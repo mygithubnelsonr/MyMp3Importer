@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29920.165
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMp3Importer", "MyMp3Importer\MyMp3Importer.csproj", "{35CA1F71-4D50-4A4E-A876-57360930DD1A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionPool", "..\..\..\11_Public\FunctionPool\FunctionPool.csproj", "{5E8D2814-7DDA-47AD-9739-DC3192F4A5F6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{35CA1F71-4D50-4A4E-A876-57360930DD1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35CA1F71-4D50-4A4E-A876-57360930DD1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35CA1F71-4D50-4A4E-A876-57360930DD1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35CA1F71-4D50-4A4E-A876-57360930DD1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E8D2814-7DDA-47AD-9739-DC3192F4A5F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E8D2814-7DDA-47AD-9739-DC3192F4A5F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E8D2814-7DDA-47AD-9739-DC3192F4A5F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E8D2814-7DDA-47AD-9739-DC3192F4A5F6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5BA1FE82-8BEC-4820-AC46-ADC332A12694}
+	EndGlobalSection
+EndGlobal

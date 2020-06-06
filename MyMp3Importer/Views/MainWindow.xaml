@@ -1,0 +1,204 @@
+﻿<Window x:Class="MyMp3Importer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MyMp3Importer"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="585" Width="500" WindowStartupLocation="CenterScreen" SizeToContent="Height" Background="#FF0991C3"
+              WindowStyle="None"  ResizeMode="NoResize" Icon="Icon1424.ico">
+    <Window.Resources>
+        <!-- Hintergrund für Header von MainWindow -->
+        <LinearGradientBrush x:Key="HeaderBackground" StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Offset="0" Color="Blue"/>
+            <GradientStop Offset="0.7" Color="Blue"/>
+            <GradientStop Offset="1" Color="#FF0991C3"/>
+        </LinearGradientBrush>
+    </Window.Resources>
+    <DockPanel>
+        <StatusBar DockPanel.Dock="Bottom" Background="Transparent" Foreground="WhiteSmoke" BorderThickness="2">
+            <StatusBarItem Content="Start: "/>
+            <StatusBarItem x:Name="statusbarStart" Content="00:00:00" Width="50"/>
+            <Separator/>
+            <StatusBarItem Content="Dauer: "/>
+            <StatusBarItem x:Name="statusbarDauer" Content="00:00:00" Width="50"/>
+            <Separator/>
+            <StatusBarItem Content="" Width="20"></StatusBarItem>
+            <StatusBarItem>
+                <ProgressBar x:Name="statusbarProgress" Width="150" Height="14" Visibility="Hidden"/>
+            </StatusBarItem>
+            <StatusBarItem Content="" Width="20"/>
+            <Separator/>
+            <StatusBarItem Content=""></StatusBarItem>
+        </StatusBar>
+        <StackPanel>
+            <Grid DockPanel.Dock="Top" x:Name="Header" Height="50"  Background="{StaticResource HeaderBackground}" MouseLeftButtonDown="Move_Window">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="50"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="1" FontSize="22" Height="30" FontFamily="Arial" Foreground="WhiteSmoke">
+                    <Bold FontWeight="ExtraBold">My</Bold>
+                    <Run FontWeight="ExtraBold" FontSize="25" Foreground="Red">Mp3</Run>
+                    <Italic>Importer</Italic>
+                    <Run FontSize="10" Text="version 1.0"/>
+                </TextBlock>
+                <Button Grid.Column="2" x:Name="buttonClose" Content="X" Style="{StaticResource exitButton}"
+                        Click="buttonClose_Click">
+                </Button>
+            </Grid>
+
+            <Grid Margin="10,4,10,0" Background="LightGray">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="150"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Row="0" Grid.Column="0" Content="Startfolder:" Margin="10,0,10,0" FontWeight="Bold"/>
+                <StackPanel Grid.Row="0" Grid.Column="3" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Label Content="Extension:" Margin="10,0,10,0" FontWeight="Bold"/>
+                </StackPanel>
+                <StackPanel Grid.Row="1" Grid.ColumnSpan="3" Orientation="Horizontal" Height="30" Margin="10,0,10,0" Background="LightGray" VerticalAlignment="Top">
+                    <TextBox x:Name="textboxStartfolder" Width="300" Background="LightGray" AllowDrop="True" Margin="0,5" HorizontalAlignment="Right"
+                             PreviewDragEnter="textboxStartfolder_DragEnter"
+                             PreviewDragOver="textboxStartfolder_PreviewDragOver" PreviewDrop="textboxStartfolder_Drop"/>
+                    <Button x:Name="buttonOpenFileDialog" Content="Browse" Margin="10,0,0,0"/>
+                    <TextBox x:Name="textboxExtension" Text=".mp3" HorizontalAlignment="Right" Margin="55,5,0,5"/>
+                </StackPanel>
+                <DataGrid x:Name="datagridFilelist" Grid.Row="2" Grid.ColumnSpan="3" Margin="10,0,10,10" Background="LightGray"
+                          AlternationCount="1" AlternatingRowBackground="#FFB9DFF7" RowBackground="#FFD2EAF7" IsReadOnly="True"/>
+                <StatusBar Grid.Row="3" Grid.ColumnSpan="3" Background="#FF0991C3" Foreground="White">
+                    <Separator/>
+                    <StatusBarItem Content="Folders:" FontWeight="Bold"/>
+                    <StatusBarItem x:Name="labelFolders" Content="0"/>
+                    <Separator/>
+                    <StatusBarItem Content="Files:" FontWeight="Bold"/>
+                    <StatusBarItem x:Name="labelFiles" Content="0"/>
+                    <Separator/>
+                    <StatusBarItem Content="Total Filesize:" FontWeight="Bold"/>
+                    <StatusBarItem x:Name="labelSize" Content="0"/>
+                    <Separator/>
+                    <StatusBarItem HorizontalAlignment="Right">
+                        <Button x:Name="buttonTest" Content="Test" Margin="80,0,0,0" Click="buttonTest_Click"/>
+                    </StatusBarItem>
+                    <StatusBarItem HorizontalAlignment="Right">
+                        <Button x:Name="buttonScan" Content="Start" Click="buttonScan_Click"/>
+                    </StatusBarItem>
+                </StatusBar>
+            </Grid>
+            <Grid Margin="10,0,10,0" Background="#FFBFBDBD">
+                <StackPanel>
+                    <Grid VerticalAlignment="Top" Background="#FFCDCACA">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="237*"/>
+                            <ColumnDefinition Width="43*"/>
+                            <ColumnDefinition Width="40*"/>
+                            <ColumnDefinition Width="154*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <GroupBox Grid.Column="0" Margin="5,0,5,5">
+                            <GroupBox.Header>
+                                <Label Content="Database" FontWeight="Bold"/>
+                            </GroupBox.Header>
+                            <Grid Margin="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0">
+                                    <CheckBox x:Name="checkboxDelete" Content="Delete" Margin="0,0,0,6"/>
+                                    <CheckBox x:Name="checkboxTestimport" Content="Testimport" IsChecked="True" IsThreeState="False" Margin="0,0,0,6"/>
+                                    <Button x:Name="buttonImport" Content="Import" IsEnabled="False" Margin="0,6,0,6" Click="buttonImport_Click"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1">
+                                    <CheckBox x:Name="checkboxSampler" Content="Sampler" Margin="0,0,0,6"/>
+                                    <CheckBox x:Name="checkboxSpezialimport" Content="Spezial Import" IsChecked="False" IsThreeState="False" Margin="0,0,0,6"/>
+                                    <Button x:Name="buttonCancel" Content="Cancel" Margin="0,6,0,6" Click="buttonCancel_Click"/>
+                                </StackPanel>
+                            </Grid>
+                        </GroupBox>
+                        <GroupBox Grid.Column="1" Margin="5,0,5,5" Grid.ColumnSpan="3" >
+                            <GroupBox.Header>
+                                <Label Content="Record" FontWeight="Bold"/>
+                            </GroupBox.Header>
+                            <Grid Margin="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0">
+                                    <Label Content="Import success:" Margin="0,0,0,6"/>
+                                    <Label Content="Import failed:" Margin="0,0,0,6"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1">
+                                    <Label x:Name="labelSuccess" Content="---" Margin="0,0,0,6"/>
+                                    <Label x:Name="labelFailed" Content="---" Margin="0,0,0,6"/>
+                                </StackPanel>
+                            </Grid>
+                        </GroupBox>
+                    </Grid>
+                </StackPanel>
+            </Grid>
+            <Expander IsExpanded="True" Margin="10,10,10,10">
+                <Expander.Header>
+                    <TextBlock Text="Spezial Import" FontWeight="Bold" Foreground="White"/>
+                </Expander.Header>
+                <Grid Background="#FFD3C9C9" Margin="0,10,0,0">
+                    <GroupBox Grid.ColumnSpan="2">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Label Grid.Row="0" Grid.Column="0" x:Name="labelGenre" Content="Genre" FontWeight="Bold"/>
+                            <ComboBox Grid.Row="1" Grid.Column="0" x:Name="comboboxGenre" Margin="5,0,10,10" SelectedIndex="0">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=Name}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                                <ComboBoxItem Content="NA"/>
+                            </ComboBox>
+                            <Label Grid.Row="0" Grid.Column="1" x:Name="labelCatalog" Content="Catalog" FontWeight="Bold"/>
+                            <ComboBox Grid.Row="1" Grid.Column="1" x:Name="comboboxCatalog" Margin="5,0,10,10" SelectedIndex="0">
+                                <ComboBoxItem Content="NA"/>
+                            </ComboBox>
+                            <Label Grid.Row="0" Grid.Column="2" x:Name="labelMedia" Content="Media" FontWeight="Bold"/>
+                            <ComboBox Grid.Row="1" Grid.Column="2" x:Name="comboboxMedia" Margin="5,0,10,10" SelectedIndex="0">
+                                <ComboBoxItem Content="NA"/>
+                            </ComboBox>
+                            <Label Grid.Row="2" Grid.Column="0" x:Name="labelArtist" Content="Artist" FontWeight="Bold"/>
+                            <Label Grid.Row="2" Grid.Column="2" x:Name="labelAlbum" Content="Album" FontWeight="Bold"/>
+                            <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.ColumnSpan="3" Margin="5,0,10,0">
+                                <ComboBox Grid.Row="3" Grid.Column="0" x:Name="comboboxInterpret" Width="215" SelectedIndex="0" >
+                                    <ComboBoxItem Content="NA"/>
+                                </ComboBox>
+                                <ComboBox Grid.Row="3" Grid.Column="2" x:Name="comboboxAlbum" Width="215" Margin="15,0,0,0" SelectedIndex="0" >
+                                    <ComboBoxItem Content="NA"/>
+                                </ComboBox>
+                            </StackPanel>
+                        </Grid>
+                    </GroupBox>
+                </Grid>
+            </Expander>
+        </StackPanel>
+    </DockPanel>
+</Window>
