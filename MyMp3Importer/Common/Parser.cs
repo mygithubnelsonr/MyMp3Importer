@@ -1,30 +1,26 @@
 ﻿using MyMp3Importer.BLL;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace MyMp3Importer.Common
 {
     public class Parser
     {
         private List<string> pathTokens = new List<string>() { "Genre", "Catalog", "Media", "Interpret", "Album" };
+        private Hashtable hashtable;
 
         public Parser()
-        { }
-
-        public List<ParserToken> ParserTokens(string path)
         {
+            hashtable = new Hashtable() { { "Genre", 1 }, { "Catalog", 2 }, { "Media", 3 }, { "Interpret", 4 }, { "Album", 5 } };
+        }
 
-            List<string> genres = null;
-            List<string> catalogs = null;
-            List<string> medias = null;
-            List<string> interpreters = null;
-            List<string> albums = null;
-
-            genres = DataGetSet.GetGenres();
-            catalogs = DataGetSet.GetCatalogs();
-            medias = DataGetSet.GetMedia();
-            //interpreters = DataGetSet.GetInterpreters();
-            //albums = DataGetSet.GetAlbums();
+        public async Task<List<ParserToken>> ParserTokens(string path)
+        {
+            List<string> genres = await DataGetSet.GetGenresAsync();
+            List<string> catalogs = await DataGetSet.GetCatalogsAsync();
+            List<string> medias = await DataGetSet.GetMediaAsync();
 
             List<ParserToken> list = new List<ParserToken>();
 

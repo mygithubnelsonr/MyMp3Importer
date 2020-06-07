@@ -2,6 +2,7 @@
 using MyMp3Importer.Common;
 using NRSoft.FunctionPool;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -105,6 +106,7 @@ namespace MyMp3Importer
         {
             this.DragMove();
         }
+
         #endregion
 
         #region Methods
@@ -204,8 +206,9 @@ namespace MyMp3Importer
             comboboxAlbum.SelectedItem = "NA";
         }
 
-        private void Scanner()
+        private async void Scanner()
         {
+            Hashtable hashtable = new Hashtable() { { "Genre", 1 }, { "Catalog", 2 }, { "Media", 3 }, { "Interpret", 4 }, { "Album", 5 } };
             List<ParserToken> tokens = null;
 
             string startDirectory = textboxStartfolder.Text;
@@ -249,76 +252,80 @@ namespace MyMp3Importer
 
             #region processing parser tokens
 
+            // ToDo try usebility of hashtable (s.o.) in Parser or scanner
             Parser parser = new Parser();
-            tokens = parser.ParserTokens(startDirectory);
+            tokens = await parser.ParserTokens(startDirectory);
 
-            for (int i = 1; i <= tokens.Count; i++)
+            await Task.Run(() =>
             {
-                if (i == 1)
+                for (int i = 1; i <= tokens.Count; i++)
                 {
-                    _genres.Add(tokens[0].Token);
-                    comboboxGenre.SelectedItem = tokens[0].Token;
-                }
-                else
-                {
-                    _genres.Add(tokens[0].Token);
-                    comboboxGenre.SelectedItem = tokens[0].Token;
-                    labelGenre.Foreground = Brushes.Red;
-                    labelGenre.Tag = false;
-                }
-
-                if (i == 2)
-                {
-                    if (_catalogs.Contains(tokens[1].Token))
-                        comboboxCatalog.SelectedItem = tokens[1].Token;
+                    if (i == 1)
+                    {
+                        if (_genres.Contains(tokens[0].Token))
+                            comboboxGenre.SelectedItem = tokens[0].Token;
+                    }
                     else
                     {
-                        _catalogs.Add(tokens[1].Token);
-                        comboboxCatalog.SelectedItem = tokens[1].Token;
-                        labelCatalog.Foreground = Brushes.Red;
-                        labelCatalog.Tag = false;
+                        _genres.Add(tokens[0].Token);
+                        comboboxGenre.SelectedItem = tokens[0].Token;
+                        labelGenre.Foreground = Brushes.Red;
+                        labelGenre.Tag = false;
                     }
-                }
 
-                if (i == 3)
-                {
-                    if (_medias.Contains(tokens[2].Token))
-                        comboboxMedia.SelectedItem = tokens[2].Token;
-                    else
+                    if (i == 2)
                     {
-                        _medias.Add(tokens[2].Token);
-                        comboboxMedia.SelectedItem = tokens[2].Token;
-                        labelMedia.Foreground = Brushes.Red;
-                        labelMedia.Tag = false;
+                        if (_catalogs.Contains(tokens[1].Token))
+                            comboboxCatalog.SelectedItem = tokens[1].Token;
+                        else
+                        {
+                            _catalogs.Add(tokens[1].Token);
+                            comboboxCatalog.SelectedItem = tokens[1].Token;
+                            labelCatalog.Foreground = Brushes.Red;
+                            labelCatalog.Tag = false;
+                        }
                     }
-                }
 
-                if (i == 4)
-                {
-                    if (_interpreters.Contains(tokens[3].Token))
-                        comboboxInterpret.SelectedItem = tokens[3].Token;
-                    else
+                    if (i == 3)
                     {
-                        _interpreters.Insert(1, tokens[3].Token);
-                        comboboxInterpret.SelectedItem = tokens[3].Token;
-                        labelArtist.Foreground = Brushes.Red;
-                        labelArtist.Tag = false;
+                        if (_medias.Contains(tokens[2].Token))
+                            comboboxMedia.SelectedItem = tokens[2].Token;
+                        else
+                        {
+                            _medias.Add(tokens[2].Token);
+                            comboboxMedia.SelectedItem = tokens[2].Token;
+                            labelMedia.Foreground = Brushes.Red;
+                            labelMedia.Tag = false;
+                        }
                     }
-                }
 
-                if (i == 5)
-                {
-                    if (_albums.Contains(tokens[4].Token))
-                        comboboxAlbum.SelectedItem = tokens[4].Token;
-                    else
+                    if (i == 4)
                     {
-                        _albums.Insert(1, tokens[4].Token);
-                        comboboxAlbum.SelectedItem = tokens[4].Token;
-                        labelAlbum.Foreground = Brushes.Red;
-                        labelAlbum.Tag = false;
+                        if (_interpreters.Contains(tokens[3].Token))
+                            comboboxInterpret.SelectedItem = tokens[3].Token;
+                        else
+                        {
+                            _interpreters.Insert(1, tokens[3].Token);
+                            comboboxInterpret.SelectedItem = tokens[3].Token;
+                            labelArtist.Foreground = Brushes.Red;
+                            labelArtist.Tag = false;
+                        }
+                    }
+
+                    if (i == 5)
+                    {
+                        if (_albums.Contains(tokens[4].Token))
+                            comboboxAlbum.SelectedItem = tokens[4].Token;
+                        else
+                        {
+                            _albums.Insert(1, tokens[4].Token);
+                            comboboxAlbum.SelectedItem = tokens[4].Token;
+                            labelAlbum.Foreground = Brushes.Red;
+                            labelAlbum.Tag = false;
+                        }
                     }
                 }
-            }
+            });
 
             #endregion
 

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MyMp3Importer"
         mc:Ignorable="d"
         Title="MainWindow" Height="585" Width="500" WindowStartupLocation="CenterScreen" SizeToContent="Height" Background="#FF0991C3"
-              WindowStyle="None"  ResizeMode="NoResize" Icon="Icon1424.ico">
+              WindowStyle="None"  ResizeMode="NoResize" Icon="Icon1424.ico" MouseLeftButtonDown="Move_Window">
     <Window.Resources>
         <!-- Hintergrund für Header von MainWindow -->
         <LinearGradientBrush x:Key="HeaderBackground" StartPoint="0,0" EndPoint="0,1">
@@ -32,7 +32,7 @@
             <StatusBarItem Content=""></StatusBarItem>
         </StatusBar>
         <StackPanel>
-            <Grid DockPanel.Dock="Top" x:Name="Header" Height="50"  Background="{StaticResource HeaderBackground}" MouseLeftButtonDown="Move_Window">
+            <Grid DockPanel.Dock="Top" x:Name="Header" Height="50"  Background="{StaticResource HeaderBackground}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="10"/>
                     <ColumnDefinition/>
@@ -170,11 +170,6 @@
                             </Grid.RowDefinitions>
                             <Label Grid.Row="0" Grid.Column="0" x:Name="labelGenre" Content="Genre" FontWeight="Bold"/>
                             <ComboBox Grid.Row="1" Grid.Column="0" x:Name="comboboxGenre" Margin="5,0,10,10" SelectedIndex="0">
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Path=Name}"/>
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
                                 <ComboBoxItem Content="NA"/>
                             </ComboBox>
                             <Label Grid.Row="0" Grid.Column="1" x:Name="labelCatalog" Content="Catalog" FontWeight="Bold"/>

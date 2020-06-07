@@ -37,51 +37,51 @@ namespace MyMp3Importer.BLL
 
         #region FileScanner
 
-        public static List<string> GetGenres()
-        {
-            List<string> genres = null;
-            using (var context = new MyJukeboxEntities())
-            {
-                genres = context.tGenres.Select(g => g.Name).ToList();
-                return genres;
-            }
-        }
+        //public static List<string> GetGenres()
+        //{
+        //    List<string> genres = null;
+        //    using (var context = new MyJukeboxEntities())
+        //    {
+        //        genres = context.tGenres.Select(g => g.Name).ToList();
+        //        return genres;
+        //    }
+        //}
 
-        public static List<string> GetCatalogs()
-        {
-            List<string> catalogues = null;
+        //public static List<string> GetCatalogs()
+        //{
+        //    List<string> catalogues = null;
 
-            using (var context = new MyJukeboxEntities())
-            {
-                catalogues = context.tCatalogs.Select(c => c.Name).ToList();
-                return catalogues;
-            }
-        }
+        //    using (var context = new MyJukeboxEntities())
+        //    {
+        //        catalogues = context.tCatalogs.Select(c => c.Name).ToList();
+        //        return catalogues;
+        //    }
+        //}
 
-        public static List<string> GetMedia()
-        {
-            List<string> medias = null;
+        //public static List<string> GetMedia()
+        //{
+        //    List<string> medias = null;
 
-            using (var context = new MyJukeboxEntities())
-            {
-                medias = context.tMedias.Select(m => m.Type).ToList();
-                return medias;
-            }
-        }
+        //    using (var context = new MyJukeboxEntities())
+        //    {
+        //        medias = context.tMedias.Select(m => m.Type).ToList();
+        //        return medias;
+        //    }
+        //}
 
-        public static List<string> GetInterpreters()
-        {
-            List<string> interpreters = null;
+        //public static List<string> GetInterpreters()
+        //{
+        //    List<string> interpreters = null;
 
-            using (var context = new MyJukeboxEntities())
-            {
-                interpreters = context.vSongs
-                                    .Select(i => i.Interpret)
-                                    .Distinct().OrderBy(i => i).ToList();
+        //    using (var context = new MyJukeboxEntities())
+        //    {
+        //        interpreters = context.vSongs
+        //                            .Select(i => i.Interpret)
+        //                            .Distinct().OrderBy(i => i).ToList();
 
-                return interpreters;
-            }
-        }
+        //        return interpreters;
+        //    }
+        //}
 
         //public static List<string> GetAlbums()
         //{
@@ -105,6 +105,34 @@ namespace MyMp3Importer.BLL
 
                 });
                 return genres;
+            }
+        }
+
+        public static async Task<List<string>> GetCatalogsAsync()
+        {
+            List<string> catalogues = null;
+
+            using (var context = new MyJukeboxEntities())
+            {
+                await Task.Run(() =>
+                {
+                    catalogues = context.tCatalogs.Select(c => c.Name).ToList();
+                });
+                return catalogues;
+            }
+        }
+
+        public static async Task<List<string>> GetMediaAsync()
+        {
+            List<string> medias = null;
+
+            using (var context = new MyJukeboxEntities())
+            {
+                await Task.Run(() =>
+                {
+                    medias = context.tMedias.Select(m => m.Type).ToList();
+                });
+                return medias;
             }
         }
 
@@ -138,34 +166,6 @@ namespace MyMp3Importer.BLL
             });
 
                 return albums;
-            }
-        }
-
-        public static async Task<List<string>> GetCatalogsAsync()
-        {
-            List<string> catalogues = null;
-
-            using (var context = new MyJukeboxEntities())
-            {
-                await Task.Run(() =>
-                {
-                    catalogues = context.tCatalogs.Select(c => c.Name).ToList();
-                });
-                return catalogues;
-            }
-        }
-
-        public static async Task<List<string>> GetMediaAsync()
-        {
-            List<string> medias = null;
-
-            using (var context = new MyJukeboxEntities())
-            {
-                await Task.Run(() =>
-                {
-                    medias = context.tMedias.Select(m => m.Type).ToList();
-                });
-                return medias;
             }
         }
 
@@ -223,7 +223,6 @@ namespace MyMp3Importer.BLL
             }
 
         }
-
 
         public static bool TruncateTableImportTest()
         {
