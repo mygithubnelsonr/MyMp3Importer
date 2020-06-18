@@ -68,8 +68,9 @@
                 </StackPanel>
                 <StackPanel Grid.Row="1" Grid.ColumnSpan="3" Orientation="Horizontal" Height="30" Margin="10,0,10,0" Background="LightGray" VerticalAlignment="Top">
                     <TextBox x:Name="textboxStartfolder" Width="300" Background="LightGray" AllowDrop="True" Margin="0,5" HorizontalAlignment="Right"
-                             PreviewDragEnter="textboxStartfolder_DragEnter"
-                             PreviewDragOver="textboxStartfolder_PreviewDragOver" PreviewDrop="textboxStartfolder_Drop"/>
+                             PreviewDragEnter="textboxStartfolder_PreviewDragEnter"
+                             PreviewDragOver="textboxStartfolder_PreviewDragOver"
+                             PreviewDrop="textboxStartfolder_PreviewDrop"/>
                     <Button x:Name="buttonOpenFileDialog" Content="Browse" Margin="10,0,0,0"/>
                     <TextBox x:Name="textboxExtension" Text=".mp3" HorizontalAlignment="Right" Margin="55,5,0,5"/>
                 </StackPanel>

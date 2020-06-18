@@ -8,7 +8,6 @@
         <EntityTypeShape EntityType="MyJukeboxModel.tActionLog" Width="1.5" PointX="5.75" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="MyJukeboxModel.tAlbum" Width="1.5" PointX="2.75" PointY="6.75" IsExpanded="true" />
         <EntityTypeShape EntityType="MyJukeboxModel.tBeat" Width="1.5" PointX="4.75" PointY="6.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="MyJukeboxModel.tCatalog" Width="1.5" PointX="0.75" PointY="2.125" IsExpanded="true" />
         <EntityTypeShape EntityType="MyJukeboxModel.tColumn" Width="1.5" PointX="6.75" PointY="6.75" IsExpanded="true" />
         <EntityTypeShape EntityType="MyJukeboxModel.tFileInfo" Width="1.5" PointX="0.75" PointY="6.375" IsExpanded="true" />
         <EntityTypeShape EntityType="MyJukeboxModel.tGenre" Width="1.5" PointX="0.75" PointY="9.75" IsExpanded="true" />
@@ -21,7 +20,6 @@
         <EntityTypeShape EntityType="MyJukeboxModel.tSetting" Width="1.5" PointX="2.75" PointY="9.75" IsExpanded="true" />
         <EntityTypeShape EntityType="MyJukeboxModel.tSong" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
         <EntityTypeShape EntityType="MyJukeboxModel.tTestImport" Width="1.5" PointX="4.75" PointY="9.75" IsExpanded="true" />
-        <AssociationConnector Association="MyJukeboxModel.FK_tSongsNew_tCatalogs" ManuallyRouted="false" />
         <AssociationConnector Association="MyJukeboxModel.FK_tSongsNew_tFileInfos" ManuallyRouted="false" />
         <AssociationConnector Association="MyJukeboxModel.FK_tSongsNew_tGenres" ManuallyRouted="false" />
         <AssociationConnector Association="MyJukeboxModel.FK_tSongsNew_tInfos" ManuallyRouted="false" />
@@ -30,6 +28,8 @@
         <EntityTypeShape EntityType="MyJukeboxModel.vPlaylistSong" Width="1.5" PointX="7.375" PointY="9.75" />
         <EntityTypeShape EntityType="MyJukeboxModel.vSong" Width="1.5" PointX="9.375" PointY="9.75" />
         <EntityTypeShape EntityType="MyJukeboxModel.vSongsLong" Width="1.5" PointX="10.375" PointY="0.75" />
+        <EntityTypeShape EntityType="MyJukeboxModel.tCatalog" Width="1.5" PointX="0.75" PointY="2.25" />
+        <AssociationConnector Association="MyJukeboxModel.FK_tSongsNew_tCatalogs" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

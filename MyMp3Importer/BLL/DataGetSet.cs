@@ -171,8 +171,10 @@ namespace MyMp3Importer.BLL
 
         #endregion
 
-        public static void CreateCatalog(string catalogName)
+        public static int CreateCatalog(string catalogName)
         {
+            int id = -1;
+
             var context = new MyJukeboxEntities();
 
             var catalogExist = context.tCatalogs
@@ -184,7 +186,11 @@ namespace MyMp3Importer.BLL
                 context.tCatalogs
                     .Add(new tCatalog { Name = catalogName });
                 context.SaveChanges();
+
+                id = GetLastID("tCatalogs");
             }
+
+            return id;
         }
 
         public static int SaveNewRecords(List<MP3Record> mP3Records, bool testImport)
@@ -293,7 +299,7 @@ namespace MyMp3Importer.BLL
                 context.tSongs.Add(song);
                 context.SaveChanges();
 
-                int songID = (int)GetLastSongID("tSongs");
+                int songID = (int)GetLastID("tSongs");
 
                 // tMd5
                 var md5 = new tMD5();
@@ -446,7 +452,7 @@ namespace MyMp3Importer.BLL
             return genres[0];
         }
 
-        public static int GetLastSongID(string tableName)
+        public static int GetLastID(string tableName)
         {
             int lastId = -1;
             int recCount = -1;
@@ -471,6 +477,15 @@ namespace MyMp3Importer.BLL
 
                     if (recCount != 0)
                         lastId = context.tSongs.Max(x => x.ID);
+                }
+
+                if (tableName == "tCatalogs")
+                {
+                    recCount = context.tCatalogs
+                                    .Select(i => i.ID).Count();
+
+                    if (recCount != 0)
+                        lastId = context.tCatalogs.Max(x => x.ID);
                 }
 
                 return lastId;

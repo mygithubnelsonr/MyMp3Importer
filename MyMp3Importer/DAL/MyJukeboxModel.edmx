@@ -35,7 +35,6 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="12" />
-          <Property Name="ID_Song" Type="int" />
         </EntityType>
         <EntityType Name="tColumns">
           <Key>
@@ -165,7 +164,7 @@
           <Property Name="SSMA_TimeStamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'A:\SOURCE\REPOS\90_WORK\WPF\MYMP3IMPORTER\MYMP3IMPORTER\MYJUKEBOX.MDF.dbo.vPlaylistSongs' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'MyJukebox.dbo.vPlaylistSongs' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="vPlaylistSongs">
           <Key>
             <PropertyRef Name="ID" />
@@ -183,7 +182,7 @@ warning 6002: The table/view 'A:\SOURCE\REPOS\90_WORK\WPF\MYMP3IMPORTER\MYMP3IMP
           <Property Name="PLID" Type="int" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'A:\SOURCE\REPOS\90_WORK\WPF\MYMP3IMPORTER\MYMP3IMPORTER\MYJUKEBOX.MDF.dbo.vSongs' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'MyJukebox.dbo.vSongs' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="vSongs">
           <Key>
             <PropertyRef Name="ID" />
@@ -199,7 +198,7 @@ warning 6002: The table/view 'A:\SOURCE\REPOS\90_WORK\WPF\MYMP3IMPORTER\MYMP3IMP
           <Property Name="FileName" Type="nvarchar" MaxLength="156" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'A:\SOURCE\REPOS\90_WORK\WPF\MYMP3IMPORTER\MYMP3IMPORTER\MYJUKEBOX.MDF.dbo.vSongsLong' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'MyJukebox.dbo.vSongsLong' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="vSongsLong">
           <Key>
             <PropertyRef Name="ID" />
@@ -400,14 +399,6 @@ warning 6002: The table/view 'A:\SOURCE\REPOS\90_WORK\WPF\MYMP3IMPORTER\MYMP3IMP
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
         </EntityType>
-        <EntityType Name="tCatalog">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="tSongs" Relationship="Self.FK_tSongsNew_tCatalogs" FromRole="tCatalogs" ToRole="tSongs" />
-        </EntityType>
         <EntityType Name="tColumn">
           <Key>
             <PropertyRef Name="ID" />
@@ -520,11 +511,11 @@ warning 6002: The table/view 'A:\SOURCE\REPOS\90_WORK\WPF\MYMP3IMPORTER\MYMP3IMP
           <Property Name="ID_Media" Type="Int32" />
           <Property Name="ID_Info" Type="Int32" />
           <Property Name="ID_File" Type="Int32" />
-          <NavigationProperty Name="tCatalog" Relationship="Self.FK_tSongsNew_tCatalogs" FromRole="tSongs" ToRole="tCatalogs" />
           <NavigationProperty Name="tFileInfo" Relationship="Self.FK_tSongsNew_tFileInfos" FromRole="tSongs" ToRole="tFileInfos" />
           <NavigationProperty Name="tGenre" Relationship="Self.FK_tSongsNew_tGenres" FromRole="tSongs" ToRole="tGenres" />
           <NavigationProperty Name="tInfo" Relationship="Self.FK_tSongsNew_tInfos" FromRole="tSongs" ToRole="tInfos" />
           <NavigationProperty Name="tMedia" Relationship="Self.FK_tSongsNew_tMedia" FromRole="tSongs" ToRole="tMedia" />
+          <NavigationProperty Name="tCatalog" Relationship="MyJukeboxModel.FK_tSongsNew_tCatalogs" FromRole="tSong" ToRole="tCatalog" />
         </EntityType>
         <EntityType Name="tTestImport">
           <Key>
@@ -546,18 +537,6 @@ warning 6002: The table/view 'A:\SOURCE\REPOS\90_WORK\WPF\MYMP3IMPORTER\MYMP3IMP
           <Property Name="ImportDate" Type="DateTime" Precision="0" />
           <Property Name="SSMA_TimeStamp" Type="Binary" MaxLength="8" FixedLength="true" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
-        <Association Name="FK_tSongsNew_tCatalogs">
-          <End Role="tCatalogs" Type="Self.tCatalog" Multiplicity="0..1" />
-          <End Role="tSongs" Type="Self.tSong" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tCatalogs">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="tSongs">
-              <PropertyRef Name="ID_Catalog" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_tSongsNew_tFileInfos">
           <End Role="tFileInfos" Type="Self.tFileInfo" Multiplicity="0..1" />
           <End Role="tSongs" Type="Self.tSong" Multiplicity="*" />
@@ -622,7 +601,6 @@ warning 6002: The table/view 'A:\SOURCE\REPOS\90_WORK\WPF\MYMP3IMPORTER\MYMP3IMP
           <EntitySet Name="tActionLogs" EntityType="Self.tActionLog" />
           <EntitySet Name="tAlbums" EntityType="Self.tAlbum" />
           <EntitySet Name="tBeats" EntityType="Self.tBeat" />
-          <EntitySet Name="tCatalogs" EntityType="Self.tCatalog" />
           <EntitySet Name="tColumns" EntityType="Self.tColumn" />
           <EntitySet Name="tFileInfos" EntityType="Self.tFileInfo" />
           <EntitySet Name="tGenres" EntityType="Self.tGenre" />
@@ -635,10 +613,6 @@ warning 6002: The table/view 'A:\SOURCE\REPOS\90_WORK\WPF\MYMP3IMPORTER\MYMP3IMP
           <EntitySet Name="tSettings" EntityType="Self.tSetting" />
           <EntitySet Name="tSongs" EntityType="Self.tSong" />
           <EntitySet Name="tTestImports" EntityType="Self.tTestImport" />
-          <AssociationSet Name="FK_tSongsNew_tCatalogs" Association="Self.FK_tSongsNew_tCatalogs">
-            <End Role="tCatalogs" EntitySet="tCatalogs" />
-            <End Role="tSongs" EntitySet="tSongs" />
-          </AssociationSet>
           <AssociationSet Name="FK_tSongsNew_tFileInfos" Association="Self.FK_tSongsNew_tFileInfos">
             <End Role="tFileInfos" EntitySet="tFileInfos" />
             <End Role="tSongs" EntitySet="tSongs" />
@@ -662,6 +636,11 @@ warning 6002: The table/view 'A:\SOURCE\REPOS\90_WORK\WPF\MYMP3IMPORTER\MYMP3IMP
           <EntitySet Name="vPlaylistSongs" EntityType="MyJukeboxModel.vPlaylistSong" />
           <EntitySet Name="vSongs" EntityType="MyJukeboxModel.vSong" />
           <EntitySet Name="vSongsLongs" EntityType="MyJukeboxModel.vSongsLong" />
+          <EntitySet Name="tCatalogs" EntityType="MyJukeboxModel.tCatalog" />
+          <AssociationSet Name="FK_tSongsNew_tCatalogs" Association="MyJukeboxModel.FK_tSongsNew_tCatalogs">
+            <End Role="tCatalog" EntitySet="tCatalogs" />
+            <End Role="tSong" EntitySet="tSongs" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="vPlaylistSong">
           <Key>
@@ -711,6 +690,26 @@ warning 6002: The table/view 'A:\SOURCE\REPOS\90_WORK\WPF\MYMP3IMPORTER\MYMP3IMP
           <Property Name="Media" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
           <Property Name="FileSize" Type="Int32" />
         </EntityType>
+        <EntityType Name="tCatalog">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tSongs" Relationship="MyJukeboxModel.FK_tSongsNew_tCatalogs" FromRole="tCatalog" ToRole="tSong" />
+        </EntityType>
+        <Association Name="FK_tSongsNew_tCatalogs">
+          <End Type="MyJukeboxModel.tCatalog" Role="tCatalog" Multiplicity="0..1" />
+          <End Type="MyJukeboxModel.tSong" Role="tSong" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tCatalog">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="tSong">
+              <PropertyRef Name="ID_Catalog" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -739,14 +738,6 @@ warning 6002: The table/view 'A:\SOURCE\REPOS\90_WORK\WPF\MYMP3IMPORTER\MYMP3IMP
           <EntitySetMapping Name="tBeats">
             <EntityTypeMapping TypeName="MyJukeboxModel.tBeat">
               <MappingFragment StoreEntitySet="tBeat">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tCatalogs">
-            <EntityTypeMapping TypeName="MyJukeboxModel.tCatalog">
-              <MappingFragment StoreEntitySet="tCatalogs">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
               </MappingFragment>
@@ -933,6 +924,14 @@ warning 6002: The table/view 'A:\SOURCE\REPOS\90_WORK\WPF\MYMP3IMPORTER\MYMP3IMP
                 <ScalarProperty Name="Album" ColumnName="Album" />
                 <ScalarProperty Name="Catalog" ColumnName="Catalog" />
                 <ScalarProperty Name="Genre" ColumnName="Genre" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tCatalogs">
+            <EntityTypeMapping TypeName="MyJukeboxModel.tCatalog">
+              <MappingFragment StoreEntitySet="tCatalogs">
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

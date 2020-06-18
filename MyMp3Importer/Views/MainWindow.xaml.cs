@@ -42,7 +42,7 @@ namespace MyMp3Importer
             e.Handled = true;
         }
 
-        private void textboxStartfolder_DragEnter(object sender, DragEventArgs e)
+        private void textboxStartfolder_PreviewDragEnter(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
@@ -54,7 +54,7 @@ namespace MyMp3Importer
             }
         }
 
-        private void textboxStartfolder_Drop(object sender, DragEventArgs e)
+        private void textboxStartfolder_PreviewDrop(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
@@ -132,33 +132,6 @@ namespace MyMp3Importer
             }
             catch { return false; }
         }
-
-        //private void FillCollectionsNotUsed()
-        //{
-        //List<string> list = null;
-
-        //List<Genre> genres = null;
-        //genres = DataGetSet.GetGenresAsync();
-
-        ////list.Insert(0, "NA");
-        //_genres = new ObservableCollection<Genre>(genres);
-
-        //list = DataGetSet.GetCatalogs();
-        //list.Insert(0, "NA");
-        //_catalogs = new ObservableCollection<string>(list);
-
-        //list = DataGetSet.GetMedia();
-        //list.Insert(0, "NA");
-        //_medias = new ObservableCollection<string>(list);
-
-        //list = new List<string>();     // DataGetSet.GetInterpreters();
-        //list.Add("NA");
-        //_interpreters = new ObservableCollection<string>(list);
-
-        //list = new List<string>();      // DataGetSet.GetAlbums();
-        //list.Add("NA");
-        //_albums = new ObservableCollection<string>(list);
-        //}
 
         private async Task FillCollectionsAsync()
         {
@@ -260,68 +233,113 @@ namespace MyMp3Importer
             {
                 for (int i = 1; i <= tokens.Count; i++)
                 {
-                    if (i == 1)
+                    if (i == 1)     // Genre
                     {
                         if (_genres.Contains(tokens[0].Token))
-                            comboboxGenre.SelectedItem = tokens[0].Token;
-                    }
-                    else
-                    {
-                        _genres.Add(tokens[0].Token);
-                        comboboxGenre.SelectedItem = tokens[0].Token;
-                        labelGenre.Foreground = Brushes.Red;
-                        labelGenre.Tag = false;
+                        {
+                            Dispatcher.Invoke(() =>
+                            {
+                                comboboxGenre.SelectedItem = tokens[0].Token;
+                                labelGenre.Tag = true;
+                            });
+                        }
+                        else
+                        {
+                            Dispatcher.Invoke(() =>
+                            {
+                                _genres.Add(tokens[0].Token);
+                                comboboxGenre.SelectedItem = tokens[0].Token;
+                                labelGenre.Foreground = Brushes.Red;
+                                labelGenre.Tag = false;
+                            });
+                        }
                     }
 
-                    if (i == 2)
+                    if (i == 2)     // Catalog
                     {
                         if (_catalogs.Contains(tokens[1].Token))
-                            comboboxCatalog.SelectedItem = tokens[1].Token;
+                        {
+                            Dispatcher.Invoke(() =>
+                            {
+                                comboboxCatalog.SelectedItem = tokens[1].Token;
+                                labelCatalog.Tag = true;
+                            });
+                        }
                         else
                         {
-                            _catalogs.Add(tokens[1].Token);
-                            comboboxCatalog.SelectedItem = tokens[1].Token;
-                            labelCatalog.Foreground = Brushes.Red;
-                            labelCatalog.Tag = false;
+                            Dispatcher.Invoke(() =>
+                            {
+                                _catalogs.Add(tokens[1].Token);
+                                comboboxCatalog.SelectedItem = tokens[1].Token;
+                                labelCatalog.Foreground = Brushes.Red;
+                                labelCatalog.Tag = false;
+                            });
                         }
                     }
 
-                    if (i == 3)
+                    if (i == 3)     // Media
                     {
                         if (_medias.Contains(tokens[2].Token))
-                            comboboxMedia.SelectedItem = tokens[2].Token;
+                        {
+                            Dispatcher.Invoke(() =>
+                            {
+                                comboboxMedia.SelectedItem = tokens[2].Token;
+                                labelMedia.Tag = true;
+                            });
+                        }
                         else
                         {
-                            _medias.Add(tokens[2].Token);
-                            comboboxMedia.SelectedItem = tokens[2].Token;
-                            labelMedia.Foreground = Brushes.Red;
-                            labelMedia.Tag = false;
+                            Dispatcher.Invoke(() =>
+                            {
+                                _medias.Add(tokens[2].Token);
+                                comboboxMedia.SelectedItem = tokens[2].Token;
+                                labelMedia.Foreground = Brushes.Red;
+                                labelMedia.Tag = false;
+                            });
                         }
                     }
 
-                    if (i == 4)
+                    if (i == 4)     // Interpret
                     {
                         if (_interpreters.Contains(tokens[3].Token))
-                            comboboxInterpret.SelectedItem = tokens[3].Token;
+                        {
+                            Dispatcher.Invoke(() =>
+                            {
+                                comboboxInterpret.SelectedItem = tokens[3].Token;
+                                labelArtist.Tag = true;
+                            });
+                        }
                         else
                         {
-                            _interpreters.Insert(1, tokens[3].Token);
-                            comboboxInterpret.SelectedItem = tokens[3].Token;
-                            labelArtist.Foreground = Brushes.Red;
-                            labelArtist.Tag = false;
+                            Dispatcher.Invoke(() =>
+                            {
+                                _interpreters.Insert(1, tokens[3].Token);
+                                comboboxInterpret.SelectedItem = tokens[3].Token;
+                                labelArtist.Foreground = Brushes.Red;
+                                labelArtist.Tag = false;
+                            });
                         }
                     }
 
-                    if (i == 5)
+                    if (i == 5)     // Album
                     {
                         if (_albums.Contains(tokens[4].Token))
-                            comboboxAlbum.SelectedItem = tokens[4].Token;
+                        {
+                            Dispatcher.Invoke(() =>
+                            {
+                                comboboxAlbum.SelectedItem = tokens[4].Token;
+                                labelAlbum.Tag = true;
+                            });
+                        }
                         else
                         {
-                            _albums.Insert(1, tokens[4].Token);
-                            comboboxAlbum.SelectedItem = tokens[4].Token;
-                            labelAlbum.Foreground = Brushes.Red;
-                            labelAlbum.Tag = false;
+                            Dispatcher.Invoke(() =>
+                            {
+                                _albums.Insert(1, tokens[4].Token);
+                                comboboxAlbum.SelectedItem = tokens[4].Token;
+                                labelAlbum.Foreground = Brushes.Red;
+                                labelAlbum.Tag = false;
+                            });
                         }
                     }
                 }
@@ -356,11 +374,17 @@ namespace MyMp3Importer
 
         private void Import()
         {
+            int _catalogID = -1;
+
             string fileExtension;
             int importFailed = 0;
             int importSuccess = 0;
 
             if (datagridFilelist.Items.Count == 0) return;
+
+            var a = labelGenre.Tag;
+
+
 
             if ((bool)labelCatalog.Tag == false)
             {
@@ -369,7 +393,7 @@ namespace MyMp3Importer
                 if (result == MessageBoxResult.No)
                     return;
                 else
-                    DataGetSet.CreateCatalog(comboboxCatalog.Text);
+                    _catalogID = DataGetSet.CreateCatalog(comboboxCatalog.Text);
             }
 
             buttonImport.IsEnabled = false;
@@ -508,7 +532,7 @@ namespace MyMp3Importer
                 labelSuccess.Content = $"{recordsAffected}";
                 labelFailed.Content = $"{mp3List.Count - recordsAffected}";
 
-                var lastID = DataGetSet.GetLastSongID("tTestImport");
+                var lastID = DataGetSet.GetLastID("tTestImport");
                 Debug.Print($"Import success = {importSuccess}, failed={importFailed}, lastId={lastID}");
 
             }
@@ -518,7 +542,6 @@ namespace MyMp3Importer
 
         private void buttonTest_Click(object sender, RoutedEventArgs e)
         {
-
 
         }
     }

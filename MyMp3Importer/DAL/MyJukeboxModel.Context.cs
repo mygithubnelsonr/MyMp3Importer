@@ -28,7 +28,6 @@ namespace MyMp3Importer.DAL
         public virtual DbSet<tActionLog> tActionLogs { get; set; }
         public virtual DbSet<tAlbum> tAlbums { get; set; }
         public virtual DbSet<tBeat> tBeats { get; set; }
-        public virtual DbSet<tCatalog> tCatalogs { get; set; }
         public virtual DbSet<tColumn> tColumns { get; set; }
         public virtual DbSet<tFileInfo> tFileInfos { get; set; }
         public virtual DbSet<tGenre> tGenres { get; set; }
@@ -44,5 +43,6 @@ namespace MyMp3Importer.DAL
         public virtual DbSet<vPlaylistSong> vPlaylistSongs { get; set; }
         public virtual DbSet<vSong> vSongs { get; set; }
         public virtual DbSet<vSongsLong> vSongsLongs { get; set; }
+        public virtual DbSet<tCatalog> tCatalogs { get; set; }
     }
 }
