@@ -35,7 +35,7 @@ namespace MyMp3Importer.BLL
             context.SaveChanges();
         }
 
-        #region FileScanner
+        #region FileImporter
 
         //public static List<string> GetGenres()
         //{
@@ -171,23 +171,45 @@ namespace MyMp3Importer.BLL
 
         #endregion
 
-        public static int CreateCatalog(string catalogName)
+        public static int CreateCatalog(string catalog)
         {
             int id = -1;
 
             var context = new MyJukeboxEntities();
 
             var catalogExist = context.tCatalogs
-                                    .Where(c => c.Name == catalogName)
+                                    .Where(c => c.Name == catalog)
                                     .FirstOrDefault();
 
             if (catalogExist == null)
             {
                 context.tCatalogs
-                    .Add(new tCatalog { Name = catalogName });
+                    .Add(new tCatalog { Name = catalog });
                 context.SaveChanges();
 
                 id = GetLastID("tCatalogs");
+            }
+
+            return id;
+        }
+
+        public static int CreateGenre(string genre)
+        {
+            int id = -1;
+
+            var context = new MyJukeboxEntities();
+
+            var result = context.tGenres
+                                    .Where(g => g.Name == genre)
+                                    .FirstOrDefault();
+
+            if (result == null)
+            {
+                context.tGenres
+                    .Add(new tGenre { Name = genre });
+                context.SaveChanges();
+
+                id = GetLastID("tGenres");
             }
 
             return id;
@@ -198,12 +220,6 @@ namespace MyMp3Importer.BLL
             int recordsImporteds = 0;
 
             Logging.Flush();
-
-            if (testImport == true)
-            {
-                var result = DataGetSet.TruncateTableImportTest();
-                Debug.Print($"TruncateTableImportTest result = {result}");
-            }
 
             foreach (MP3Record record in mP3Records)
             {
@@ -230,12 +246,16 @@ namespace MyMp3Importer.BLL
 
         }
 
-        public static bool TruncateTableImportTest()
+        public static bool TruncateTestTables()
         {
             try
             {
+                int result = -1;
                 var context = new MyJukeboxEntities();
-                var result = context.Database.ExecuteSqlCommand("truncate table [tTestImport]");
+                result = context.Database.ExecuteSqlCommand("truncate table [tSongsTest]");
+                result = context.Database.ExecuteSqlCommand("truncate table [tFileInfosTest]");
+                result = context.Database.ExecuteSqlCommand("truncate table [tInfosTest]");
+                result = context.Database.ExecuteSqlCommand("truncate table [tMD5Test]");
 
                 return true;
             }
@@ -349,27 +369,26 @@ namespace MyMp3Importer.BLL
             {
                 var context = new MyJukeboxEntities();
 
-                var media = new tMedia();
-                var medium = context.tMedias
-                    .Where(m => m.ID == record.Media)
-                    .Select(m => m.Type).FirstOrDefault();
+                var songs = new tSongsTest();
 
-                var import = new tTestImport();
-                import.Album = record.Album;
-                import.FileDate = record.FileDate;
-                import.FileName = record.FileName;
-                import.FileSize = record.FileSize;
-                import.Genre = record.Genre;
-                import.Interpret = record.Interpret;
-                import.Katalog = record.Catalog;
-                import.MD5 = record.MD5;
+                songs.Album = record.Album;
+                songs.Artist = record.Interpret;
+                songs.Titel = record.Titel;
+                songs.Pfad = record.Path;
+                songs.FileName = record.FileName;
+                songs.IsSampler = record.IsSample;
+
+                // ToDo: continue here
+
+                //import.FileDate = record.FileDate;
+                //import.FileSize = record.FileSize;
+                //import.Genre = record.Genre;
+                //import.Catalog = record.Catalog;
+                //import.MD5 = record.MD5;
                 //import.Medium = medium;
-                import.Pfad = record.Path;
-                import.IsSampler = record.IsSample;
-                import.Titel = record.Titel;
-                import.ImportDate = DateTime.Now;
+                //import.ImportDate = DateTime.Now;
 
-                context.tTestImports.Add(import);
+                context.tSongsTests.Add(songs);
                 context.SaveChanges();
 
                 Logging.Log("1 record added");
@@ -452,6 +471,22 @@ namespace MyMp3Importer.BLL
             return genres[0];
         }
 
+        internal static int GetMediaIDByType(string type)
+        {
+            try
+            {
+                var context = new MyJukeboxEntities();
+
+                var media = context.tMedias
+                                .Where(m => m.Type == type).FirstOrDefault();
+                return media.ID;
+            }
+            catch
+            {
+                return -1;
+            }
+        }
+
         public static int GetLastID(string tableName)
         {
             int lastId = -1;
@@ -461,13 +496,23 @@ namespace MyMp3Importer.BLL
             {
                 var context = new MyJukeboxEntities();
 
-                if (tableName == "tTestImport")
+
+                if (tableName == "tGenres")
                 {
-                    recCount = context.tTestImports
+                    recCount = context.tGenres
                                     .Select(i => i.ID).Count();
 
                     if (recCount != 0)
-                        lastId = context.tTestImports.Max(x => x.ID);
+                        lastId = context.tCatalogs.Max(x => x.ID);
+                }
+
+                if (tableName == "tCatalogs")
+                {
+                    recCount = context.tCatalogs
+                                    .Select(i => i.ID).Count();
+
+                    if (recCount != 0)
+                        lastId = context.tCatalogs.Max(x => x.ID);
                 }
 
                 if (tableName == "tSongs")
@@ -479,13 +524,13 @@ namespace MyMp3Importer.BLL
                         lastId = context.tSongs.Max(x => x.ID);
                 }
 
-                if (tableName == "tCatalogs")
+                if (tableName == "tSongsTest")
                 {
-                    recCount = context.tCatalogs
+                    recCount = context.tSongsTests
                                     .Select(i => i.ID).Count();
 
                     if (recCount != 0)
-                        lastId = context.tCatalogs.Max(x => x.ID);
+                        lastId = context.tSongs.Max(x => x.ID);
                 }
 
                 return lastId;
@@ -522,6 +567,8 @@ namespace MyMp3Importer.BLL
                 });
             }
         }
+
+
 
         public static MP3Record GetRecordInfo(string startDirectory)
         {

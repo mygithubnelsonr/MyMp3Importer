@@ -19,7 +19,6 @@
         <EntityTypeShape EntityType="MyJukeboxModel.tQuery" Width="1.5" PointX="8.75" PointY="6.75" IsExpanded="true" />
         <EntityTypeShape EntityType="MyJukeboxModel.tSetting" Width="1.5" PointX="2.75" PointY="9.75" IsExpanded="true" />
         <EntityTypeShape EntityType="MyJukeboxModel.tSong" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="MyJukeboxModel.tTestImport" Width="1.5" PointX="4.75" PointY="9.75" IsExpanded="true" />
         <AssociationConnector Association="MyJukeboxModel.FK_tSongsNew_tFileInfos" ManuallyRouted="false" />
         <AssociationConnector Association="MyJukeboxModel.FK_tSongsNew_tGenres" ManuallyRouted="false" />
         <AssociationConnector Association="MyJukeboxModel.FK_tSongsNew_tInfos" ManuallyRouted="false" />
@@ -30,6 +29,10 @@
         <EntityTypeShape EntityType="MyJukeboxModel.vSongsLong" Width="1.5" PointX="10.375" PointY="0.75" />
         <EntityTypeShape EntityType="MyJukeboxModel.tCatalog" Width="1.5" PointX="0.75" PointY="2.25" />
         <AssociationConnector Association="MyJukeboxModel.FK_tSongsNew_tCatalogs" />
+        <EntityTypeShape EntityType="MyJukeboxModel.tFileInfosTest" Width="1.5" PointX="8.75" PointY="13.25" />
+        <EntityTypeShape EntityType="MyJukeboxModel.tInfosTest" Width="1.5" PointX="10.75" PointY="13.25" />
+        <EntityTypeShape EntityType="MyJukeboxModel.tMD5Test" Width="1.5" PointX="12.625" PointY="13.25" />
+        <EntityTypeShape EntityType="MyJukeboxModel.tSongsTest" Width="1.5" PointX="6.75" PointY="13.25" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

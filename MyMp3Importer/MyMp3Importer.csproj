@@ -137,13 +137,22 @@
     <Compile Include="DAL\tFileInfo.cs">
       <DependentUpon>MyJukeboxModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="DAL\tFileInfosTest.cs">
+      <DependentUpon>MyJukeboxModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="DAL\tGenre.cs">
       <DependentUpon>MyJukeboxModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DAL\tInfo.cs">
       <DependentUpon>MyJukeboxModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="DAL\tInfosTest.cs">
+      <DependentUpon>MyJukeboxModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="DAL\tMD5.cs">
+      <DependentUpon>MyJukeboxModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\tMD5Test.cs">
       <DependentUpon>MyJukeboxModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DAL\tMedia.cs">
@@ -164,7 +173,7 @@
     <Compile Include="DAL\tSong.cs">
       <DependentUpon>MyJukeboxModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="DAL\tTestImport.cs">
+    <Compile Include="DAL\tSongsTest.cs">
       <DependentUpon>MyJukeboxModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DAL\vPlaylistSong.cs">

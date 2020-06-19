@@ -205,7 +205,7 @@ namespace MyMp3Importer
             {
                 if (fi.Extension == filePattern)
                 {
-                    files.Add(new FileDetails() { File = fi.Name, Extension = fi.Extension, Path = fi.DirectoryName, Size = fi.Length, LastWrite = fi.LastWriteTime });
+                    files.Add(new FileDetails() { File = fi.Name.Replace(fi.Extension, "").ToLower(), Extension = fi.Extension, Path = fi.DirectoryName, Size = fi.Length, LastWrite = fi.LastWriteTime }); ;
                     allFileSize += fi.Length;
                 }
             }
@@ -372,28 +372,34 @@ namespace MyMp3Importer
             #endregion
         }
 
+        // ToDo: import counter is wrong
         private void Import()
         {
-            int _catalogID = -1;
-
-            string fileExtension;
+            int catalogID = -1;
             int importFailed = 0;
             int importSuccess = 0;
+            int recordsAffected = 0;
 
             if (datagridFilelist.Items.Count == 0) return;
 
-            var a = labelGenre.Tag;
-
-
-
-            if ((bool)labelCatalog.Tag == false)
+            if ((bool)labelGenre.Tag == false)
             {
-                var result = MessageBox.Show($"catalog '{comboboxCatalog.Text}' does not exist in the databse!\n\n" +
-                            "create new catalog?", "New Catalog", MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
+                var result = MessageBox.Show($"Missing genre '{comboboxGenre.Text}' in table tGenre!\n\n" +
+                            "You want create this genre?", "New Genre", MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
                 if (result == MessageBoxResult.No)
                     return;
                 else
-                    _catalogID = DataGetSet.CreateCatalog(comboboxCatalog.Text);
+                    catalogID = DataGetSet.CreateGenre(comboboxGenre.Text);
+            }
+
+            if ((bool)labelCatalog.Tag == false)
+            {
+                var result = MessageBox.Show($"Missing catalog '{comboboxCatalog.Text}' in table tCatalogs!\n\n" +
+                            "You want create this catalog?", "New Catalog", MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
+                if (result == MessageBoxResult.No)
+                    return;
+                else
+                    catalogID = DataGetSet.CreateCatalog(comboboxCatalog.Text);
             }
 
             buttonImport.IsEnabled = false;
@@ -415,10 +421,15 @@ namespace MyMp3Importer
             #endregion
 
             DateTime t1 = DateTime.Now;
-            statusbarStart.Content = t1.Hour.ToString() + ":" + t1.Minute.ToString() + ":" + t1.Second.ToString();
+            statusbarStart.Content = t1.ToString("HH:mm:ss");
             statusbarDauer.Content = "";
             statusbarProgress.Visibility = Visibility.Visible;
-            //toolStripProgressBar.Enabled = true;
+
+            if (checkboxTestimport.IsChecked == true)
+            {
+                var result = DataGetSet.TruncateTestTables();
+                Debug.Print($"TruncateTestTables result = {result}");
+            }
 
             var list = datagridFilelist.Items;
 
@@ -438,15 +449,19 @@ namespace MyMp3Importer
                     }
 
                     MP3Record mp3 = new MP3Record();
+                    mp3.Album = comboboxAlbum.Text;
 
-                    mp3.FileName = item.File;
-                    fileExtension = item.Extension;
+                    mp3.Titel = item.File;
+                    mp3.FileName = item.File + item.Extension;
                     mp3.FileSize = Convert.ToInt32(item.Size);
                     mp3.FileDate = item.LastWrite;
                     mp3.Path = item.Path;
-
-                    FileInfo fi = new FileInfo(item.File);
-                    fileExtension = fi.Extension.ToLower();
+                    mp3.IsSample = (bool)checkboxSampler.IsChecked;
+                    mp3.Media = DataGetSet.GetMediaIDByType(comboboxMedia.Text);
+                    mp3.Catalog = comboboxCatalog.Text;
+                    mp3.Genre = comboboxGenre.Text;
+                    mp3.Interpret = comboboxInterpret.Text;
+                    mp3.MD5 = Helpers.MD5(mp3.Path + mp3.FileName);
 
                     if (checkboxSpezialimport.IsChecked == false)
                     {
@@ -517,25 +532,24 @@ namespace MyMp3Importer
                         #endregion
                     }
 
-                    mp3.MD5 = Helpers.MD5(mp3.Path + mp3.FileName);
                     mp3List.Add(mp3);
+                    // save records
+                    var testimport = checkboxTestimport.IsChecked ?? false;
+                    recordsAffected += DataGetSet.SaveNewRecords(mp3List, testimport);
                 }
 
-                statusbarProgress.Visibility = Visibility.Hidden;
-
-                // save records
-                var testimport = checkboxTestimport.IsChecked ?? false;
-                int recordsAffected = DataGetSet.SaveNewRecords(mp3List, testimport);
                 DateTime t2 = DateTime.Now;
+                statusbarProgress.Visibility = Visibility.Hidden;
                 statusbarDauer.Content = (t2 - t1).Milliseconds.ToString() + " ms";
 
                 labelSuccess.Content = $"{recordsAffected}";
                 labelFailed.Content = $"{mp3List.Count - recordsAffected}";
 
-                var lastID = DataGetSet.GetLastID("tTestImport");
+                var lastID = DataGetSet.GetLastID("tSongsTest");
                 Debug.Print($"Import success = {importSuccess}, failed={importFailed}, lastId={lastID}");
-
             }
+
+            buttonImport.IsEnabled = true;
         }
 
         #endregion
