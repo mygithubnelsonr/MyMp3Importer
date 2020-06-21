@@ -12,7 +12,7 @@ namespace MyMp3Importer.DAL
     using System;
     using System.Collections.Generic;
     
-    public partial class tInfosTest
+    public partial class tInfos_tst
     {
         public int ID { get; set; }
         public int ID_Song { get; set; }

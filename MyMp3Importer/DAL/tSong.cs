@@ -16,7 +16,7 @@ namespace MyMp3Importer.DAL
     {
         public int ID { get; set; }
         public string Album { get; set; }
-        public string Interpret { get; set; }
+        public string Artist { get; set; }
         public string Titel { get; set; }
         public string Pfad { get; set; }
         public string FileName { get; set; }

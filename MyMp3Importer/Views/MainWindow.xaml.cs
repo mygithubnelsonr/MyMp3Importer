@@ -205,7 +205,8 @@ namespace MyMp3Importer
             {
                 if (fi.Extension == filePattern)
                 {
-                    files.Add(new FileDetails() { File = fi.Name.Replace(fi.Extension, "").ToLower(), Extension = fi.Extension, Path = fi.DirectoryName, Size = fi.Length, LastWrite = fi.LastWriteTime }); ;
+                    string file = GeneralH.ToProperCase(fi.Name.Replace(fi.Extension, ""));
+                    files.Add(new FileDetails() { File = file, Extension = fi.Extension, Path = fi.DirectoryName, Size = fi.Length, LastWrite = fi.LastWriteTime }); ;
                     allFileSize += fi.Length;
                 }
             }
@@ -372,7 +373,6 @@ namespace MyMp3Importer
             #endregion
         }
 
-        // ToDo: import counter is wrong
         private void Import()
         {
             int catalogID = -1;
@@ -449,18 +449,17 @@ namespace MyMp3Importer
                     }
 
                     MP3Record mp3 = new MP3Record();
+                    mp3.Genre = comboboxGenre.SelectedIndex;
+                    mp3.Catalog = comboboxCatalog.SelectedIndex;
+                    mp3.Media = comboboxMedia.SelectedIndex;
                     mp3.Album = comboboxAlbum.Text;
-
                     mp3.Titel = item.File;
                     mp3.FileName = item.File + item.Extension;
                     mp3.FileSize = Convert.ToInt32(item.Size);
                     mp3.FileDate = item.LastWrite;
                     mp3.Path = item.Path;
                     mp3.IsSample = (bool)checkboxSampler.IsChecked;
-                    mp3.Media = DataGetSet.GetMediaIDByType(comboboxMedia.Text);
-                    mp3.Catalog = comboboxCatalog.Text;
-                    mp3.Genre = comboboxGenre.Text;
-                    mp3.Interpret = comboboxInterpret.Text;
+                    mp3.Artist = comboboxInterpret.Text;
                     mp3.MD5 = Helpers.MD5(mp3.Path + mp3.FileName);
 
                     if (checkboxSpezialimport.IsChecked == false)
@@ -479,11 +478,10 @@ namespace MyMp3Importer
                         //    mp3.Titel = GeneralH.ToProperCase(arTmp[1].Trim());
                         //}
 
-                        mp3.Genre = comboboxGenre.Text;
-                        mp3.Album = comboboxAlbum.Text;  //arPath[arPath.Length - 1];
-                        mp3.Media = comboboxMedia.SelectedIndex;
-                        mp3.Catalog = comboboxCatalog.Text;
-                        //catalogue = comboboxCatalog.Text;
+                        //mp3.Genre = comboboxGenre.SelectedIndex;
+                        //mp3.Album = comboboxAlbum.Text;  //arPath[arPath.Length - 1];
+                        //mp3.Media = comboboxMedia.SelectedIndex;
+                        //mp3.Catalog = comboboxCatalog.SelectedIndex;
                     }
                     else
                     {
@@ -533,17 +531,20 @@ namespace MyMp3Importer
                     }
 
                     mp3List.Add(mp3);
-                    // save records
-                    var testimport = checkboxTestimport.IsChecked ?? false;
-                    recordsAffected += DataGetSet.SaveNewRecords(mp3List, testimport);
                 }
+
+                // save records
+                if ((bool)checkboxTestimport.IsChecked == true)
+                    recordsAffected += DataGetSet.SaveTestRecord(mp3List);
+                else
+                    recordsAffected += DataGetSet.SaveRecord(mp3List);
 
                 DateTime t2 = DateTime.Now;
                 statusbarProgress.Visibility = Visibility.Hidden;
                 statusbarDauer.Content = (t2 - t1).Milliseconds.ToString() + " ms";
 
                 labelSuccess.Content = $"{recordsAffected}";
-                labelFailed.Content = $"{mp3List.Count - recordsAffected}";
+                labelFailed.Content = $"{list.Count - recordsAffected}";
 
                 var lastID = DataGetSet.GetLastID("tSongsTest");
                 Debug.Print($"Import success = {importSuccess}, failed={importFailed}, lastId={lastID}");
@@ -556,6 +557,9 @@ namespace MyMp3Importer
 
         private void buttonTest_Click(object sender, RoutedEventArgs e)
         {
+            var id = DataGetSet.GetLastID("tSongs_tst");
+
+            Debug.Print(id.ToString());
 
         }
     }

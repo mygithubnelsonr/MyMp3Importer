@@ -12,10 +12,14 @@ namespace MyMp3Importer.DAL
     using System;
     using System.Collections.Generic;
     
-    public partial class tMD5Test
+    public partial class tFileInfos_tst
     {
         public int ID { get; set; }
         public int ID_Song { get; set; }
-        public string MD5 { get; set; }
+        public Nullable<int> FileSize { get; set; }
+        public Nullable<System.DateTime> FileDate { get; set; }
+        public Nullable<System.TimeSpan> Duration { get; set; }
+        public Nullable<System.DateTime> ImportDate { get; set; }
+        public string Link { get; set; }
     }
 }

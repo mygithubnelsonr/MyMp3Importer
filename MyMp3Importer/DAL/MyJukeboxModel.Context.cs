@@ -26,8 +26,6 @@ namespace MyMp3Importer.DAL
         }
     
         public virtual DbSet<tActionLog> tActionLogs { get; set; }
-        public virtual DbSet<tAlbum> tAlbums { get; set; }
-        public virtual DbSet<tBeat> tBeats { get; set; }
         public virtual DbSet<tColumn> tColumns { get; set; }
         public virtual DbSet<tFileInfo> tFileInfos { get; set; }
         public virtual DbSet<tGenre> tGenres { get; set; }
@@ -43,9 +41,12 @@ namespace MyMp3Importer.DAL
         public virtual DbSet<vSong> vSongs { get; set; }
         public virtual DbSet<vSongsLong> vSongsLongs { get; set; }
         public virtual DbSet<tCatalog> tCatalogs { get; set; }
-        public virtual DbSet<tFileInfosTest> tFileInfosTests { get; set; }
-        public virtual DbSet<tInfosTest> tInfosTests { get; set; }
-        public virtual DbSet<tMD5Test> tMD5Test { get; set; }
-        public virtual DbSet<tSongsTest> tSongsTests { get; set; }
+        public virtual DbSet<tFileInfos_tst> tFileInfos_tst { get; set; }
+        public virtual DbSet<tInfos_tst> tInfos_tst { get; set; }
+        public virtual DbSet<tMD5_tst> tMD5_tst { get; set; }
+        public virtual DbSet<tCatalogs_tst> tCatalogs_tst { get; set; }
+        public virtual DbSet<tGenres_tst> tGenres_tst { get; set; }
+        public virtual DbSet<tMedia_tst> tMedia_tst { get; set; }
+        public virtual DbSet<tSongs_tst> tSongs_tst { get; set; }
     }
 }

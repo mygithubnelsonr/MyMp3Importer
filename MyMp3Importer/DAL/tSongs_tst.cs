@@ -12,7 +12,7 @@ namespace MyMp3Importer.DAL
     using System;
     using System.Collections.Generic;
     
-    public partial class tSongsTest
+    public partial class tSongs_tst
     {
         public int ID { get; set; }
         public string Album { get; set; }
@@ -20,9 +20,12 @@ namespace MyMp3Importer.DAL
         public string Titel { get; set; }
         public string Pfad { get; set; }
         public string FileName { get; set; }
-        public Nullable<bool> IsSampler { get; set; }
         public Nullable<int> ID_Genre { get; set; }
         public Nullable<int> ID_Catalog { get; set; }
         public Nullable<int> ID_Media { get; set; }
+    
+        public virtual tCatalogs_tst tCatalogs_tst { get; set; }
+        public virtual tGenres_tst tGenres_tst { get; set; }
+        public virtual tMedia_tst tMedia_tst { get; set; }
     }
 }

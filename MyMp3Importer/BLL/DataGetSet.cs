@@ -153,22 +153,6 @@ namespace MyMp3Importer.BLL
             }
         }
 
-        public static async Task<List<string>> GetAlbumsAsync()
-        {
-            List<string> albums = null;
-
-            using (var context = new MyJukeboxEntities())
-            {
-                await Task.Run(() =>
-            {
-                albums = context.tAlbums
-                                .Select(a => a.Name).ToList();
-            });
-
-                return albums;
-            }
-        }
-
         #endregion
 
         public static int CreateCatalog(string catalog)
@@ -215,7 +199,7 @@ namespace MyMp3Importer.BLL
             return id;
         }
 
-        public static int SaveNewRecords(List<MP3Record> mP3Records, bool testImport)
+        public static int SaveRecord(List<MP3Record> mP3Records)
         {
             int recordsImporteds = 0;
 
@@ -223,7 +207,21 @@ namespace MyMp3Importer.BLL
 
             foreach (MP3Record record in mP3Records)
             {
-                recordsImporteds += SaveNewRecord(record, testImport);
+                recordsImporteds += SetRecord(record);
+            }
+
+            return recordsImporteds;
+        }
+
+        public static int SaveTestRecord(List<MP3Record> mP3Records)
+        {
+            int recordsImporteds = 0;
+
+            Logging.Flush();
+
+            foreach (MP3Record record in mP3Records)
+            {
+                recordsImporteds += SetTestRecord(record);
             }
 
             return recordsImporteds;
@@ -252,10 +250,10 @@ namespace MyMp3Importer.BLL
             {
                 int result = -1;
                 var context = new MyJukeboxEntities();
-                result = context.Database.ExecuteSqlCommand("truncate table [tSongsTest]");
-                result = context.Database.ExecuteSqlCommand("truncate table [tFileInfosTest]");
-                result = context.Database.ExecuteSqlCommand("truncate table [tInfosTest]");
-                result = context.Database.ExecuteSqlCommand("truncate table [tMD5Test]");
+                result = context.Database.ExecuteSqlCommand("truncate table [tst].[tSongs]");
+                result = context.Database.ExecuteSqlCommand("truncate table [tst].[tFileInfos]");
+                result = context.Database.ExecuteSqlCommand("truncate table [tst].[tInfos]");
+                result = context.Database.ExecuteSqlCommand("truncate table [tst].[tMD5]");
 
                 return true;
             }
@@ -264,19 +262,29 @@ namespace MyMp3Importer.BLL
                 Debug.Print($"TruncateTableImportTest_Error: {ex.Message}");
                 return false;
             }
-
         }
 
-        private static bool MD5Exist(string MD5)
+        private static bool MD5Exist(string MD5, bool testmode = false)
         {
+            object result = null;
+
             var context = new MyJukeboxEntities();
-            var result = context.tMD5
-                            .Where(m => m.MD5 == MD5).FirstOrDefault();
-            //.Select(m => m.MD5).ToList();
+
+            if (testmode == false)
+            {
+                result = context.tMD5
+                                .Where(m => m.MD5 == MD5).FirstOrDefault();
+
+            }
+            else
+            {
+                result = context.tMD5_tst
+                                .Where(m => m.MD5 == MD5).FirstOrDefault();
+            }
 
             if (result != null)
             {
-                Debug.Print($"title allready exist! (MD5={result.MD5})");
+                Debug.Print($"title allready exist! (MD5={result})");
                 return true;
             }
             else
@@ -285,119 +293,151 @@ namespace MyMp3Importer.BLL
             }
         }
 
-        private static int SaveNewRecord(MP3Record record, bool testImport)
+        private static int SaveTestRecord(MP3Record record)
         {
             int recordsImported = 0;
 
-            if (testImport == true)
-                recordsImported += SetNewTestRecord(record);
-            else
-            {
-                var exist = MD5Exist(record.MD5);
+            recordsImported += SetTestRecord(record);
 
-                if (MD5Exist(record.MD5) == false)
-                {
-                    recordsImported += SetNewRecord(record);
-                }
+            return recordsImported;
+        }
+
+        private static int SaveRecord(MP3Record record)
+        {
+            int recordsImported = 0;
+
+
+            var exist = MD5Exist(record.MD5);
+
+            if (MD5Exist(record.MD5) == false)
+            {
+                recordsImported += SetRecord(record);
             }
             return recordsImported;
         }
 
-        private static int SetNewRecord(MP3Record record)   // productiv
+        private static int SetRecord(MP3Record mp3Record)
         {
-            try
+            int lastSongID = -1;
+
+            if (MD5Exist(mp3Record.MD5, false) == false)
             {
-                var context = new MyJukeboxEntities();
+                try
+                {
+                    var context = new MyJukeboxEntities();
+                    // tsongs data
+                    var songs = new tSong();
+                    songs.Album = mp3Record.Album;
+                    songs.Artist = mp3Record.Artist;
+                    songs.Titel = mp3Record.Titel;
+                    songs.Pfad = mp3Record.Path;
+                    songs.FileName = mp3Record.FileName;
+                    songs.ID_Genre = mp3Record.Genre;
+                    songs.ID_Catalog = mp3Record.Catalog;
+                    songs.ID_Media = mp3Record.Media;
+                    context.tSongs.Add(songs);
+                    context.SaveChanges();
 
-                var song = new tSong();
-                song.Album = record.Album;
-                song.Interpret = record.Interpret;
-                song.Titel = record.Titel;
-                song.Pfad = record.Path;
-                song.FileName = record.FileName;
+                    lastSongID = GetLastID("tSongs");
 
-                context.tSongs.Add(song);
-                context.SaveChanges();
+                    // tmd5 data
+                    var md5 = new tMD5();
+                    md5.MD5 = mp3Record.MD5;
+                    md5.ID_Song = lastSongID;
+                    context.tMD5.Add(md5);
+                    context.SaveChanges();
 
-                int songID = (int)GetLastID("tSongs");
+                    // tfileinfo data
+                    var file = new tFileInfo();
+                    file.FileDate = mp3Record.FileDate;
+                    file.FileSize = mp3Record.FileSize;
+                    file.ImportDate = DateTime.Now;
+                    file.ID_Song = lastSongID;
+                    context.tFileInfos.Add(file);
+                    context.SaveChanges();
 
-                // tMd5
-                var md5 = new tMD5();
-                md5.ID_Song = songID;
-                md5.MD5 = record.MD5;
+                    // tinfos data
+                    var info = new tInfo();
+                    info.Sampler = mp3Record.IsSample;
+                    info.ID_Song = lastSongID;
+                    context.tInfos.Add(info);
+                    context.SaveChanges();
 
-                context.tMD5.Add(md5);
-                context.SaveChanges();
-
-                // tInfo
-                var info = new tInfo();
-                info.ID_Song = songID;
-                info.Media = record.Media;
-                info.Sampler = record.IsSample;
-                context.tInfos.Add(info);
-                context.SaveChanges();
-
-                // tFileInfo
-                var file = new tFileInfo();
-                file.ID_Song = songID;
-                file.FileDate = record.FileDate;
-                file.FileSize = record.FileSize;
-                file.ImportDate = DateTime.Now;
-                context.tFileInfos.Add(file);
-                context.SaveChanges();
-
-                int catalogID = GetCatalogFromString(record.Catalog);
-                int genreID = GetGenreFromString(record.Genre);
-
-                // tSong
-                song.ID_Catalog = catalogID;
-                song.ID_Genre = genreID;
-                context.SaveChanges();
-
-                return 1;
+                    Logging.Log("1 record added");
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    Debug.Print($"SetNewTestRecord_Error: {ex.Message}");
+                    Logging.Log(ex.Message);
+                    return 0;
+                }
             }
-            catch (Exception ex)
+            else
             {
-                Debug.Print("SetNewRecord_Error: {ex.Message}");
                 return 0;
             }
         }
 
-        private static int SetNewTestRecord(MP3Record record)
+        private static int SetTestRecord(MP3Record mp3Record)
         {
-            try
+            int lastSongID = -1;
+
+            if (MD5Exist(mp3Record.MD5, true) == false)
             {
-                var context = new MyJukeboxEntities();
+                try
+                {
+                    var context = new MyJukeboxEntities();
+                    // tsongs data
+                    var songs = new tSongs_tst();
+                    songs.Album = mp3Record.Album;
+                    songs.Artist = mp3Record.Artist;
+                    songs.Titel = mp3Record.Titel;
+                    songs.Pfad = mp3Record.Path;
+                    songs.FileName = mp3Record.FileName;
+                    songs.ID_Genre = mp3Record.Genre;
+                    songs.ID_Catalog = mp3Record.Catalog;
+                    songs.ID_Media = mp3Record.Media;
+                    context.tSongs_tst.Add(songs);
+                    context.SaveChanges();
 
-                var songs = new tSongsTest();
+                    lastSongID = GetLastID("tSongs_tst");
 
-                songs.Album = record.Album;
-                songs.Artist = record.Interpret;
-                songs.Titel = record.Titel;
-                songs.Pfad = record.Path;
-                songs.FileName = record.FileName;
-                songs.IsSampler = record.IsSample;
+                    // tmd5 data
+                    var md5 = new tMD5_tst();
+                    md5.MD5 = mp3Record.MD5;
+                    md5.ID_Song = lastSongID;
+                    context.tMD5_tst.Add(md5);
+                    context.SaveChanges();
 
-                // ToDo: continue here
+                    // tfileinfo data
+                    var file = new tFileInfos_tst();
+                    file.FileDate = mp3Record.FileDate;
+                    file.FileSize = mp3Record.FileSize;
+                    file.ImportDate = DateTime.Now;
+                    file.ID_Song = lastSongID;
+                    context.tFileInfos_tst.Add(file);
+                    context.SaveChanges();
 
-                //import.FileDate = record.FileDate;
-                //import.FileSize = record.FileSize;
-                //import.Genre = record.Genre;
-                //import.Catalog = record.Catalog;
-                //import.MD5 = record.MD5;
-                //import.Medium = medium;
-                //import.ImportDate = DateTime.Now;
+                    // tinfos data
+                    var info = new tInfos_tst();
+                    info.Sampler = mp3Record.IsSample;
+                    info.ID_Song = lastSongID;
+                    context.tInfos_tst.Add(info);
+                    context.SaveChanges();
 
-                context.tSongsTests.Add(songs);
-                context.SaveChanges();
-
-                Logging.Log("1 record added");
-                return 1;
+                    Logging.Log("1 record added");
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    Debug.Print($"SetNewTestRecord_Error: {ex.Message}");
+                    Logging.Log(ex.Message);
+                    return 0;
+                }
             }
-            catch (Exception ex)
+            else
             {
-                Debug.Print($"SetNewTestRecord_Error: {ex.Message}");
-                Logging.Log(ex.Message);
                 return 0;
             }
         }
@@ -490,47 +530,54 @@ namespace MyMp3Importer.BLL
         public static int GetLastID(string tableName)
         {
             int lastId = -1;
-            int recCount = -1;
 
             try
             {
                 var context = new MyJukeboxEntities();
 
-
                 if (tableName == "tGenres")
                 {
-                    recCount = context.tGenres
-                                    .Select(i => i.ID).Count();
+                    var result = context.tGenres
+                                    .Select(n => n.ID).Count();
 
-                    if (recCount != 0)
-                        lastId = context.tCatalogs.Max(x => x.ID);
+                    if (result != 0)
+                        lastId = context.tGenres.Max(n => n.ID);
+                }
+
+                if (tableName == "tGenres_tst")
+                {
+                    var result = context.tGenres_tst
+                                    .Select(n => n.ID).Count();
+
+                    if (result != 0)
+                        lastId = context.tGenres_tst.Max(n => n.ID);
                 }
 
                 if (tableName == "tCatalogs")
                 {
-                    recCount = context.tCatalogs
-                                    .Select(i => i.ID).Count();
+                    var result = context.tCatalogs
+                                    .Select(n => n.ID).Count();
 
-                    if (recCount != 0)
-                        lastId = context.tCatalogs.Max(x => x.ID);
+                    if (result != 0)
+                        lastId = context.tCatalogs.Max(n => n.ID);
                 }
 
                 if (tableName == "tSongs")
                 {
-                    recCount = context.tSongs
-                                    .Select(i => i.ID).Count();
+                    var result = context.tSongs
+                                    .Select(n => n.ID).Count();
 
-                    if (recCount != 0)
-                        lastId = context.tSongs.Max(x => x.ID);
+                    if (result != 0)
+                        lastId = context.tSongs.Max(n => n.ID);
                 }
 
-                if (tableName == "tSongsTest")
+                if (tableName == "tSongs_tst")
                 {
-                    recCount = context.tSongsTests
-                                    .Select(i => i.ID).Count();
+                    var result = context.tSongs_tst
+                                    .Select(n => n.ID).Count();
 
-                    if (recCount != 0)
-                        lastId = context.tSongs.Max(x => x.ID);
+                    if (result != 0)
+                        lastId = context.tSongs_tst.Max(n => n.ID);
                 }
 
                 return lastId;
@@ -568,42 +615,41 @@ namespace MyMp3Importer.BLL
             }
         }
 
+        //public static MP3Record GetRecordInfo(string startDirectory)
+        //{
+        //    MP3Record record = null;
 
+        //    // no special import
+        //    string[] arTmp = startDirectory.Split('\\');
 
-        public static MP3Record GetRecordInfo(string startDirectory)
-        {
-            MP3Record record = null;
+        //    if (arTmp.Length < 5)
+        //        return record;
 
-            // no special import
-            string[] arTmp = startDirectory.Split('\\');
+        //    List<int> media;
+        //    string type = arTmp[arTmp.Length - 3];
+        //    var context = new MyJukeboxEntities();
+        //    media = context.tMedias
+        //                .Where(m => m.Type == type)
+        //                .Select(m => m.ID).ToList();
 
-            if (arTmp.Length < 5)
-                return record;
+        //    try
+        //    {
+        //        record = new MP3Record();
+        //        record.Album = arTmp[arTmp.Length - 1];
+        //        record.Artist = arTmp[arTmp.Length - 2];
+        //        record.Media = media[0];
+        //        //record.Genre = arTmp[arTmp.Length - 5];
+        //        //record.Catalog = arTmp[arTmp.Length - 4];
 
-            List<int> media;
-            string type = arTmp[arTmp.Length - 3];
-            var context = new MyJukeboxEntities();
-            media = context.tMedias
-                        .Where(m => m.Type == type)
-                        .Select(m => m.ID).ToList();
+        //        return record;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        //MessageBox.Show("Media Type not found!", ex.Message);
+        //        return null;
+        //    }
+        //}
 
-            try
-            {
-                record = new MP3Record();
-                record.Album = arTmp[arTmp.Length - 1];
-                record.Interpret = arTmp[arTmp.Length - 2];
-                record.Media = media[0];
-                record.Genre = arTmp[arTmp.Length - 5];
-                record.Catalog = arTmp[arTmp.Length - 4];
-
-                return record;
-            }
-            catch (Exception ex)
-            {
-                //MessageBox.Show("Media Type not found!", ex.Message);
-                return null;
-            }
-        }
         #endregion
     }
 }

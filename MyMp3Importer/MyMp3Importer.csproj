@@ -122,13 +122,10 @@
     <Compile Include="DAL\tActionLog.cs">
       <DependentUpon>MyJukeboxModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="DAL\tAlbum.cs">
-      <DependentUpon>MyJukeboxModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DAL\tBeat.cs">
-      <DependentUpon>MyJukeboxModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="DAL\tCatalog.cs">
+      <DependentUpon>MyJukeboxModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\tCatalogs_tst.cs">
       <DependentUpon>MyJukeboxModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DAL\tColumn.cs">
@@ -137,25 +134,31 @@
     <Compile Include="DAL\tFileInfo.cs">
       <DependentUpon>MyJukeboxModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="DAL\tFileInfosTest.cs">
+    <Compile Include="DAL\tFileInfos_tst.cs">
       <DependentUpon>MyJukeboxModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DAL\tGenre.cs">
       <DependentUpon>MyJukeboxModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="DAL\tGenres_tst.cs">
+      <DependentUpon>MyJukeboxModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="DAL\tInfo.cs">
       <DependentUpon>MyJukeboxModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="DAL\tInfosTest.cs">
+    <Compile Include="DAL\tInfos_tst.cs">
       <DependentUpon>MyJukeboxModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DAL\tMD5.cs">
       <DependentUpon>MyJukeboxModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="DAL\tMD5Test.cs">
+    <Compile Include="DAL\tMD5_tst.cs">
       <DependentUpon>MyJukeboxModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DAL\tMedia.cs">
+      <DependentUpon>MyJukeboxModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\tMedia_tst.cs">
       <DependentUpon>MyJukeboxModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DAL\tPlaylist.cs">
@@ -173,7 +176,7 @@
     <Compile Include="DAL\tSong.cs">
       <DependentUpon>MyJukeboxModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="DAL\tSongsTest.cs">
+    <Compile Include="DAL\tSongs_tst.cs">
       <DependentUpon>MyJukeboxModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DAL\vPlaylistSong.cs">

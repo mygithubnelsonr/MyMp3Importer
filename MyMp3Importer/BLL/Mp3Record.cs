@@ -4,11 +4,11 @@ namespace MyMp3Importer.BLL
 {
     public class MP3Record
     {
-        public string Genre { get; set; }
-        public string Catalog { get; set; }
+        public int Genre { get; set; }
+        public int Catalog { get; set; }
         public int Media { get; set; }
         public string Album { get; set; }
-        public string Interpret { get; set; }
+        public string Artist { get; set; }
         public string Titel { get; set; }
         public string Path { get; set; }
         public string FileName { get; set; }

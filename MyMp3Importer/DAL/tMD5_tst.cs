@@ -12,9 +12,10 @@ namespace MyMp3Importer.DAL
     using System;
     using System.Collections.Generic;
     
-    public partial class tBeat
+    public partial class tMD5_tst
     {
         public int ID { get; set; }
-        public string Name { get; set; }
+        public int ID_Song { get; set; }
+        public string MD5 { get; set; }
     }
 }

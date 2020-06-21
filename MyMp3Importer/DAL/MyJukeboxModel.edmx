@@ -15,20 +15,6 @@
           <Property Name="Message" Type="nvarchar" MaxLength="254" />
           <Property Name="Date" Type="datetime2" Precision="0" />
         </EntityType>
-        <EntityType Name="tAlbums">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
-        </EntityType>
-        <EntityType Name="tBeat">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nchar" MaxLength="10" Nullable="false" />
-        </EntityType>
         <EntityType Name="tCatalogs">
           <Key>
             <PropertyRef Name="ID" />
@@ -45,18 +31,6 @@
           <Property Name="Width" Type="int" />
         </EntityType>
         <EntityType Name="tFileInfos">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ID_Song" Type="int" Nullable="false" />
-          <Property Name="FileSize" Type="int" />
-          <Property Name="FileDate" Type="datetime" />
-          <Property Name="Duration" Type="time" Precision="7" />
-          <Property Name="ImportDate" Type="datetime" />
-          <Property Name="Link" Type="nvarchar" MaxLength="50" />
-        </EntityType>
-        <EntityType Name="tFileInfosTest">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
@@ -89,29 +63,7 @@
           <Property Name="Comment" Type="nvarchar" MaxLength="20" />
           <Property Name="Media" Type="int" />
         </EntityType>
-        <EntityType Name="tInfosTest">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ID_Song" Type="int" Nullable="false" />
-          <Property Name="Played" Type="int" />
-          <Property Name="Rating" Type="int" />
-          <Property Name="Beat" Type="int" />
-          <Property Name="Error" Type="bit" />
-          <Property Name="Sampler" Type="bit" />
-          <Property Name="Comment" Type="nvarchar" MaxLength="20" />
-          <Property Name="Media" Type="int" />
-        </EntityType>
         <EntityType Name="tMD5">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ID_Song" Type="int" Nullable="false" />
-          <Property Name="MD5" Type="nvarchar" MaxLength="32" Nullable="false" />
-        </EntityType>
-        <EntityType Name="tMD5Test">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
@@ -177,17 +129,72 @@
           <Property Name="ID_Info" Type="int" />
           <Property Name="ID_File" Type="int" />
         </EntityType>
-        <EntityType Name="tSongsTest">
+        <EntityType Name="tCatalogs1">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="12" />
+        </EntityType>
+        <EntityType Name="tFileInfos1">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID_Song" Type="int" Nullable="false" />
+          <Property Name="FileSize" Type="int" />
+          <Property Name="FileDate" Type="datetime" />
+          <Property Name="Duration" Type="time" Precision="7" />
+          <Property Name="ImportDate" Type="datetime" />
+          <Property Name="Link" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="tGenres1">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="12" />
+        </EntityType>
+        <EntityType Name="tInfos1">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID_Song" Type="int" Nullable="false" />
+          <Property Name="Played" Type="int" />
+          <Property Name="Rating" Type="int" />
+          <Property Name="Beat" Type="int" />
+          <Property Name="Error" Type="bit" />
+          <Property Name="Sampler" Type="bit" />
+          <Property Name="Comment" Type="nvarchar" MaxLength="20" />
+          <Property Name="Media" Type="int" />
+        </EntityType>
+        <EntityType Name="tMD51">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID_Song" Type="int" Nullable="false" />
+          <Property Name="MD5" Type="nvarchar" MaxLength="32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tMedia1">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Type" Type="nvarchar" MaxLength="12" />
+          <Property Name="Comment" Type="nvarchar" MaxLength="12" />
+        </EntityType>
+        <EntityType Name="tSongs1">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Album" Type="nvarchar" MaxLength="50" />
-          <Property Name="Artist" Type="nvarchar" MaxLength="65" />
+          <Property Name="Artist" Type="nvarchar" MaxLength="126" />
           <Property Name="Titel" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="Pfad" Type="nvarchar" MaxLength="254" />
-          <Property Name="FileName" Type="nvarchar" MaxLength="100" />
-          <Property Name="IsSampler" Type="bit" />
+          <Property Name="FileName" Type="nvarchar" MaxLength="156" />
           <Property Name="ID_Genre" Type="int" />
           <Property Name="ID_Catalog" Type="int" />
           <Property Name="ID_Media" Type="int" />
@@ -258,6 +265,42 @@ warning 6002: The table/view 'MyJukebox.dbo.vSongsLong' does not have a primary 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_tSongs(tst)_tCatalogs(tst)">
+          <End Role="tCatalogs1" Type="Self.tCatalogs1" Multiplicity="0..1" />
+          <End Role="tSongs1" Type="Self.tSongs1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tCatalogs1">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="tSongs1">
+              <PropertyRef Name="ID_Catalog" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tSongs(tst)_tGenres(tst)">
+          <End Role="tGenres1" Type="Self.tGenres1" Multiplicity="0..1" />
+          <End Role="tSongs1" Type="Self.tSongs1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tGenres1">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="tSongs1">
+              <PropertyRef Name="ID_Genre" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tSongs(tst)_tMedia(tst)">
+          <End Role="tMedia1" Type="Self.tMedia1" Multiplicity="0..1" />
+          <End Role="tSongs1" Type="Self.tSongs1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tMedia1">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="tSongs1">
+              <PropertyRef Name="ID_Media" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_tSongsNew_tCatalogs">
           <End Role="tCatalogs" Type="Self.tCatalogs" Multiplicity="0..1" />
           <End Role="tSongs" Type="Self.tSongs" Multiplicity="*" />
@@ -320,24 +363,25 @@ warning 6002: The table/view 'MyJukebox.dbo.vSongsLong' does not have a primary 
         </Association>
         <EntityContainer Name="MyJukeboxModelStoreContainer">
           <EntitySet Name="tActionLog" EntityType="Self.tActionLog" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="tAlbums" EntityType="Self.tAlbums" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="tBeat" EntityType="Self.tBeat" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tCatalogs" EntityType="Self.tCatalogs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tColumns" EntityType="Self.tColumns" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tFileInfos" EntityType="Self.tFileInfos" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="tFileInfosTest" EntityType="Self.tFileInfosTest" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tGenres" EntityType="Self.tGenres" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tInfos" EntityType="Self.tInfos" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="tInfosTest" EntityType="Self.tInfosTest" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tMD5" EntityType="Self.tMD5" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="tMD5Test" EntityType="Self.tMD5Test" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tMedia" EntityType="Self.tMedia" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tPlaylists" EntityType="Self.tPlaylists" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tPLentries" EntityType="Self.tPLentries" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tQueries" EntityType="Self.tQueries" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tSettings" EntityType="Self.tSettings" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tSongs" EntityType="Self.tSongs" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="tSongsTest" EntityType="Self.tSongsTest" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tCatalogs1" EntityType="Self.tCatalogs1" Schema="tst" Table="tCatalogs" store:Type="Tables" />
+          <EntitySet Name="tFileInfos1" EntityType="Self.tFileInfos1" Schema="tst" Table="tFileInfos" store:Type="Tables" />
+          <EntitySet Name="tGenres1" EntityType="Self.tGenres1" Schema="tst" Table="tGenres" store:Type="Tables" />
+          <EntitySet Name="tInfos1" EntityType="Self.tInfos1" Schema="tst" Table="tInfos" store:Type="Tables" />
+          <EntitySet Name="tMD51" EntityType="Self.tMD51" Schema="tst" Table="tMD5" store:Type="Tables" />
+          <EntitySet Name="tMedia1" EntityType="Self.tMedia1" Schema="tst" Table="tMedia" store:Type="Tables" />
+          <EntitySet Name="tSongs1" EntityType="Self.tSongs1" Schema="tst" Table="tSongs" store:Type="Tables" />
           <EntitySet Name="vPlaylistSongs" EntityType="Self.vPlaylistSongs" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [vPlaylistSongs].[ID] AS [ID], 
@@ -382,6 +426,18 @@ warning 6002: The table/view 'MyJukebox.dbo.vSongsLong' does not have a primary 
             <End Role="tPlaylists" EntitySet="tPlaylists" />
             <End Role="tPLentries" EntitySet="tPLentries" />
           </AssociationSet>
+          <AssociationSet Name="FK_tSongs(tst)_tCatalogs(tst)" Association="Self.FK_tSongs(tst)_tCatalogs(tst)">
+            <End Role="tCatalogs1" EntitySet="tCatalogs1" />
+            <End Role="tSongs1" EntitySet="tSongs1" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tSongs(tst)_tGenres(tst)" Association="Self.FK_tSongs(tst)_tGenres(tst)">
+            <End Role="tGenres1" EntitySet="tGenres1" />
+            <End Role="tSongs1" EntitySet="tSongs1" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tSongs(tst)_tMedia(tst)" Association="Self.FK_tSongs(tst)_tMedia(tst)">
+            <End Role="tMedia1" EntitySet="tMedia1" />
+            <End Role="tSongs1" EntitySet="tSongs1" />
+          </AssociationSet>
           <AssociationSet Name="FK_tSongsNew_tCatalogs" Association="Self.FK_tSongsNew_tCatalogs">
             <End Role="tCatalogs" EntitySet="tCatalogs" />
             <End Role="tSongs" EntitySet="tSongs" />
@@ -416,20 +472,6 @@ warning 6002: The table/view 'MyJukebox.dbo.vSongsLong' does not have a primary 
           <Property Name="FaultSource" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Message" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
           <Property Name="Date" Type="DateTime" Precision="0" />
-        </EntityType>
-        <EntityType Name="tAlbum">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-        </EntityType>
-        <EntityType Name="tBeat">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
         </EntityType>
         <EntityType Name="tColumn">
           <Key>
@@ -534,7 +576,7 @@ warning 6002: The table/view 'MyJukebox.dbo.vSongsLong' does not have a primary 
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Album" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Interpret" Type="String" MaxLength="126" FixedLength="false" Unicode="true" />
+          <Property Name="Artist" Type="String" MaxLength="126" FixedLength="false" Unicode="true" />
           <Property Name="Titel" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Pfad" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
           <Property Name="FileName" Type="String" MaxLength="156" FixedLength="false" Unicode="true" />
@@ -611,8 +653,6 @@ warning 6002: The table/view 'MyJukebox.dbo.vSongsLong' does not have a primary 
         </Association>
         <EntityContainer Name="MyJukeboxEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="tActionLogs" EntityType="Self.tActionLog" />
-          <EntitySet Name="tAlbums" EntityType="Self.tAlbum" />
-          <EntitySet Name="tBeats" EntityType="Self.tBeat" />
           <EntitySet Name="tColumns" EntityType="Self.tColumn" />
           <EntitySet Name="tFileInfos" EntityType="Self.tFileInfo" />
           <EntitySet Name="tGenres" EntityType="Self.tGenre" />
@@ -652,11 +692,26 @@ warning 6002: The table/view 'MyJukebox.dbo.vSongsLong' does not have a primary 
             <End Role="tCatalog" EntitySet="tCatalogs" />
             <End Role="tSong" EntitySet="tSongs" />
           </AssociationSet>
-          <EntitySet Name="tFileInfosTests" EntityType="MyJukeboxModel.tFileInfosTest" />
-          <EntitySet Name="tInfosTests" EntityType="MyJukeboxModel.tInfosTest" />
-          <EntitySet Name="tMD5Test" EntityType="MyJukeboxModel.tMD5Test" />
-          <EntitySet Name="tSongsTests" EntityType="MyJukeboxModel.tSongsTest" />
-        </EntityContainer>
+          <EntitySet Name="tFileInfos_tst" EntityType="MyJukeboxModel.tFileInfos_tst" />
+          <EntitySet Name="tInfos_tst" EntityType="MyJukeboxModel.tInfos_tst" />
+          <EntitySet Name="tMD5_tst" EntityType="MyJukeboxModel.tMD5_tst" />
+          <EntitySet Name="tCatalogs_tst" EntityType="MyJukeboxModel.tCatalogs_tst" />
+          <EntitySet Name="tGenres_tst" EntityType="MyJukeboxModel.tGenres_tst" />
+          <EntitySet Name="tMedia_tst" EntityType="MyJukeboxModel.tMedia_tst" />
+          <EntitySet Name="tSongs_tst" EntityType="MyJukeboxModel.tSongs_tst" />
+          <AssociationSet Name="FK_tSongs_tst__tCatalogs_tst_" Association="MyJukeboxModel.FK_tSongs_tst__tCatalogs_tst_">
+            <End Role="tCatalogs1" EntitySet="tCatalogs_tst" />
+            <End Role="tSongs1" EntitySet="tSongs_tst" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tSongs_tst__tGenres_tst_" Association="MyJukeboxModel.FK_tSongs_tst__tGenres_tst_">
+            <End Role="tGenres1" EntitySet="tGenres_tst" />
+            <End Role="tSongs1" EntitySet="tSongs_tst" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tSongs_tst__tMedia_tst_" Association="MyJukeboxModel.FK_tSongs_tst__tMedia_tst_">
+            <End Role="tMedia1" EntitySet="tMedia_tst" />
+            <End Role="tSongs1" EntitySet="tSongs_tst" />
+          </AssociationSet>
+          </EntityContainer>
         <EntityType Name="vPlaylistSong">
           <Key>
             <PropertyRef Name="ID" />
@@ -712,7 +767,7 @@ warning 6002: The table/view 'MyJukebox.dbo.vSongsLong' does not have a primary 
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="tSongs" Relationship="MyJukeboxModel.FK_tSongsNew_tCatalogs" FromRole="tCatalog" ToRole="tSong" />
-        </EntityType>
+          </EntityType>
         <Association Name="FK_tSongsNew_tCatalogs">
           <End Type="MyJukeboxModel.tCatalog" Role="tCatalog" Multiplicity="0..1" />
           <End Type="MyJukeboxModel.tSong" Role="tSong" Multiplicity="*" />
@@ -725,7 +780,7 @@ warning 6002: The table/view 'MyJukebox.dbo.vSongsLong' does not have a primary 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="tFileInfosTest">
+        <EntityType Name="tFileInfos_tst">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
@@ -737,7 +792,7 @@ warning 6002: The table/view 'MyJukebox.dbo.vSongsLong' does not have a primary 
           <Property Name="ImportDate" Type="DateTime" Precision="3" />
           <Property Name="Link" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="tInfosTest">
+        <EntityType Name="tInfos_tst">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
@@ -751,7 +806,7 @@ warning 6002: The table/view 'MyJukebox.dbo.vSongsLong' does not have a primary 
           <Property Name="Comment" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="Media" Type="Int32" />
         </EntityType>
-        <EntityType Name="tMD5Test">
+        <EntityType Name="tMD5_tst">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
@@ -759,22 +814,85 @@ warning 6002: The table/view 'MyJukebox.dbo.vSongsLong' does not have a primary 
           <Property Name="ID_Song" Type="Int32" Nullable="false" />
           <Property Name="MD5" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="tSongsTest">
+        <EntityType Name="tCatalogs_tst">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tSongs_tst" Relationship="MyJukeboxModel.FK_tSongs_tst__tCatalogs_tst_" FromRole="tCatalogs1" ToRole="tSongs1" />
+        </EntityType>
+        <EntityType Name="tGenres_tst">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tSongs_tst" Relationship="MyJukeboxModel.FK_tSongs_tst__tGenres_tst_" FromRole="tGenres1" ToRole="tSongs1" />
+        </EntityType>
+        <EntityType Name="tMedia_tst">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Type" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="Comment" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tSongs_tst" Relationship="MyJukeboxModel.FK_tSongs_tst__tMedia_tst_" FromRole="tMedia1" ToRole="tSongs1" />
+        </EntityType>
+        <EntityType Name="tSongs_tst">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Album" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Artist" Type="String" MaxLength="65" FixedLength="false" Unicode="true" />
+          <Property Name="Artist" Type="String" MaxLength="126" FixedLength="false" Unicode="true" />
           <Property Name="Titel" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Pfad" Type="String" MaxLength="254" FixedLength="false" Unicode="true" />
-          <Property Name="FileName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="IsSampler" Type="Boolean" />
+          <Property Name="FileName" Type="String" MaxLength="156" FixedLength="false" Unicode="true" />
           <Property Name="ID_Genre" Type="Int32" />
           <Property Name="ID_Catalog" Type="Int32" />
           <Property Name="ID_Media" Type="Int32" />
+          <NavigationProperty Name="tCatalogs_tst" Relationship="MyJukeboxModel.FK_tSongs_tst__tCatalogs_tst_" FromRole="tSongs1" ToRole="tCatalogs1" />
+          <NavigationProperty Name="tGenres_tst" Relationship="MyJukeboxModel.FK_tSongs_tst__tGenres_tst_" FromRole="tSongs1" ToRole="tGenres1" />
+          <NavigationProperty Name="tMedia_tst" Relationship="MyJukeboxModel.FK_tSongs_tst__tMedia_tst_" FromRole="tSongs1" ToRole="tMedia1" />
         </EntityType>
-      </Schema>
+        <Association Name="FK_tSongs_tst__tCatalogs_tst_">
+          <End Type="MyJukeboxModel.tCatalogs_tst" Role="tCatalogs1" Multiplicity="0..1" />
+          <End Type="MyJukeboxModel.tSongs_tst" Role="tSongs1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tCatalogs1">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="tSongs1">
+              <PropertyRef Name="ID_Catalog" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tSongs_tst__tGenres_tst_">
+          <End Type="MyJukeboxModel.tGenres_tst" Role="tGenres1" Multiplicity="0..1" />
+          <End Type="MyJukeboxModel.tSongs_tst" Role="tSongs1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tGenres1">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="tSongs1">
+              <PropertyRef Name="ID_Genre" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tSongs_tst__tMedia_tst_">
+          <End Type="MyJukeboxModel.tMedia_tst" Role="tMedia1" Multiplicity="0..1" />
+          <End Type="MyJukeboxModel.tSongs_tst" Role="tSongs1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tMedia1">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="tSongs1">
+              <PropertyRef Name="ID_Media" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -788,22 +906,6 @@ warning 6002: The table/view 'MyJukebox.dbo.vSongsLong' does not have a primary 
                 <ScalarProperty Name="FaultSource" ColumnName="FaultSource" />
                 <ScalarProperty Name="Message" ColumnName="Message" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tAlbums">
-            <EntityTypeMapping TypeName="MyJukeboxModel.tAlbum">
-              <MappingFragment StoreEntitySet="tAlbums">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tBeats">
-            <EntityTypeMapping TypeName="MyJukeboxModel.tBeat">
-              <MappingFragment StoreEntitySet="tBeat">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -913,7 +1015,7 @@ warning 6002: The table/view 'MyJukebox.dbo.vSongsLong' does not have a primary 
               <MappingFragment StoreEntitySet="tSongs">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Album" ColumnName="Album" />
-                <ScalarProperty Name="Interpret" ColumnName="Interpret" />
+                <ScalarProperty Name="Artist" ColumnName="Interpret" />
                 <ScalarProperty Name="Titel" ColumnName="Titel" />
                 <ScalarProperty Name="Pfad" ColumnName="Pfad" />
                 <ScalarProperty Name="FileName" ColumnName="FileName" />
@@ -979,9 +1081,9 @@ warning 6002: The table/view 'MyJukebox.dbo.vSongsLong' does not have a primary 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="tFileInfosTests">
-            <EntityTypeMapping TypeName="MyJukeboxModel.tFileInfosTest">
-              <MappingFragment StoreEntitySet="tFileInfosTest">
+          <EntitySetMapping Name="tFileInfos_tst">
+            <EntityTypeMapping TypeName="MyJukeboxModel.tFileInfos_tst">
+              <MappingFragment StoreEntitySet="tFileInfos1">
                 <ScalarProperty Name="Link" ColumnName="Link" />
                 <ScalarProperty Name="ImportDate" ColumnName="ImportDate" />
                 <ScalarProperty Name="Duration" ColumnName="Duration" />
@@ -992,9 +1094,9 @@ warning 6002: The table/view 'MyJukebox.dbo.vSongsLong' does not have a primary 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="tInfosTests">
-            <EntityTypeMapping TypeName="MyJukeboxModel.tInfosTest">
-              <MappingFragment StoreEntitySet="tInfosTest">
+          <EntitySetMapping Name="tInfos_tst">
+            <EntityTypeMapping TypeName="MyJukeboxModel.tInfos_tst">
+              <MappingFragment StoreEntitySet="tInfos1">
                 <ScalarProperty Name="Media" ColumnName="Media" />
                 <ScalarProperty Name="Comment" ColumnName="Comment" />
                 <ScalarProperty Name="Sampler" ColumnName="Sampler" />
@@ -1007,22 +1109,46 @@ warning 6002: The table/view 'MyJukebox.dbo.vSongsLong' does not have a primary 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="tMD5Test">
-            <EntityTypeMapping TypeName="MyJukeboxModel.tMD5Test">
-              <MappingFragment StoreEntitySet="tMD5Test">
+          <EntitySetMapping Name="tMD5_tst">
+            <EntityTypeMapping TypeName="MyJukeboxModel.tMD5_tst">
+              <MappingFragment StoreEntitySet="tMD51">
                 <ScalarProperty Name="MD5" ColumnName="MD5" />
                 <ScalarProperty Name="ID_Song" ColumnName="ID_Song" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="tSongsTests">
-            <EntityTypeMapping TypeName="MyJukeboxModel.tSongsTest">
-              <MappingFragment StoreEntitySet="tSongsTest">
+          <EntitySetMapping Name="tCatalogs_tst">
+            <EntityTypeMapping TypeName="MyJukeboxModel.tCatalogs_tst">
+              <MappingFragment StoreEntitySet="tCatalogs1">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tGenres_tst">
+            <EntityTypeMapping TypeName="MyJukeboxModel.tGenres_tst">
+              <MappingFragment StoreEntitySet="tGenres1">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tMedia_tst">
+            <EntityTypeMapping TypeName="MyJukeboxModel.tMedia_tst">
+              <MappingFragment StoreEntitySet="tMedia1">
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tSongs_tst">
+            <EntityTypeMapping TypeName="MyJukeboxModel.tSongs_tst">
+              <MappingFragment StoreEntitySet="tSongs1">
                 <ScalarProperty Name="ID_Media" ColumnName="ID_Media" />
                 <ScalarProperty Name="ID_Catalog" ColumnName="ID_Catalog" />
                 <ScalarProperty Name="ID_Genre" ColumnName="ID_Genre" />
-                <ScalarProperty Name="IsSampler" ColumnName="IsSampler" />
                 <ScalarProperty Name="FileName" ColumnName="FileName" />
                 <ScalarProperty Name="Pfad" ColumnName="Pfad" />
                 <ScalarProperty Name="Titel" ColumnName="Titel" />

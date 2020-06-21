@@ -12,9 +12,18 @@ namespace MyMp3Importer.DAL
     using System;
     using System.Collections.Generic;
     
-    public partial class tAlbum
+    public partial class tCatalogs_tst
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public tCatalogs_tst()
+        {
+            this.tSongs_tst = new HashSet<tSongs_tst>();
+        }
+    
         public int ID { get; set; }
         public string Name { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tSongs_tst> tSongs_tst { get; set; }
     }
 }
