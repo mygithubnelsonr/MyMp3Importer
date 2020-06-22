@@ -14,12 +14,6 @@ namespace MyMp3Importer.DAL
     
     public partial class tFileInfo
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public tFileInfo()
-        {
-            this.tSongs = new HashSet<tSong>();
-        }
-    
         public int ID { get; set; }
         public int ID_Song { get; set; }
         public Nullable<int> FileSize { get; set; }
@@ -27,8 +21,5 @@ namespace MyMp3Importer.DAL
         public Nullable<System.TimeSpan> Duration { get; set; }
         public Nullable<System.DateTime> ImportDate { get; set; }
         public string Link { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tSong> tSongs { get; set; }
     }
 }

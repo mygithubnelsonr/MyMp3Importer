@@ -102,6 +102,11 @@ namespace MyMp3Importer
 
         }
 
+        private void buttonTest_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
         private void Move_Window(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             this.DragMove();
@@ -351,7 +356,7 @@ namespace MyMp3Importer
             #region Fill Albums condtionaly
             var folders = System.Convert.ToInt32(labelFolders.Content);
 
-            if (comboboxInterpret.SelectedItem.ToString() != "NA" && folders > 1)
+            if (comboboxInterpret.SelectedItem.ToString() != "NA" && folders > 0)
             {
                 List<string> allDirs = Helpers.GetDirectories(startDirectory, false);
                 _albums.Clear();
@@ -406,20 +411,6 @@ namespace MyMp3Importer
 
             List<MP3Record> mp3List = null;
 
-            #region checkBoxSpecialImport.Checked
-            //if (checkBoxSpecialImport.Checked)
-            //{
-            //    if (comboBoxGenre.Text == "" | comboBoxGenre.Text == "Untitled"
-            //        | comboBoxKatalog.Text == "" | comboBoxKatalog.Text == "Untitled"
-            //        | comboBoxMedium.Text == "" | comboBoxMedium.Text == "NA"
-            //        | comboBoxAlbum.Text == "" | comboBoxAlbum.Text == "Untitled")
-            //    {
-            //        MessageBox.Show("If option 'Spezial Import' is checked then all 'Spezial Import' Fields must be filled out");
-            //        return;
-            //    }
-            //}
-            #endregion
-
             DateTime t1 = DateTime.Now;
             statusbarStart.Content = t1.ToString("HH:mm:ss");
             statusbarDauer.Content = "";
@@ -435,7 +426,12 @@ namespace MyMp3Importer
 
             for (int i = 0; i <= comboboxAlbum.Items.Count - 1; i++)
             {
+
                 comboboxAlbum.SelectedIndex = i;
+
+                if (comboboxAlbum.Text == "NA")
+                    continue;
+
                 mp3List = new List<MP3Record>();
 
                 foreach (FileDetails item in list)
@@ -444,9 +440,7 @@ namespace MyMp3Importer
                         break;
 
                     if (!item.Path.Contains(comboboxAlbum.Text))
-                    {
                         continue;
-                    }
 
                     MP3Record mp3 = new MP3Record();
                     mp3.Genre = comboboxGenre.SelectedIndex;
@@ -555,12 +549,5 @@ namespace MyMp3Importer
 
         #endregion
 
-        private void buttonTest_Click(object sender, RoutedEventArgs e)
-        {
-            var id = DataGetSet.GetLastID("tSongs_tst");
-
-            Debug.Print(id.ToString());
-
-        }
     }
 }
