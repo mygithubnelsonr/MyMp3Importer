@@ -1,0 +1,70 @@
+﻿    #region checkboxSpezialimport
+    //if (checkboxSpezialimport.IsChecked == false)
+    //{
+    //MP3Record record = DataGetSet.GetRecordInfo(filePfad);
+
+    //string[] arTmp = fileName.ToLower().Split(new string[] { " - " }, StringSplitOptions.RemoveEmptyEntries);
+    //if (arTmp.Length == 0)
+    //{
+    //    mp3.Interpret = "NA";
+    //    mp3.Titel = GeneralH.ToProperCase(arTmp[0].Trim());
+    //}
+    //else
+    //{
+    //    mp3.Interpret = GeneralH.ToProperCase(arTmp[0].Trim());
+    //    mp3.Titel = GeneralH.ToProperCase(arTmp[1].Trim());
+    //}
+
+    //mp3.Genre = comboboxGenre.SelectedIndex;
+    //mp3.Album = comboboxAlbum.Text;  //arPath[arPath.Length - 1];
+    //mp3.Media = comboboxMedia.SelectedIndex;
+    //mp3.Catalog = comboboxCatalog.SelectedIndex;
+    //}
+    //else
+    //{
+    //MP3Record record = DataGetSet.GetRecordInfo(filePfad);
+
+    // ??????????????????????
+    //string[] arTmp = item.Path.Split(new string[] { "\\" }, StringSplitOptions.RemoveEmptyEntries);
+
+    //if (arTmp.Length < 5)
+    //{
+    //    MessageBox.Show("Falsche Anzahl von Folderebenen!");
+    //    buttonImport.IsEnabled = true;
+    //    statusbarProgress.Visibility = Visibility.Hidden;
+    //    break;  // Stop Import
+    //}
+
+    //arTmp = item.File.ToLower().Split(new string[] { " - " }, StringSplitOptions.RemoveEmptyEntries);
+    //if (arTmp.Length == 0)
+    //{
+    //    mp3.Interpret = "NA";
+    //    string strTitel = GeneralH.ToProperCase(arTmp[0].Trim());
+    //    mp3.Titel = strTitel.Replace(fileExtension, "");
+    //}
+    //else
+    //{
+    //    mp3.Interpret = GeneralH.ToProperCase(arTmp[0].Trim());
+    //    string strTitel = GeneralH.ToProperCase(arTmp[1].Trim());
+    //    mp3.Titel = strTitel.Replace(fileExtension, "");
+    //}
+
+    #region altes zeuch
+    //List<int> media;
+    //string type = arPath[arPath.Length - 3];
+
+
+    //var context = new MyJukeboxEntities();
+    //media = context.tMedias
+    //            .Where(m => m.Type == type)
+    //            .Select(m => m.ID).ToList();
+
+    //mp3.Media = media[0];
+    //mp3.Album = arPath[arPath.Length - 1];
+    ////mp3.Interpret = arPath[arPath.Length - 2];
+    //mp3.Catalog = arPath[arPath.Length - 4];
+    //mp3.Genre = arPath[arPath.Length - 5];
+    #endregion
+    //}
+
+    #endregion

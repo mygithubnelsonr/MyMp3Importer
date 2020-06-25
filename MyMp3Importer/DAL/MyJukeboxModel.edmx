@@ -25,20 +25,6 @@
           <Property Name="Message" Type="nvarchar" MaxLength="254" />
           <Property Name="Date" Type="datetime2" Precision="0" />
         </EntityType>
-        <EntityType Name="tAlbums2del">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
-        </EntityType>
-        <EntityType Name="tBeat2del">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nchar" MaxLength="10" Nullable="false" />
-        </EntityType>
         <EntityType Name="tCatalogs">
           <Key>
             <PropertyRef Name="ID" />
@@ -361,8 +347,6 @@ warning 6002: The table/view 'MyJukebox.dbo.vSongsLong' does not have a primary 
         <EntityContainer Name="MyJukeboxModelStoreContainer">
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tActionLog" EntityType="Self.tActionLog" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="tAlbums2del" EntityType="Self.tAlbums2del" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="tBeat2del" EntityType="Self.tBeat2del" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tCatalogs" EntityType="Self.tCatalogs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tColumns" EntityType="Self.tColumns" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tFileInfos" EntityType="Self.tFileInfos" Schema="dbo" store:Type="Tables" />
@@ -596,8 +580,6 @@ warning 6002: The table/view 'MyJukebox.dbo.vSongsLong' does not have a primary 
             <End Role="tMedia1" EntitySet="tMedia_tst" />
             <End Role="tSongs1" EntitySet="tSongs_tst" />
           </AssociationSet>
-          <EntitySet Name="tAlbums2del" EntityType="MyJukeboxModel.tAlbums2del" />
-          <EntitySet Name="tBeat2del" EntityType="MyJukeboxModel.tBeat2del" />
           <EntitySet Name="tInfos" EntityType="MyJukeboxModel.tInfo" />
           <EntitySet Name="tSongs" EntityType="MyJukeboxModel.tSong" />
           <AssociationSet Name="FK_tSongsNew_tCatalogs" Association="MyJukeboxModel.FK_tSongsNew_tCatalogs">
@@ -693,7 +675,6 @@ warning 6002: The table/view 'MyJukebox.dbo.vSongsLong' does not have a primary 
           <Property Name="Error" Type="Boolean" />
           <Property Name="Sampler" Type="Boolean" />
           <Property Name="Comment" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="Media" Type="Int32" />
         </EntityType>
         <EntityType Name="tMD5_tst">
           <Key>
@@ -781,20 +762,6 @@ warning 6002: The table/view 'MyJukebox.dbo.vSongsLong' does not have a primary 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="tAlbums2del">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="tBeat2del">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
-        </EntityType>
         <EntityType Name="tInfo">
           <Key>
             <PropertyRef Name="ID" />
@@ -1034,7 +1001,6 @@ warning 6002: The table/view 'MyJukebox.dbo.vSongsLong' does not have a primary 
           <EntitySetMapping Name="tInfos_tst">
             <EntityTypeMapping TypeName="MyJukeboxModel.tInfos_tst">
               <MappingFragment StoreEntitySet="tInfos1">
-                <ScalarProperty Name="Media" ColumnName="Media" />
                 <ScalarProperty Name="Comment" ColumnName="Comment" />
                 <ScalarProperty Name="Sampler" ColumnName="Sampler" />
                 <ScalarProperty Name="Error" ColumnName="Error" />
@@ -1091,22 +1057,6 @@ warning 6002: The table/view 'MyJukebox.dbo.vSongsLong' does not have a primary 
                 <ScalarProperty Name="Titel" ColumnName="Titel" />
                 <ScalarProperty Name="Artist" ColumnName="Artist" />
                 <ScalarProperty Name="Album" ColumnName="Album" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tAlbums2del">
-            <EntityTypeMapping TypeName="MyJukeboxModel.tAlbums2del">
-              <MappingFragment StoreEntitySet="tAlbums2del">
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tBeat2del">
-            <EntityTypeMapping TypeName="MyJukeboxModel.tBeat2del">
-              <MappingFragment StoreEntitySet="tBeat2del">
-                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

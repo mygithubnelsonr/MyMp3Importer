@@ -157,24 +157,45 @@ namespace MyMp3Importer.BLL
 
         public static int CreateCatalog(string catalog)
         {
-            int id = -1;
+            int idDbo = -1;
+            int idTst = -1;
 
             var context = new MyJukeboxEntities();
 
-            var catalogExist = context.tCatalogs
+            #region create new catalog on [dbo]
+            var catalogDboExist = context.tCatalogs
                                     .Where(c => c.Name == catalog)
                                     .FirstOrDefault();
 
-            if (catalogExist == null)
+            if (catalogDboExist == null)
             {
                 context.tCatalogs
                     .Add(new tCatalog { Name = catalog });
                 context.SaveChanges();
 
-                id = GetLastID("tCatalogs");
+                idDbo = GetLastID("tCatalogs");
             }
+            #endregion
 
-            return id;
+            #region create new catalog on [tst]
+            var catalogTstExist = context.tCatalogs
+                                    .Where(c => c.Name == catalog)
+                                    .FirstOrDefault();
+
+            if (catalogTstExist == null)
+            {
+                context.tCatalogs
+                    .Add(new tCatalog { Name = catalog });
+                context.SaveChanges();
+
+                idTst = GetLastID("tCatalogs");
+            }
+            #endregion
+
+            if (idDbo == idTst)
+                return idDbo;
+            else
+                return -1;
         }
 
         public static int CreateGenre(string genre)

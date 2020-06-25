@@ -22,6 +22,5 @@ namespace MyMp3Importer.DAL
         public Nullable<bool> Error { get; set; }
         public Nullable<bool> Sampler { get; set; }
         public string Comment { get; set; }
-        public Nullable<int> Media { get; set; }
     }
 }

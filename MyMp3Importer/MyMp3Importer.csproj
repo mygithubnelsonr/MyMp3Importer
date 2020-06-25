@@ -33,7 +33,7 @@
     <MapFileExtensions>true</MapFileExtensions>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationRevision>2</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -81,6 +81,7 @@
       <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
@@ -117,7 +118,7 @@
     <Compile Include="BLL\Setting.cs" />
     <Compile Include="BLL\SettingsDb.cs" />
     <Compile Include="Common\Colors.cs" />
-    <Compile Include="Common\InfosFile.cs" />
+    <Compile Include="Common\FileDetails.cs" />
     <Compile Include="Common\Helpers.cs" />
     <Compile Include="DAL\MyJukeboxModel.Context.cs">
       <AutoGen>True</AutoGen>
@@ -137,12 +138,6 @@
     <Compile Include="Common\Parser.cs" />
     <Compile Include="Common\ParserToken.cs" />
     <Compile Include="DAL\tActionLog.cs">
-      <DependentUpon>MyJukeboxModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DAL\tAlbums2del.cs">
-      <DependentUpon>MyJukeboxModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DAL\tBeat2del.cs">
       <DependentUpon>MyJukeboxModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DAL\tCatalog.cs">
@@ -211,6 +206,7 @@
     <Compile Include="DAL\vSongsLong.cs">
       <DependentUpon>MyJukeboxModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="FileDetailsList.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -283,6 +279,7 @@
       <DependentUpon>MyJukeboxModel.edmx</DependentUpon>
       <LastGenOutput>MyJukeboxModel.cs</LastGenOutput>
     </Content>
+    <Resource Include="Old Stuff.txt" />
     <Resource Include="Views\Icon1424.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
