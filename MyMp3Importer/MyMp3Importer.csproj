@@ -114,12 +114,13 @@
     <Compile Include="BLL\DataGetSet.cs" />
     <Compile Include="BLL\Genre.cs" />
     <Compile Include="BLL\Logging.cs" />
-    <Compile Include="BLL\Mp3Record.cs" />
+    <Compile Include="Common\Mp3Record.cs" />
     <Compile Include="BLL\Setting.cs" />
     <Compile Include="BLL\SettingsDb.cs" />
     <Compile Include="Common\Colors.cs" />
     <Compile Include="Common\FileDetails.cs" />
     <Compile Include="Common\Helpers.cs" />
+    <Compile Include="Common\MpeRecordList.cs" />
     <Compile Include="DAL\MyJukeboxModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -206,7 +207,7 @@
     <Compile Include="DAL\vSongsLong.cs">
       <DependentUpon>MyJukeboxModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="FileDetailsList.cs" />
+    <Compile Include="Common\FileDetailsList.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

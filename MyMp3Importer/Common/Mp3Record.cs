@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MyMp3Importer.BLL
+namespace MyMp3Importer.Common
 {
     public class MP3Record
     {

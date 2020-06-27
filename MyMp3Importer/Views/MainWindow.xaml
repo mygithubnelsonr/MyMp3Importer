@@ -42,7 +42,7 @@
                     <Bold FontWeight="ExtraBold">My</Bold>
                     <Run FontWeight="ExtraBold" FontSize="25" Foreground="Red">Mp3</Run>
                     <Italic>Importer</Italic>
-                    <Run FontSize="10" Text="version 0.0"/>
+                    <Run FontSize="10" Text="version 1.2.3"/>
                 </TextBlock>
                 <Button Grid.Column="2" x:Name="buttonClose" Content="X" Style="{StaticResource exitButton}"
                         Click="buttonClose_Click">
@@ -88,7 +88,10 @@
                     <StatusBarItem x:Name="labelSize" Content="0"/>
                     <Separator/>
                     <StatusBarItem HorizontalAlignment="Right">
-                        <Button x:Name="buttonTest" Content="Test" Margin="80,0,0,0" Click="buttonTest_Click"/>
+                        <Button x:Name="buttonTest" Content="Test" Margin="50,0,0,0" Click="buttonTest_Click"/>
+                    </StatusBarItem>
+                    <StatusBarItem HorizontalAlignment="Right">
+                        <Button x:Name="buttonList" Content="Liste" Margin="20,0,0,0" Click="buttonList_Click"/>
                     </StatusBarItem>
                     <StatusBarItem HorizontalAlignment="Right">
                         <Button x:Name="buttonScan" Content="Start" Click="buttonScan_Click"/>
@@ -170,24 +173,24 @@
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
                             <Label Grid.Row="0" Grid.Column="0" x:Name="labelGenre" Content="Genre" FontWeight="Bold"/>
-                            <ComboBox Grid.Row="1" Grid.Column="0" x:Name="comboboxGenre" Margin="5,0,10,10" SelectedIndex="0">
+                            <ComboBox Grid.Row="1" Grid.Column="0" x:Name="comboboxGenre" IsEditable="True" Margin="5,0,10,10" SelectedIndex="0">
                                 <ComboBoxItem Content="NA"/>
                             </ComboBox>
                             <Label Grid.Row="0" Grid.Column="1" x:Name="labelCatalog" Content="Catalog" FontWeight="Bold"/>
-                            <ComboBox Grid.Row="1" Grid.Column="1" x:Name="comboboxCatalog" Margin="5,0,10,10" SelectedIndex="0">
+                            <ComboBox Grid.Row="1" Grid.Column="1" x:Name="comboboxCatalog" IsEditable="True" Margin="5,0,10,10" SelectedIndex="0">
                                 <ComboBoxItem Content="NA"/>
                             </ComboBox>
                             <Label Grid.Row="0" Grid.Column="2" x:Name="labelMedia" Content="Media" FontWeight="Bold"/>
-                            <ComboBox Grid.Row="1" Grid.Column="2" x:Name="comboboxMedia" Margin="5,0,10,10" SelectedIndex="0">
+                            <ComboBox Grid.Row="1" Grid.Column="2" x:Name="comboboxMedia" IsEditable="True" Margin="5,0,10,10" SelectedIndex="0">
                                 <ComboBoxItem Content="NA"/>
                             </ComboBox>
                             <Label Grid.Row="2" Grid.Column="0" x:Name="labelArtist" Content="Artist" FontWeight="Bold"/>
                             <Label Grid.Row="2" Grid.Column="2" x:Name="labelAlbum" Content="Album" FontWeight="Bold"/>
                             <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.ColumnSpan="3" Margin="5,0,10,0">
-                                <ComboBox Grid.Row="3" Grid.Column="0" x:Name="comboboxInterpret" Width="215" SelectedIndex="0" >
+                                <ComboBox Grid.Row="3" Grid.Column="0" x:Name="comboboxInterpret" IsEditable="True" Width="215" SelectedIndex="0" >
                                     <ComboBoxItem Content="NA"/>
                                 </ComboBox>
-                                <ComboBox Grid.Row="3" Grid.Column="2" x:Name="comboboxAlbum" Width="215" Margin="15,0,0,0" SelectedIndex="0" >
+                                <ComboBox Grid.Row="3" Grid.Column="2" x:Name="comboboxAlbum" Width="215" IsEditable="True" Margin="15,0,0,0" SelectedIndex="0" >
                                     <ComboBoxItem Content="NA"/>
                                 </ComboBox>
                             </StackPanel>
