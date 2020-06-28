@@ -33,7 +33,6 @@ namespace MyMp3Importer.DAL
         public virtual DbSet<tMedia> tMedias { get; set; }
         public virtual DbSet<tPlaylist> tPlaylists { get; set; }
         public virtual DbSet<tPLentry> tPLentries { get; set; }
-        public virtual DbSet<tQuery> tQueries { get; set; }
         public virtual DbSet<tSetting> tSettings { get; set; }
         public virtual DbSet<vPlaylistSong> vPlaylistSongs { get; set; }
         public virtual DbSet<vSong> vSongs { get; set; }

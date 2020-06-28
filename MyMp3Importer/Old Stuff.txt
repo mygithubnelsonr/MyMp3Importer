@@ -1,4 +1,24 @@
-﻿    #region checkboxSpezialimport
+﻿namespace MyMp3Importer.BLL
+{
+    public class Genre
+    {
+        public int ID { get; set; }
+        public string Name { get; set; }
+    }
+}
+
+namespace MyMp3Importer.BLL
+{
+    public class Setting
+    {
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public string Value { get; set; }
+        public System.Nullable<bool> Editable { get; set; }
+    }
+}
+
+#region checkboxSpezialimport
     //if (checkboxSpezialimport.IsChecked == false)
     //{
     //MP3Record record = DataGetSet.GetRecordInfo(filePfad);
@@ -68,3 +88,77 @@
     //}
 
     #endregion
+
+            //public static List<string> GetGenres()
+        //{
+        //    List<string> genres = null;
+        //    using (var context = new MyJukeboxEntities())
+        //    {
+        //        genres = context.tGenres.Select(g => g.Name).ToList();
+        //        return genres;
+        //    }
+        //}
+
+        //public static List<string> GetCatalogs()
+        //{
+        //    List<string> catalogues = null;
+
+        //    using (var context = new MyJukeboxEntities())
+        //    {
+        //        catalogues = context.tCatalogs.Select(c => c.Name).ToList();
+        //        return catalogues;
+        //    }
+        //}
+
+        //public static List<string> GetMedia()
+        //{
+        //    List<string> medias = null;
+
+        //    using (var context = new MyJukeboxEntities())
+        //    {
+        //        medias = context.tMedias.Select(m => m.Type).ToList();
+        //        return medias;
+        //    }
+        //}
+
+        //public static List<string> GetInterpreters()
+        //{
+        //    List<string> interpreters = null;
+
+        //    using (var context = new MyJukeboxEntities())
+        //    {
+        //        interpreters = context.vSongs
+        //                            .Select(i => i.Interpret)
+        //                            .Distinct().OrderBy(i => i).ToList();
+
+        //        return interpreters;
+        //    }
+        //}
+
+        //public static List<string> GetAlbums()
+        //{
+        //    List<string> albums = null;
+
+        //    using (var context = new MyJukeboxEntities())
+        //    {
+        //        albums = context.tAlbums.Select(a => a.Name).ToList();
+        //        return albums;
+        //    }
+        //}
+
+        //public static async Task<List<string>> GetInterpretersAsync()
+        //{
+        //    List<string> interpreter = null;
+
+        //    using (var context = new MyJukeboxEntities())
+        //    {
+        //        await Task.Run(() =>
+        //        {
+        //            interpreter = context.vSongs
+        //                            .Select(i => i.Interpret)
+        //                            .Distinct().OrderBy(i => i).ToList();
+        //        });
+
+        //        return interpreter;
+        //    }
+        //}

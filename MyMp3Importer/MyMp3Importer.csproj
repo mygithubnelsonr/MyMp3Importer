@@ -112,12 +112,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BLL\DataGetSet.cs" />
-    <Compile Include="BLL\Genre.cs" />
-    <Compile Include="BLL\Logging.cs" />
     <Compile Include="Common\Mp3Record.cs" />
-    <Compile Include="BLL\Setting.cs" />
-    <Compile Include="BLL\SettingsDb.cs" />
-    <Compile Include="Common\Colors.cs" />
     <Compile Include="Common\FileDetails.cs" />
     <Compile Include="Common\Helpers.cs" />
     <Compile Include="Common\MpeRecordList.cs" />
@@ -184,9 +179,6 @@
       <DependentUpon>MyJukeboxModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DAL\tPLentry.cs">
-      <DependentUpon>MyJukeboxModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DAL\tQuery.cs">
       <DependentUpon>MyJukeboxModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DAL\tSetting.cs">

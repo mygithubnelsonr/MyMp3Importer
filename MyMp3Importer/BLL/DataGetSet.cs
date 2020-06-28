@@ -10,89 +10,7 @@ namespace MyMp3Importer.BLL
 {
     public class DataGetSet
     {
-        public static void SetRating(int id, int rating)
-        {
-            var context = new MyJukeboxEntities();
-            var result = context.tInfos.SingleOrDefault(s => s.ID_Song == id);
-
-            if (result != null)
-            {
-                result.Rating = rating;
-                context.SaveChanges();
-            };
-        }
-
-        public static void SetColumnWidth(string name, int width)
-        {
-            var context = new MyJukeboxEntities();
-            var result = context.tColumns.SingleOrDefault(n => n.Name == name);
-
-            if (result != null)
-                result.Width = width;
-            else
-                context.tColumns.Add(new tColumn { Name = name, Width = width });
-
-            context.SaveChanges();
-        }
-
         #region FileImporter
-
-        //public static List<string> GetGenres()
-        //{
-        //    List<string> genres = null;
-        //    using (var context = new MyJukeboxEntities())
-        //    {
-        //        genres = context.tGenres.Select(g => g.Name).ToList();
-        //        return genres;
-        //    }
-        //}
-
-        //public static List<string> GetCatalogs()
-        //{
-        //    List<string> catalogues = null;
-
-        //    using (var context = new MyJukeboxEntities())
-        //    {
-        //        catalogues = context.tCatalogs.Select(c => c.Name).ToList();
-        //        return catalogues;
-        //    }
-        //}
-
-        //public static List<string> GetMedia()
-        //{
-        //    List<string> medias = null;
-
-        //    using (var context = new MyJukeboxEntities())
-        //    {
-        //        medias = context.tMedias.Select(m => m.Type).ToList();
-        //        return medias;
-        //    }
-        //}
-
-        //public static List<string> GetInterpreters()
-        //{
-        //    List<string> interpreters = null;
-
-        //    using (var context = new MyJukeboxEntities())
-        //    {
-        //        interpreters = context.vSongs
-        //                            .Select(i => i.Interpret)
-        //                            .Distinct().OrderBy(i => i).ToList();
-
-        //        return interpreters;
-        //    }
-        //}
-
-        //public static List<string> GetAlbums()
-        //{
-        //    List<string> albums = null;
-
-        //    using (var context = new MyJukeboxEntities())
-        //    {
-        //        albums = context.tAlbums.Select(a => a.Name).ToList();
-        //        return albums;
-        //    }
-        //}
 
         public static async Task<List<string>> GetGenresAsync()
         {
@@ -133,23 +51,6 @@ namespace MyMp3Importer.BLL
                     medias = context.tMedias.Select(m => m.Type).ToList();
                 });
                 return medias;
-            }
-        }
-
-        public static async Task<List<string>> GetInterpretersAsync()
-        {
-            List<string> interpreter = null;
-
-            using (var context = new MyJukeboxEntities())
-            {
-                await Task.Run(() =>
-                {
-                    interpreter = context.vSongs
-                                    .Select(i => i.Interpret)
-                                    .Distinct().OrderBy(i => i).ToList();
-                });
-
-                return interpreter;
             }
         }
 
@@ -224,8 +125,6 @@ namespace MyMp3Importer.BLL
         {
             int recordsImporteds = 0;
 
-            Logging.Flush();
-
             foreach (MP3Record record in mP3Records)
             {
                 recordsImporteds += SetRecord(record);
@@ -238,31 +137,12 @@ namespace MyMp3Importer.BLL
         {
             int recordsImporteds = 0;
 
-            Logging.Flush();
-
             foreach (MP3Record record in mP3Records)
             {
                 recordsImporteds += SetTestRecord(record);
             }
 
             return recordsImporteds;
-        }
-
-        public static bool TruncateTableQueries()
-        {
-            try
-            {
-                var context = new MyJukeboxEntities();
-                var result = context.Database.ExecuteSqlCommand("truncate table [tQueries]");
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Debug.Print($"TruncateTableImportTest_Error: {ex.Message}");
-                return false;
-            }
-
         }
 
         public static bool TruncateTestTables()
@@ -314,29 +194,6 @@ namespace MyMp3Importer.BLL
             }
         }
 
-        private static int SaveTestRecord(MP3Record record)
-        {
-            int recordsImported = 0;
-
-            recordsImported += SetTestRecord(record);
-
-            return recordsImported;
-        }
-
-        private static int SaveRecord(MP3Record record)
-        {
-            int recordsImported = 0;
-
-
-            var exist = MD5Exist(record.MD5);
-
-            if (MD5Exist(record.MD5) == false)
-            {
-                recordsImported += SetRecord(record);
-            }
-            return recordsImported;
-        }
-
         private static int SetRecord(MP3Record mp3Record)
         {
             int lastSongID = -1;
@@ -384,13 +241,11 @@ namespace MyMp3Importer.BLL
                     context.tInfos.Add(info);
                     context.SaveChanges();
 
-                    Logging.Log("1 record added");
                     return 1;
                 }
                 catch (Exception ex)
                 {
                     Debug.Print($"SetNewTestRecord_Error: {ex.Message}");
-                    Logging.Log(ex.Message);
                     return 0;
                 }
             }
@@ -447,104 +302,17 @@ namespace MyMp3Importer.BLL
                     context.tInfos_tst.Add(info);
                     context.SaveChanges();
 
-                    Logging.Log("1 record added");
                     return 1;
                 }
                 catch (Exception ex)
                 {
                     Debug.Print($"SetNewTestRecord_Error: {ex.Message}");
-                    Logging.Log(ex.Message);
                     return 0;
                 }
             }
             else
             {
                 return 0;
-            }
-        }
-
-        #region Parameters
-        public static List<Setting> GetParameters()
-        {
-            List<Setting> settings = new List<Setting>();
-
-            try
-            {
-                using (var context = new MyJukeboxEntities())
-                {
-                    var result = context.tSettings.Select(s => s).ToList();
-                    foreach (var s in result)
-                    {
-                        settings.Add(new Setting { ID = s.ID, Name = s.Name, Value = s.Value, Editable = s.Editable }); ;
-                    }
-                }
-
-                return settings;
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        public static void SaveParameters(List<Setting> settings)
-        {
-            var context = new MyJukeboxEntities();
-
-            foreach (Setting setting in settings)
-            {
-                var result = context.tSettings.SingleOrDefault(p => p.Name == setting.Name);
-                result.Value = setting.Value;
-            }
-
-            context.SaveChanges();
-
-        }
-        #endregion
-
-        #region Generell
-        public static int GetCatalogFromString(string catalog)
-        {
-            List<int> catalogs;
-            try
-            {
-                var context = new MyJukeboxEntities();
-                catalogs = context.tCatalogs
-                            .Where(c => c.Name == catalog)
-                            .Select(c => c.ID).ToList();
-
-                return catalogs[0];
-            }
-            catch
-            {
-                return -1;
-            }
-        }
-
-        public static int GetGenreFromString(string genre)
-        {
-            List<int> genres;
-            var context = new MyJukeboxEntities();
-            genres = context.tGenres
-                        .Where(g => g.Name == genre)
-                        .Select(g => g.ID).ToList();
-
-            return genres[0];
-        }
-
-        internal static int GetMediaIDByType(string type)
-        {
-            try
-            {
-                var context = new MyJukeboxEntities();
-
-                var media = context.tMedias
-                                .Where(m => m.Type == type).FirstOrDefault();
-                return media.ID;
-            }
-            catch
-            {
-                return -1;
             }
         }
 
@@ -609,68 +377,5 @@ namespace MyMp3Importer.BLL
             }
         }
 
-        public static async Task RefillMD5Table()
-        {
-            List<tMD5> rec = new List<tMD5>();
-            using (var context = new MyJukeboxEntities())
-            {
-                await Task.Run(() =>
-                {
-                    var result = context.tSongs
-                                    .OrderBy(s => s.ID)
-                                    .Select(s => new { s.ID, s.Pfad, s.FileName });
-
-                    foreach (var s in result)
-                    {
-                        string hash = Helpers.MD5($"{s.Pfad}{s.FileName}");
-                        Debug.Print($"ID_Song={s.ID}, md5={hash}");
-
-
-                        rec.Add(new tMD5 { ID_Song = s.ID, MD5 = hash });
-
-                    }
-
-                    context.tMD5.AddRange(rec);
-                    context.SaveChanges();
-                });
-            }
-        }
-
-        //public static MP3Record GetRecordInfo(string startDirectory)
-        //{
-        //    MP3Record record = null;
-
-        //    // no special import
-        //    string[] arTmp = startDirectory.Split('\\');
-
-        //    if (arTmp.Length < 5)
-        //        return record;
-
-        //    List<int> media;
-        //    string type = arTmp[arTmp.Length - 3];
-        //    var context = new MyJukeboxEntities();
-        //    media = context.tMedias
-        //                .Where(m => m.Type == type)
-        //                .Select(m => m.ID).ToList();
-
-        //    try
-        //    {
-        //        record = new MP3Record();
-        //        record.Album = arTmp[arTmp.Length - 1];
-        //        record.Artist = arTmp[arTmp.Length - 2];
-        //        record.Media = media[0];
-        //        //record.Genre = arTmp[arTmp.Length - 5];
-        //        //record.Catalog = arTmp[arTmp.Length - 4];
-
-        //        return record;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //MessageBox.Show("Media Type not found!", ex.Message);
-        //        return null;
-        //    }
-        //}
-
-        #endregion
     }
 }

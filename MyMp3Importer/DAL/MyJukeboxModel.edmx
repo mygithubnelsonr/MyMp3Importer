@@ -106,13 +106,6 @@
           <Property Name="SongID" Type="int" Nullable="false" />
           <Property Name="Pos" Type="int" Nullable="false" />
         </EntityType>
-        <EntityType Name="tQueries">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Query" Type="nvarchar" MaxLength="50" Nullable="false" />
-        </EntityType>
         <EntityType Name="tSettings">
           <Key>
             <PropertyRef Name="ID" />
@@ -356,7 +349,6 @@ warning 6002: The table/view 'MyJukebox.dbo.vSongsLong' does not have a primary 
           <EntitySet Name="tMedia" EntityType="Self.tMedia" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tPlaylists" EntityType="Self.tPlaylists" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tPLentries" EntityType="Self.tPLentries" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="tQueries" EntityType="Self.tQueries" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tSettings" EntityType="Self.tSettings" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tSongs" EntityType="Self.tSongs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tCatalogs1" EntityType="Self.tCatalogs1" Schema="tst" Table="tCatalogs" store:Type="Tables" />
@@ -514,13 +506,6 @@ warning 6002: The table/view 'MyJukebox.dbo.vSongsLong' does not have a primary 
           <Property Name="Pos" Type="Int32" Nullable="false" />
           <NavigationProperty Name="tPlaylist" Relationship="Self.FK_tPLentries_tPlaylists" FromRole="tPLentries" ToRole="tPlaylists" />
         </EntityType>
-        <EntityType Name="tQuery">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Query" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-        </EntityType>
         <EntityType Name="tSetting">
           <Key>
             <PropertyRef Name="ID" />
@@ -551,7 +536,6 @@ warning 6002: The table/view 'MyJukebox.dbo.vSongsLong' does not have a primary 
           <EntitySet Name="tMedias" EntityType="Self.tMedia" />
           <EntitySet Name="tPlaylists" EntityType="Self.tPlaylist" />
           <EntitySet Name="tPLentries" EntityType="Self.tPLentry" />
-          <EntitySet Name="tQueries" EntityType="Self.tQuery" />
           <EntitySet Name="tSettings" EntityType="Self.tSetting" />
           <AssociationSet Name="FK_tPLentries_tPlaylists" Association="Self.FK_tPLentries_tPlaylists">
             <End Role="tPlaylists" EntitySet="tPlaylists" />
@@ -910,14 +894,6 @@ warning 6002: The table/view 'MyJukebox.dbo.vSongsLong' does not have a primary 
                 <ScalarProperty Name="PLID" ColumnName="PLID" />
                 <ScalarProperty Name="SongID" ColumnName="SongID" />
                 <ScalarProperty Name="Pos" ColumnName="Pos" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tQueries">
-            <EntityTypeMapping TypeName="MyJukeboxModel.tQuery">
-              <MappingFragment StoreEntitySet="tQueries">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Query" ColumnName="Query" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

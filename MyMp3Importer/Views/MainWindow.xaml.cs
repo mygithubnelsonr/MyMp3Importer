@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -25,7 +26,7 @@ namespace MyMp3Importer
         private ObservableCollection<string> _albums = null;
 
         private FileDetailsList _fileDetails = null;
-
+        private string _ignores = "NA,_Images";
         #endregion
 
         #region CTOR
@@ -33,8 +34,7 @@ namespace MyMp3Importer
         {
             InitializeComponent();
 
-            //var v = Properties.Settings.Default.Version;
-            //textblockHeader.Text = Properties.Settings.Default.Version;
+            textblockVersion.Text = Properties.Settings.Default.Version;
 
             FillCombosAsync();
         }
@@ -380,14 +380,16 @@ namespace MyMp3Importer
 
                 foreach (string dir in allDirs)
                 {
-                    System.Console.WriteLine(dir);
+                    if (_ignores.Contains(dir.Split('\\').Last()) != true)
+                    {
+                        System.Console.WriteLine(dir);
 
-                    DirectoryInfo di = new DirectoryInfo(dir);
+                        DirectoryInfo di = new DirectoryInfo(dir);
 
-                    Console.WriteLine(di.Name);
+                        Console.WriteLine(di.Name);
 
-                    _albums.Add(di.Name);
-
+                        _albums.Add(di.Name);
+                    }
                 }
                 comboboxAlbum.SelectedIndex = 0;
             }
@@ -459,10 +461,10 @@ namespace MyMp3Importer
             {
                 comboboxAlbum.SelectedIndex = i;
 
-                if (comboboxAlbum.Text == "NA")
+                if (_ignores.Contains(comboboxAlbum.Text))  // == "NA" || comboboxAlbum.Text == "_Images")
                     continue;
 
-                List<MP3Record> mp3List = mP3Records(fileDetailsList, false);
+                List<MP3Record> mp3List = mp3Records(fileDetailsList, false);
 
                 // save records
                 if ((bool)checkboxTestimport.IsChecked == true)
@@ -510,7 +512,7 @@ namespace MyMp3Importer
                 if (comboboxAlbum.Text == "NA")
                     continue;
 
-                List<MP3Record> mp3List = mP3Records(_fileDetails, true);
+                List<MP3Record> mp3List = mp3Records(_fileDetails, true);
 
                 // save records
                 if ((bool)checkboxTestimport.IsChecked == true)
@@ -532,43 +534,7 @@ namespace MyMp3Importer
             buttonImport.IsEnabled = true;
         }
 
-        //private List<MP3Record> mP3Records(List<FileDetails> list)
-        //{
-        //    List<MP3Record> mp3List = new List<MP3Record>();
-
-        //    foreach (FileDetails item in list)
-        //    {
-        //        if (Convert.ToBoolean(buttonCancel.Tag) == true)
-        //            break;
-
-        //        if (!item.Path.Contains(comboboxAlbum.Text))
-        //            continue;
-
-        //        MP3Record mp3 = new MP3Record();
-
-        //        mp3.Genre = comboboxGenre.SelectedIndex;
-        //        mp3.Catalog = comboboxCatalog.SelectedIndex;
-        //        mp3.Media = comboboxMedia.SelectedIndex;
-        //        mp3.Album = comboboxAlbum.Text;
-        //        mp3.Titel = item.File;
-        //        mp3.FileName = item.File + item.Extension;
-        //        mp3.FileSize = Convert.ToInt32(item.Size);
-        //        mp3.FileDate = item.LastWrite;
-        //        mp3.Path = item.Path;
-        //        mp3.IsSample = (bool)checkboxSampler.IsChecked;
-        //        mp3.Artist = comboboxInterpret.Text;
-        //        mp3.MD5 = Helpers.MD5(mp3.Path + mp3.FileName);
-
-        //        var ar = item.File.Split('-');
-        //        mp3.Titel = ar[1];
-
-        //        mp3List.Add(mp3);
-        //    }
-
-        //    return mp3List;
-        //}
-
-        private List<MP3Record> mP3Records(List<FileDetails> list, bool isSampler)
+        private List<MP3Record> mp3Records(List<FileDetails> list, bool isSampler)
         {
             List<MP3Record> mp3List = new List<MP3Record>();
 
@@ -596,7 +562,11 @@ namespace MyMp3Importer
 
                 var ar = item.File.Split('-');
                 mp3.Titel = ar[1].Trim();
-                if (isSampler == true) mp3.Artist = ar[0].Trim();
+
+                //if (isSampler == true)
+                //    mp3.Artist = ar[0].Trim();
+                //else
+                mp3.Artist = ar[0].Trim();
 
                 mp3List.Add(mp3);
             }
