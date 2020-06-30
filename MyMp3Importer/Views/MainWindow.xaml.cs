@@ -233,7 +233,9 @@ namespace MyMp3Importer
 
             labelFolders.Content = filedetails.DirCount.ToString();
             labelFiles.Content = filedetails.FileCount.ToString();
-            labelSize.Content = filedetails.FileSizeAll.ToString();
+
+            var size = filedetails.FileSizeAll / 1024;
+            labelSize.Content = size.ToString("#,#") + " Kb";
 
             if (filedetails.FileSizeAll > 0)
                 buttonImport.IsEnabled = true;
@@ -577,16 +579,21 @@ namespace MyMp3Importer
         private async Task CreateNewList()
         {
             string startFolder = @"\\win2k16dc01\FS012";
+            string documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\win2k16dc01_FS012.txt";
+
             buttonList.IsEnabled = false;
+
             await Task.Run(() =>
             {
                 string[] allfiles = Directory.GetFileSystemEntries(startFolder, "*.mp3", SearchOption.AllDirectories);
 
-                File.WriteAllLines(@"A:\Temp\win2k16dc01_FS012.txt", allfiles, Encoding.UTF8);
+
+                File.WriteAllLines(documents, allfiles, Encoding.UTF8);
 
             });
 
             buttonList.IsEnabled = true;
+
         }
         #endregion
 

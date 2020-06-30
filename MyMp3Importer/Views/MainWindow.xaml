@@ -89,17 +89,15 @@
                     <StatusBarItem Content="Files:" FontWeight="Bold"/>
                     <StatusBarItem x:Name="labelFiles" Content="0"/>
                     <Separator/>
-                    <StatusBarItem Content="Total Filesize:" FontWeight="Bold"/>
+                    <StatusBarItem Content="Size:" FontWeight="Bold"/>
                     <StatusBarItem x:Name="labelSize" Content="0"/>
                     <Separator/>
                     <StatusBarItem HorizontalAlignment="Right">
-                        <Button x:Name="buttonTest" Content="Test" Margin="50,0,0,0" Click="buttonTest_Click"/>
-                    </StatusBarItem>
-                    <StatusBarItem HorizontalAlignment="Right">
-                        <Button x:Name="buttonList" Content="Liste" Margin="20,0,0,0" Click="buttonList_Click"/>
-                    </StatusBarItem>
-                    <StatusBarItem HorizontalAlignment="Right">
-                        <Button x:Name="buttonScan" Content="Start" Click="buttonScan_Click"/>
+                        <StackPanel Orientation="Horizontal">
+                            <Button x:Name="buttonTest" Content="Test" Margin="2,0,0,0" Click="buttonTest_Click"/>
+                            <Button x:Name="buttonList" Content="Liste" Margin="4,0,0,0" Click="buttonList_Click"/>
+                            <Button x:Name="buttonScan" Content="Start" Margin="4,0,0,0" Click="buttonScan_Click"/>
+                        </StackPanel>
                     </StatusBarItem>
                 </StatusBar>
             </Grid>
