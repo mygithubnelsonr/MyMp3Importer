@@ -34,7 +34,7 @@ namespace MyMp3Importer
         {
             InitializeComponent();
 
-            textblockVersion.Text = Properties.Settings.Default.Version;
+            statusVersion.Content = Properties.Settings.Default.Version;
 
             FillCombosAsync();
         }
@@ -80,6 +80,8 @@ namespace MyMp3Importer
                 textboxStartfolder.ToolTip = folder;
                 labelFailed.Content = "0";
                 labelSuccess.Content = "0";
+
+                this.Activate();
 
                 if (CheckStartfolder() == true)
                     Scanner();
@@ -440,8 +442,6 @@ namespace MyMp3Importer
 
         private void ImportAlbum()
         {
-            int importFailed = 0;
-            int importSuccess = 0;
             int recordsAffected = 0;
 
             buttonImport.IsEnabled = false;
@@ -474,16 +474,16 @@ namespace MyMp3Importer
                 else
                     recordsAffected += DataGetSet.SaveRecord(mp3List);
 
-                DateTime t2 = DateTime.Now;
-                statusbarProgress.Visibility = Visibility.Hidden;
-                statusbarDauer.Content = (t2 - t1).Milliseconds.ToString() + " ms";
-
                 labelSuccess.Content = $"{recordsAffected}";
                 labelFailed.Content = $"{mp3List.Count - recordsAffected}";
-
-                var lastID = DataGetSet.GetLastID("tSongsTest");
-                Debug.Print($"Import success = {importSuccess}, failed={importFailed}, lastId={lastID}");
             }
+
+            DateTime t2 = DateTime.Now;
+            statusbarProgress.Visibility = Visibility.Hidden;
+            statusbarDauer.Content = (t2 - t1).Milliseconds.ToString() + " ms";
+
+            labelSuccess.Content = $"{recordsAffected}";
+            labelFailed.Content = $"{datagridFilelist.Items.Count - recordsAffected}";
 
             buttonImport.IsEnabled = true;
         }

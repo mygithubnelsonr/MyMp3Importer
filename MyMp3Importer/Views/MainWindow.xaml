@@ -8,12 +8,7 @@
         Title="MainWindow" Height="585" Width="500" WindowStartupLocation="CenterScreen" SizeToContent="Height" Background="#FF0991C3"
               WindowStyle="None"  ResizeMode="NoResize" Icon="Icon1424.ico" MouseLeftButtonDown="Move_Window">
     <Window.Resources>
-        <!-- Hintergrund für Header von MainWindow -->
-        <LinearGradientBrush x:Key="HeaderBackground" StartPoint="0,0" EndPoint="0,1">
-            <GradientStop Offset="0" Color="Blue"/>
-            <GradientStop Offset="0.7" Color="Blue"/>
-            <GradientStop Offset="1" Color="#FF0991C3"/>
-        </LinearGradientBrush>
+
     </Window.Resources>
     <DockPanel>
         <StatusBar DockPanel.Dock="Bottom" Background="Transparent" Foreground="WhiteSmoke" BorderThickness="2">
@@ -27,9 +22,9 @@
             <StatusBarItem>
                 <ProgressBar x:Name="statusbarProgress" Width="150" Height="14" Visibility="Hidden"/>
             </StatusBarItem>
-            <StatusBarItem Content="" Width="20"/>
-            <Separator/>
-            <StatusBarItem Content=""></StatusBarItem>
+            <StatusBarItem Content="" Width="50" />
+            <StatusBarItem Content="Version:" HorizontalAlignment="Right"/>
+            <StatusBarItem x:Name="statusVersion" Content="0.0.0" HorizontalAlignment="Right"></StatusBarItem>
         </StatusBar>
         <StackPanel>
             <Grid DockPanel.Dock="Top" x:Name="Header" Height="50"  Background="{StaticResource HeaderBackground}">
@@ -38,19 +33,32 @@
                     <ColumnDefinition/>
                     <ColumnDefinition Width="50"/>
                 </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="1"  Orientation="Horizontal">
-                    <TextBlock FontSize="22" Height="30" FontFamily="Arial" Foreground="WhiteSmoke">
+                <StackPanel Grid.Column="1" Margin="10 4" HorizontalAlignment="Left">
+                    <TextBlock x:Name="textblockHeader" FontSize="26" FontFamily="Arial" Foreground="WhiteSmoke">
                         <Bold FontWeight="ExtraBold">My</Bold>
-                        <Run FontWeight="ExtraBold" FontSize="25" Foreground="Red">Mp3</Run>
+                        <Run FontWeight="ExtraBold" FontSize="26" Foreground="Red">Mp3</Run>
                         <Italic>Importer</Italic>
-                        <Run FontSize="10" Text="version: "/>
                     </TextBlock>
-                    <TextBlock x:Name="textblockVersion" Text="0.0.0" FontFamily="Arial" Margin="1,10,1,0"
-                               Foreground="White" FontSize="10" VerticalAlignment="Center">
-                    </TextBlock>
+                    <Rectangle Height="15" Width="192">
+                        <Rectangle.Fill>
+                            <VisualBrush Visual="{Binding ElementName=textblockHeader}"/>
+                        </Rectangle.Fill>
+                        <Rectangle.LayoutTransform>
+                            <TransformGroup>
+                                <SkewTransform AngleX="-15"/>
+                                <ScaleTransform ScaleY="-1"/>
+                            </TransformGroup>
+                        </Rectangle.LayoutTransform>
+                        <Rectangle.OpacityMask>
+                            <LinearGradientBrush EndPoint="0 1">
+                                <GradientStop Color="Transparent" Offset="0"/>
+                                <GradientStop Color="#66FFFFFF" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
                 </StackPanel>
                 <Button Grid.Column="2" x:Name="buttonClose" Content="X" Style="{StaticResource exitButton}"
-                        Click="buttonClose_Click">
+                    VerticalAlignment="Top" Click="buttonClose_Click">
                 </Button>
             </Grid>
 
@@ -80,7 +88,8 @@
                     <TextBox x:Name="textboxExtension" Text=".mp3" HorizontalAlignment="Right" Margin="55,5,0,5"/>
                 </StackPanel>
                 <DataGrid x:Name="datagridFilelist" Grid.Row="2" Grid.ColumnSpan="3" Margin="10,0,10,10" Background="LightGray"
-                          AlternationCount="1" AlternatingRowBackground="#FFB9DFF7" RowBackground="#FFD2EAF7" IsReadOnly="True"/>
+                          CanUserSortColumns="True" AlternationCount="1" AlternatingRowBackground="#FFB9DFF7"
+                          RowBackground="#FFD2EAF7" IsReadOnly="True" ColumnHeaderStyle="{StaticResource HeaderStyle}"/>
                 <StatusBar Grid.Row="3" Grid.ColumnSpan="3" Background="#FF0991C3" Foreground="White">
                     <Separator/>
                     <StatusBarItem Content="Folders:" FontWeight="Bold"/>

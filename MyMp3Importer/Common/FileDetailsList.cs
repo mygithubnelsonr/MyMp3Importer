@@ -1,6 +1,6 @@
-﻿using NRSoft.FunctionPool;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
+using NRSoft.FunctionPool;
 
 namespace MyMp3Importer.Common
 {
