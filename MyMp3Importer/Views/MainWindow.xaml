@@ -134,7 +134,8 @@
                                 </Grid.ColumnDefinitions>
                                 <StackPanel Grid.Column="0">
                                     <CheckBox x:Name="checkboxDelete" Content="Delete" Margin="0,0,0,6"/>
-                                    <CheckBox x:Name="checkboxTestimport" Content="Testimport" IsChecked="True" IsThreeState="False" Margin="0,0,0,6"/>
+                                    <CheckBox x:Name="checkboxTestimport" Content="Testimport" IsChecked="True" IsThreeState="False" 
+                                              Margin="0,0,0,6" Click="checkboxTestimport_Click"/>
                                     <Button x:Name="buttonImport" Content="Import" IsEnabled="False" Margin="0,6,0,6" Click="buttonImport_Click"/>
                                 </StackPanel>
                                 <StackPanel Grid.Column="1">

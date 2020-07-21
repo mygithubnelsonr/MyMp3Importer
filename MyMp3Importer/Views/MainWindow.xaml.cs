@@ -433,14 +433,16 @@ namespace MyMp3Importer
                     return;
             }
 
-            if (checkboxSampler.IsChecked == true)
-                ImportSampler();
-            else
-                ImportAlbum();
+            //if (checkboxSampler.IsChecked == true)
+            //    ImportSampler();
+            //else
+            //    ImportAlbum();
+
+            Import((bool)checkboxSampler.IsChecked);
 
         }
 
-        private void ImportAlbum()
+        private void Import(bool isSampler)
         {
             int recordsAffected = 0;
 
@@ -455,14 +457,17 @@ namespace MyMp3Importer
             {
                 var result = DataGetSet.TruncateTestTables();
                 Debug.Print($"TruncateTestTables result = {result}");
+                if (result == false) return;
             }
 
             for (int i = 0; i <= comboboxAlbum.Items.Count - 1; i++)
             {
                 comboboxAlbum.SelectedIndex = i;
 
-                if (_ignores.Contains(comboboxAlbum.Text))  // == "NA" || comboboxAlbum.Text == "_Images")
+                if (isSampler == false && _ignores.Contains(comboboxAlbum.Text))
+                {
                     continue;
+                }
 
                 List<MP3Record> mp3List = mp3Records(_fileDetails, false);  // isSampler = false
 
@@ -484,49 +489,93 @@ namespace MyMp3Importer
             buttonImport.IsEnabled = true;
         }
 
-        private void ImportSampler()
-        {
-            int recordsAffected = 0;
+        //private void ImportAlbum()
+        //{
+        //    int recordsAffected = 0;
 
-            buttonImport.IsEnabled = false;
+        //    buttonImport.IsEnabled = false;
 
-            DateTime t1 = DateTime.Now;
-            statusbarStart.Content = t1.ToString("HH:mm:ss");
-            statusbarDauer.Content = "";
-            statusbarProgress.Visibility = Visibility.Visible;
+        //    DateTime t1 = DateTime.Now;
+        //    statusbarStart.Content = t1.ToString("HH:mm:ss");
+        //    statusbarDauer.Content = "";
+        //    statusbarProgress.Visibility = Visibility.Visible;
 
-            if (checkboxTestimport.IsChecked == true)
-            {
-                var result = DataGetSet.TruncateTestTables();
-                Debug.Print($"TruncateTestTables result = {result}");
-            }
+        //    if (checkboxTestimport.IsChecked == true)
+        //    {
+        //        var result = DataGetSet.TruncateTestTables();
+        //        Debug.Print($"TruncateTestTables result = {result}");
+        //    }
 
-            for (int i = 0; i <= comboboxAlbum.Items.Count - 1; i++)
-            {
-                comboboxAlbum.SelectedIndex = i;
+        //    for (int i = 0; i <= comboboxAlbum.Items.Count - 1; i++)
+        //    {
+        //        comboboxAlbum.SelectedIndex = i;
 
-                if (comboboxAlbum.Text == "NA")
-                    continue;
+        //        if (_ignores.Contains(comboboxAlbum.Text))  // == "NA" || comboboxAlbum.Text == "_Images")
+        //            continue;
 
-                List<MP3Record> mp3List = mp3Records(_fileDetails, true);   // isSampler = true
+        //        List<MP3Record> mp3List = mp3Records(_fileDetails, false);  // isSampler = false
 
-                // save records
-                if ((bool)checkboxTestimport.IsChecked == true)
-                    recordsAffected += DataGetSet.SaveTestRecord(mp3List);
-                else
-                    recordsAffected += DataGetSet.SaveRecord(mp3List);
+        //        // save records
+        //        if ((bool)checkboxTestimport.IsChecked == true)
+        //            recordsAffected += DataGetSet.SaveTestRecord(mp3List);
+        //        else
+        //            recordsAffected += DataGetSet.SaveRecord(mp3List);
 
-            }
+        //    }
 
-            DateTime t2 = DateTime.Now;
-            statusbarProgress.Visibility = Visibility.Hidden;
-            statusbarDauer.Content = (t2 - t1).Milliseconds.ToString() + " ms";
+        //    DateTime t2 = DateTime.Now;
+        //    statusbarProgress.Visibility = Visibility.Hidden;
+        //    statusbarDauer.Content = (t2 - t1).Milliseconds.ToString() + " ms";
 
-            labelSuccess.Content = $"{recordsAffected}";
-            labelFailed.Content = $"{_fileDetails.Count - recordsAffected}";
+        //    labelSuccess.Content = $"{recordsAffected}";
+        //    labelFailed.Content = $"{_fileDetails.Count - recordsAffected}";
 
-            buttonImport.IsEnabled = true;
-        }
+        //    buttonImport.IsEnabled = true;
+        //}
+
+        //private void ImportSampler()
+        //{
+        //    int recordsAffected = 0;
+
+        //    buttonImport.IsEnabled = false;
+
+        //    DateTime t1 = DateTime.Now;
+        //    statusbarStart.Content = t1.ToString("HH:mm:ss");
+        //    statusbarDauer.Content = "";
+        //    statusbarProgress.Visibility = Visibility.Visible;
+
+        //    if (checkboxTestimport.IsChecked == true)
+        //    {
+        //        var result = DataGetSet.TruncateTestTables();
+        //        Debug.Print($"TruncateTestTables result = {result}");
+        //    }
+
+        //    for (int i = 0; i <= comboboxAlbum.Items.Count -1; i++)
+        //    {
+        //        comboboxAlbum.SelectedIndex = i;
+
+        //        //if (comboboxAlbum.Text == "NA")
+        //        //    continue;
+
+        //        List<MP3Record> mp3List = mp3Records(_fileDetails, true);   // isSampler = true
+
+        //        // save records
+        //        if ((bool)checkboxTestimport.IsChecked == true)
+        //            recordsAffected += DataGetSet.SaveTestRecord(mp3List);
+        //        else
+        //            recordsAffected += DataGetSet.SaveRecord(mp3List);
+
+        //    }
+
+        //    DateTime t2 = DateTime.Now;
+        //    statusbarProgress.Visibility = Visibility.Hidden;
+        //    statusbarDauer.Content = (t2 - t1).Milliseconds.ToString() + " ms";
+
+        //    labelSuccess.Content = $"{recordsAffected}";
+        //    labelFailed.Content = $"{_fileDetails.Count - recordsAffected}";
+
+        //    buttonImport.IsEnabled = true;
+        //}
 
         private List<MP3Record> mp3Records(List<FileDetails> list, bool isSampler)
         {
@@ -589,5 +638,10 @@ namespace MyMp3Importer
         }
         #endregion
 
+        private void checkboxTestimport_Click(object sender, RoutedEventArgs e)
+        {
+            labelSuccess.Content = "0";
+            labelFailed.Content = "0";
+        }
     }
 }
