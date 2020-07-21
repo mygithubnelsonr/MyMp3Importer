@@ -457,8 +457,6 @@ namespace MyMp3Importer
                 Debug.Print($"TruncateTestTables result = {result}");
             }
 
-            List<FileDetails> fileDetailsList = datagridFilelist.ItemsSource as List<FileDetails>;
-
             for (int i = 0; i <= comboboxAlbum.Items.Count - 1; i++)
             {
                 comboboxAlbum.SelectedIndex = i;
@@ -466,7 +464,7 @@ namespace MyMp3Importer
                 if (_ignores.Contains(comboboxAlbum.Text))  // == "NA" || comboboxAlbum.Text == "_Images")
                     continue;
 
-                List<MP3Record> mp3List = mp3Records(fileDetailsList, false);
+                List<MP3Record> mp3List = mp3Records(_fileDetails, false);  // isSampler = false
 
                 // save records
                 if ((bool)checkboxTestimport.IsChecked == true)
@@ -474,8 +472,6 @@ namespace MyMp3Importer
                 else
                     recordsAffected += DataGetSet.SaveRecord(mp3List);
 
-                labelSuccess.Content = $"{recordsAffected}";
-                labelFailed.Content = $"{mp3List.Count - recordsAffected}";
             }
 
             DateTime t2 = DateTime.Now;
@@ -483,15 +479,13 @@ namespace MyMp3Importer
             statusbarDauer.Content = (t2 - t1).Milliseconds.ToString() + " ms";
 
             labelSuccess.Content = $"{recordsAffected}";
-            labelFailed.Content = $"{datagridFilelist.Items.Count - recordsAffected}";
+            labelFailed.Content = $"{_fileDetails.Count - recordsAffected}";
 
             buttonImport.IsEnabled = true;
         }
 
         private void ImportSampler()
         {
-            int importFailed = 0;
-            int importSuccess = 0;
             int recordsAffected = 0;
 
             buttonImport.IsEnabled = false;
@@ -514,7 +508,7 @@ namespace MyMp3Importer
                 if (comboboxAlbum.Text == "NA")
                     continue;
 
-                List<MP3Record> mp3List = mp3Records(_fileDetails, true);
+                List<MP3Record> mp3List = mp3Records(_fileDetails, true);   // isSampler = true
 
                 // save records
                 if ((bool)checkboxTestimport.IsChecked == true)
@@ -522,16 +516,14 @@ namespace MyMp3Importer
                 else
                     recordsAffected += DataGetSet.SaveRecord(mp3List);
 
-                DateTime t2 = DateTime.Now;
-                statusbarProgress.Visibility = Visibility.Hidden;
-                statusbarDauer.Content = (t2 - t1).Milliseconds.ToString() + " ms";
-
-                labelSuccess.Content = $"{recordsAffected}";
-                labelFailed.Content = $"{_fileDetails.Count - recordsAffected}";
-
-                var lastID = DataGetSet.GetLastID("tSongsTest");
-                Debug.Print($"Import success = {importSuccess}, failed={importFailed}, lastId={lastID}");
             }
+
+            DateTime t2 = DateTime.Now;
+            statusbarProgress.Visibility = Visibility.Hidden;
+            statusbarDauer.Content = (t2 - t1).Milliseconds.ToString() + " ms";
+
+            labelSuccess.Content = $"{recordsAffected}";
+            labelFailed.Content = $"{_fileDetails.Count - recordsAffected}";
 
             buttonImport.IsEnabled = true;
         }
@@ -560,7 +552,7 @@ namespace MyMp3Importer
                 mp3.FileDate = item.LastWrite;
                 mp3.Path = item.Path;
                 mp3.IsSample = isSampler;
-                mp3.MD5 = Helpers.MD5(mp3.Path + mp3.FileName);
+                mp3.MD5 = Helpers.MD5($"{mp3.Path}\\{mp3.FileName}");
 
                 var ar = item.File.Split('-');
                 mp3.Titel = ar[1].Trim();

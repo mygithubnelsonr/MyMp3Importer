@@ -25,7 +25,7 @@ namespace MyMp3Importer.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1.2.3")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1.2.4")]
         public string Version {
             get {
                 return ((string)(this["Version"]));
