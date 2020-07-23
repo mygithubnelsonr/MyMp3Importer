@@ -6,7 +6,6 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
@@ -26,7 +25,7 @@ namespace MyMp3Importer
         private ObservableCollection<string> _albums = null;
 
         private FileDetailsList _fileDetails = null;
-        private string _ignores = "NA,_Images";
+        private string _ignores = "NA,_Images,Backup";
         #endregion
 
         #region CTOR
@@ -42,6 +41,8 @@ namespace MyMp3Importer
         #endregion
 
         #region FormEvents
+
+        #region Textbox Drag & Drop
         private void textboxStartfolder_PreviewDragOver(object sender, DragEventArgs e)
         {
             e.Handled = true;
@@ -87,6 +88,55 @@ namespace MyMp3Importer
                     Scanner();
             }
         }
+        #endregion
+
+        #region Datagrid Drag & Drop
+        private void datagridFilelist_PreviewDragEnter(object sender, DragEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void datagridFilelist_PreviewDragOver(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effects = DragDropEffects.Copy;
+            }
+            else
+            {
+                e.Effects = DragDropEffects.None;
+            }
+        }
+
+        private void datagridFilelist_PreviewDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                datagridFilelist.ItemsSource = null;
+
+                string[] filenames = (string[])e.Data.GetData(DataFormats.FileDrop, false);
+
+                DirectoryInfo di;
+                di = new DirectoryInfo(filenames[0]);
+                string folder;
+
+                if ((di.Attributes & FileAttributes.Directory) > 0)
+                    folder = di.FullName;
+                else
+                    folder = di.Parent.FullName;
+
+                textboxStartfolder.Text = folder;
+                textboxStartfolder.ToolTip = folder;
+                labelFailed.Content = "0";
+                labelSuccess.Content = "0";
+
+                this.Activate();
+
+                if (CheckStartfolder() == true)
+                    Scanner();
+            }
+        }
+        #endregion
 
         private void buttonClose_Click(object sender, RoutedEventArgs e)
         {
@@ -97,7 +147,6 @@ namespace MyMp3Importer
         {
             datagridFilelist.ItemsSource = null;
             datagridFilelist.Items.Clear();
-
             Scanner();
         }
 
@@ -118,7 +167,13 @@ namespace MyMp3Importer
 
         private void buttonList_Click(object sender, RoutedEventArgs e)
         {
-            CreateNewList();
+            //CreateNewFileList();
+        }
+
+        private void checkboxTestimport_Click(object sender, RoutedEventArgs e)
+        {
+            labelSuccess.Content = "0";
+            labelFailed.Content = "0";
         }
 
         private void Move_Window(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -137,7 +192,7 @@ namespace MyMp3Importer
 
                 if (di.Exists)
                 {
-                    textboxStartfolder.Background = Brushes.LightGreen;
+                    textboxStartfolder.Background = (Brush)new BrushConverter().ConvertFrom("#FFD1E6A7");   //.LightGreen;
                     textboxStartfolder.IsEnabled = true;
                     return true;
                 }
@@ -617,31 +672,27 @@ namespace MyMp3Importer
             return mp3List;
         }
 
-        private async Task CreateNewList()
-        {
-            string startFolder = @"\\win2k16dc01\FS012";
-            string documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\win2k16dc01_FS012.txt";
+        //private async Task CreateNewFileList()
+        //{
+        //    string startFolder = @"\\win2k16dc01\FS012";
+        //    string documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\win2k16dc01_FS012.txt";
 
-            buttonList.IsEnabled = false;
+        //    buttonList.IsEnabled = false;
 
-            await Task.Run(() =>
-            {
-                string[] allfiles = Directory.GetFileSystemEntries(startFolder, "*.mp3", SearchOption.AllDirectories);
+        //    await Task.Run(() =>
+        //    {
+        //        string[] allfiles = Directory.GetFileSystemEntries(startFolder, "*.mp3", SearchOption.AllDirectories);
 
+        //        File.WriteAllLines(documents, allfiles, Encoding.UTF8);
 
-                File.WriteAllLines(documents, allfiles, Encoding.UTF8);
+        //    });
 
-            });
+        //    buttonList.IsEnabled = true;
 
-            buttonList.IsEnabled = true;
+        //}
 
-        }
         #endregion
 
-        private void checkboxTestimport_Click(object sender, RoutedEventArgs e)
-        {
-            labelSuccess.Content = "0";
-            labelFailed.Content = "0";
-        }
+
     }
 }

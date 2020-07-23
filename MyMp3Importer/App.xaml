@@ -11,11 +11,9 @@
             <GradientStop Offset="1" Color="#FF0991C3"/>
         </LinearGradientBrush>
         <LinearGradientBrush x:Key="HeaderBrush" StartPoint="0.5,0" EndPoint="0.5,1">
-            <GradientStop Color="#FF71B4FF" Offset="0"/>
-            <GradientStop Color="#FF0078FF" Offset="1"/>
-            <GradientStop Color="#FF1E424E" Offset="0.509"/>
-            <GradientStop Color="#FF1D4855" Offset="0.542"/>
-            <GradientStop Color="#FF193A44" Offset="0.526"/>
+            <GradientStop Color="#FF0078FF" Offset="0"/>
+            <GradientStop Color="#FF71B4FF" Offset="1"/>
+            <GradientStop Color="Blue" Offset="0.509"/>
         </LinearGradientBrush>
         <LinearGradientBrush x:Key="HeaderBorderBrush" StartPoint="0.5,0" EndPoint="0.5,1">
             <GradientStop Color="#FF1D1D1D" Offset="0.614"/>

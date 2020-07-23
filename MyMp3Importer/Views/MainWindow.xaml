@@ -80,7 +80,7 @@
                     <Label Content="Extension:" Margin="10,0,10,0" FontWeight="Bold"/>
                 </StackPanel>
                 <StackPanel Grid.Row="1" Grid.ColumnSpan="3" Orientation="Horizontal" Height="30" Margin="10,0,10,0" Background="LightGray" VerticalAlignment="Top">
-                    <TextBox x:Name="textboxStartfolder" Width="300" Background="LightGray" AllowDrop="True" Margin="0,5" HorizontalAlignment="Right"
+                    <TextBox x:Name="textboxStartfolder" Width="300" Background="#FFD3D3D3" AllowDrop="True" Margin="0,5" HorizontalAlignment="Right"
                              PreviewDragEnter="textboxStartfolder_PreviewDragEnter"
                              PreviewDragOver="textboxStartfolder_PreviewDragOver"
                              PreviewDrop="textboxStartfolder_PreviewDrop"/>
@@ -88,8 +88,11 @@
                     <TextBox x:Name="textboxExtension" Text=".mp3" HorizontalAlignment="Right" Margin="55,5,0,5"/>
                 </StackPanel>
                 <DataGrid x:Name="datagridFilelist" Grid.Row="2" Grid.ColumnSpan="3" Margin="10,0,10,10" Background="LightGray"
-                          CanUserSortColumns="True" AlternationCount="1" AlternatingRowBackground="#FFB9DFF7"
-                          RowBackground="#FFD2EAF7" IsReadOnly="True" ColumnHeaderStyle="{StaticResource HeaderStyle}"/>
+                        CanUserSortColumns="True" AlternationCount="1" AlternatingRowBackground="#FFB9DFF7" AllowDrop="True"
+                        RowBackground="#FFD2EAF7" IsReadOnly="True" ColumnHeaderStyle="{StaticResource HeaderStyle}"
+                        PreviewDragEnter="datagridFilelist_PreviewDragEnter"
+                        PreviewDragOver="datagridFilelist_PreviewDragOver"
+                        PreviewDrop="datagridFilelist_PreviewDrop"/>
                 <StatusBar Grid.Row="3" Grid.ColumnSpan="3" Background="#FF0991C3" Foreground="White">
                     <Separator/>
                     <StatusBarItem Content="Folders:" FontWeight="Bold"/>
