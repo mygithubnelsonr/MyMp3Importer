@@ -8,6 +8,10 @@ namespace MyMp3Importer.Common
 {
     public class Parser
     {
+        private List<string> _genres;
+        private List<string> _catalogs;
+        private List<string> _medias;
+
         private bool _isSampler = false;
 
         private List<string> pathTokens = new List<string>() { "Genre", "Catalog", "Media", "Interpret", "Album" };
@@ -24,9 +28,13 @@ namespace MyMp3Importer.Common
         {
             _isSampler = isSampler;
             hashtable = new Hashtable() { { "Genre", 1 }, { "Catalog", 2 }, { "Media", 3 }, { "Interpret", 4 }, { "Album", 5 } };
+
+            _genres = DataGetSet.GetGenres();
+            _catalogs = DataGetSet.GetCatalogs();
+            _medias = DataGetSet.GetMedia();
         }
 
-        public async Task<List<ParserToken>> ParesSamplerTokens(string path)
+        public async Task<List<ParserToken>> ParesSamplerTokensAsync(string path)
         {
             List<string> genres = await DataGetSet.GetGenresAsync();
             List<string> catalogs = await DataGetSet.GetCatalogsAsync();
@@ -34,8 +42,7 @@ namespace MyMp3Importer.Common
 
             List<ParserToken> list = new List<ParserToken>();
 
-            string container = GetContainer(path);
-
+            string container = Helpers.GetContainer(path);
 
             var tokens = container.Split('\\').ToList();
             tokens.RemoveAt(0);
@@ -69,21 +76,42 @@ namespace MyMp3Importer.Common
             return list;
         }
 
-        public async Task<List<ParserToken>> ParserTokens(string path)
+        //private Parser2 parserToken(List<string> list, string tokenName, string token, string path)
+        //{
+        //    Parser2 parser = new Parser2(list, tokenName, token, path);
+
+        //    string container = GetContainer(path);
+
+        //    var tokens = container.Split('\\').ToList();
+        //    tokens.RemoveAt(0);
+
+        //    if (list.Contains(token))
+        //    {
+        //        var p = parser.GetParserToken();
+        //        Debug.Print($"add {tokenName}, {token}, {true}");
+        //    }
+        //    else
+        //    {
+        //        var p = parser.GetParserToken();      // = new ParserToken2() { Name = tokenName, Token = token, State = false };
+        //        Debug.Print($"add {tokenName}, {token}, {false}");
+        //    }
+
+        //    return parser;
+        //}
+
+        public async Task<List<ParserToken>> ParserTokensAsync(string path)
         {
             List<string> genres = await DataGetSet.GetGenresAsync();
             List<string> catalogs = await DataGetSet.GetCatalogsAsync();
             List<string> medias = await DataGetSet.GetMediaAsync();
 
-            List<ParserToken> list = new List<ParserToken>();
-
-            string container = GetContainer(path);
+            string container = Helpers.GetContainer(path);
 
             var tokens = container.Split('\\').ToList();
             tokens.RemoveAt(0);
 
+            List<ParserToken> list = new List<ParserToken>();
             int counter = 0;
-
 
             try
             {
@@ -119,27 +147,5 @@ namespace MyMp3Importer.Common
                 return null;
             }
         }
-
-        private string GetContainer(string path)
-        {
-            string container = "";
-
-            // check if network share or drive letter
-            if (path.StartsWith(@"\\"))
-            {
-                string b = path.Remove(0, 2);
-                int start = b.IndexOf("\\") + 1;
-                int len = b.Length - start;
-                container = b.Substring(start, len);
-            }
-            else
-            {
-                string b = path.Remove(0, 3);
-                container = b;
-            }
-
-            return container;
-        }
-
     }
 }

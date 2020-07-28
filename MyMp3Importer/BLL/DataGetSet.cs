@@ -54,6 +54,38 @@ namespace MyMp3Importer.BLL
             }
         }
 
+        public static List<string> GetGenres()
+        {
+            List<string> genres = null;
+            using (var context = new MyJukeboxEntities())
+            {
+                genres = context.tGenres.Select(g => g.Name).ToList();
+                return genres;
+            }
+        }
+
+        public static List<string> GetCatalogs()
+        {
+            List<string> catalogues = null;
+
+            using (var context = new MyJukeboxEntities())
+            {
+                catalogues = context.tCatalogs.Select(c => c.Name).ToList();
+                return catalogues;
+            }
+        }
+
+        public static List<string> GetMedia()
+        {
+            List<string> medias = null;
+
+            using (var context = new MyJukeboxEntities())
+            {
+                medias = context.tMedias.Select(m => m.Type).ToList();
+                return medias;
+            }
+        }
+
         #endregion
 
         public static int CreateCatalog(string catalog)
