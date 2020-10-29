@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using NRSoft.FunctionPool;
+using System.Collections.Generic;
 using System.IO;
-using NRSoft.FunctionPool;
 
 namespace MyMp3Importer.Common
 {
@@ -12,6 +12,8 @@ namespace MyMp3Importer.Common
         private string _startDirectory = "";
         private string _filePattern = "";
         private FileDetailsList _fileDetailsList = null;
+
+        private List<string> _fileList = null;
 
         public FileDetailsList()
         {
@@ -40,6 +42,39 @@ namespace MyMp3Importer.Common
                     _allFileSize += fi.Length;
                 }
             }
+            _dirCount = Helpers.DirectoryCount(_startDirectory, false);
+            _fileCount = _fileDetailsList.Count;
+
+            return _fileDetailsList;
+        }
+
+        public FileDetailsList(List<string> fileList, string startDirectory, string filePattern)
+        {
+            _startDirectory = startDirectory;
+            _filePattern = filePattern;
+            _fileList = fileList;
+        }
+
+        public FileDetailsList LoadFiles()
+        {
+            List<FileInfo> fileInfos = new List<FileInfo>();
+            FileDetailsList _fileDetailsList = new FileDetailsList();
+
+            foreach (string file in _fileList)
+            {
+                FileInfo fi = FileSystemUtils.GetFileinfo(file);
+                string f = GeneralH.ToProperCase(fi.Name.Replace(fi.Extension, ""));
+                _fileDetailsList.Add(new FileDetails()
+                { 
+                    File = f, 
+                    Extension = fi.Extension,
+                    Path = fi.DirectoryName,
+                    Size = fi.Length,
+                    LastWrite = fi.LastWriteTime
+                });
+                _allFileSize += fi.Length;
+            }
+
             _dirCount = Helpers.DirectoryCount(_startDirectory, false);
             _fileCount = _fileDetailsList.Count;
 

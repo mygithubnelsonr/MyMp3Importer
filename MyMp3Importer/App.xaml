@@ -36,6 +36,12 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+
+        <Style x:Key="nostyleButton" TargetType="Button">
+            
+        </Style>
+        
+        <!-- Standart Button Style  -->
         <Style TargetType="Button">
             <Setter Property="Width" Value="60"/>
             <Setter Property="Height" Value="20"/>
@@ -62,7 +68,7 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-        <Style x:Key="HeaderStyle" TargetType="DataGridColumnHeader">
+        <Style x:Key="datagridHeaderStyle" TargetType="DataGridColumnHeader">
             <Setter Property="Background" Value="{StaticResource HeaderBrush}" />
             <Setter Property="Foreground" Value="White" />
             <Setter Property="FontWeight" Value="Bold"/>

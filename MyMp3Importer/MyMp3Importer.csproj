@@ -70,6 +70,9 @@
   <PropertyGroup>
     <SignManifests>true</SignManifests>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Views\Icon1424.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
@@ -111,12 +114,16 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="BLL\CatalogList.cs" />
     <Compile Include="BLL\DataGetSet.cs" />
+    <Compile Include="BLL\GenreList.cs" />
+    <Compile Include="BLL\MediaList.cs" />
     <Compile Include="Common\Mp3Record.cs" />
     <Compile Include="Common\FileDetails.cs" />
     <Compile Include="Common\Helpers.cs" />
     <Compile Include="Common\MpeRecordList.cs" />
-    <Compile Include="Common\Parser2.cs" />
+    <Compile Include="Common\Parser.cs" />
+    <Compile Include="Common\ParserTokenList.cs" />
     <Compile Include="DAL\MyJukeboxModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -132,7 +139,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>MyJukeboxModel.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Common\Parser.cs" />
     <Compile Include="Common\ParserToken.cs" />
     <Compile Include="DAL\tActionLog.cs">
       <DependentUpon>MyJukeboxModel.tt</DependentUpon>
@@ -271,7 +277,7 @@
     <Resource Include="Views\Icon1424.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\11_Public\FunctionPool\FunctionPool.csproj">
+    <ProjectReference Include="..\..\..\..\..\11_Public\FunctionPool\FunctionPool.csproj">
       <Project>{5e8d2814-7dda-47ad-9739-dc3192f4a5f6}</Project>
       <Name>FunctionPool</Name>
     </ProjectReference>

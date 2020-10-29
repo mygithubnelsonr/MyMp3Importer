@@ -64,33 +64,33 @@ namespace MyMp3Importer
 
         private void textboxStartfolder_PreviewDrop(object sender, DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                datagridFilelist.ItemsSource = null;
+            //if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            //{
+            //    datagridFilelist.ItemsSource = null;
 
-                string[] filenames = (string[])e.Data.GetData(DataFormats.FileDrop, false);
+            //    string[] filenames = (string[])e.Data.GetData(DataFormats.FileDrop, false);
 
-                DirectoryInfo di;
-                di = new DirectoryInfo(filenames[0]);
-                string folder;
+            //    DirectoryInfo di;
+            //    di = new DirectoryInfo(filenames[0]);
+            //    string folder;
 
-                if ((di.Attributes & FileAttributes.Directory) > 0)
-                    folder = di.FullName;
-                else
-                    folder = di.Parent.FullName;
+            //    if ((di.Attributes & FileAttributes.Directory) > 0)
+            //        folder = di.FullName;
+            //    else
+            //        folder = di.Parent.FullName;
 
-                textboxStartfolder.Text = folder;
-                textboxStartfolder.ToolTip = folder;
-                labelFailed.Content = "0";
-                labelSuccess.Content = "0";
+            //    textboxStartfolder.Text = folder;
+            //    textboxStartfolder.ToolTip = folder;
+            //    labelFailed.Content = "0";
+            //    labelSuccess.Content = "0";
 
-                this.Activate();
+            //    this.Activate();
 
-                checkboxTestimport.IsChecked = true;
+            //    checkboxTestimport.IsChecked = true;
 
-                if (CheckStartfolder() == true)
-                    Scanner();
-            }
+            //    if (CheckStartfolder() == true)
+            //        Scanner();
+            //}
         }
         #endregion
 
@@ -110,33 +110,70 @@ namespace MyMp3Importer
 
         private void datagridFilelist_PreviewDrop(object sender, DragEventArgs e)
         {
+            checkboxTestimport.IsChecked = true;
+            datagridFilelist.ItemsSource = "";
+            string fullpath = "";
+
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
-                datagridFilelist.ItemsSource = null;
-
                 string[] filenames = (string[])e.Data.GetData(DataFormats.FileDrop, false);
+                fullpath = filenames[0];
 
-                DirectoryInfo di;
-                di = new DirectoryInfo(filenames[0]);
-                string folder;
-
-                if ((di.Attributes & FileAttributes.Directory) > 0)
-                    folder = di.FullName;
+                if (CheckStartfolder(fullpath) == false)
+                {
+                    textboxStartfolder.Background = Brushes.Salmon;
+                    buttonScan.IsEnabled = false;
+                    return;
+                }
                 else
-                    folder = di.Parent.FullName;
+                {
+                    textboxStartfolder.Background = (Brush)new BrushConverter().ConvertFrom("#FFD1E6A7");   //.LightGreen;
+                    textboxStartfolder.IsEnabled = true;
+                    buttonScan.IsEnabled = true;
+                }
 
-                textboxStartfolder.Text = folder;
-                textboxStartfolder.ToolTip = folder;
+                bool isFolder = File.GetAttributes(fullpath).HasFlag(FileAttributes.Directory);
+
+                if (isFolder == true)
+                {
+                    textboxStartfolder.Text = fullpath;
+                    ProcessFolder(fullpath, textboxExtension.Text);
+                }
+                else
+                {
+                    textboxStartfolder.Text = Path.GetDirectoryName(fullpath);
+                    ProcessFileList(filenames, textboxStartfolder.Text, textboxExtension.Text);
+                }
+
                 labelFailed.Content = "0";
                 labelSuccess.Content = "0";
 
                 this.Activate();
-
-                checkboxTestimport.IsChecked = true;
-                if (CheckStartfolder() == true)
-                    Scanner();
             }
         }
+
+        private void ProcessFolder(string path, string extension)
+        {
+            if (CheckStartfolder(path) == true)
+            {
+                ScannFolder(path, extension);
+            }
+
+            textboxStartfolder.Text = path;
+            textboxStartfolder.ToolTip = path;
+        }
+
+        private void ProcessFileList(string[] files, string path, string extension)
+        {
+            if (CheckStartfolder(path) == true)
+            {
+                ScannFileList(files, path, extension);
+            }
+
+            //textboxStartfolder.Text = path;
+            //textboxStartfolder.ToolTip = path;
+        }
+
         #endregion
 
         private void buttonMinimize_Click(object sender, RoutedEventArgs e)
@@ -151,9 +188,23 @@ namespace MyMp3Importer
 
         private void buttonScan_Click(object sender, RoutedEventArgs e)
         {
-            datagridFilelist.ItemsSource = null;
-            datagridFilelist.Items.Clear();
-            Scanner();
+            //datagridFilelist.ItemsSource = null;
+            //datagridFilelist.Items.Clear();
+
+            //_artists.Clear();
+            //_artists.Add("NA");
+            //_albums.Clear();
+            //_albums.Add("NA");
+
+            //comboboxArtist.SelectedItem = "NA";
+            //comboboxAlbum.SelectedItem = "NA";
+
+            //ScannFolder(textboxStartfolder.Text, textboxExtension.Text);
+        }
+
+        private void buttonClear_Click(object sender, RoutedEventArgs e)
+        {
+            datagridFilelist.ItemsSource = "";
         }
 
         private void buttonImport_Click(object sender, RoutedEventArgs e)
@@ -168,7 +219,15 @@ namespace MyMp3Importer
 
         private void buttonTest_Click(object sender, RoutedEventArgs e)
         {
-            //Test(@"\\win2k16dc01\FS012\Andere\Annette\CD\_Various Artists\VHS = Burning Boots 2000");
+            //List<ParserToken> tokens = new List<ParserToken>();
+            //ParserTokenList parserlist = new ParserTokenList(@"\\win2k16dc01\FS012\Andere\Berni\M3\Norah Jones");
+            //tokens = parserlist.Get();
+            //Debug.Print($"{tokens.Count}");
+
+            //foreach (var token in tokens)
+            //{
+            //    Debug.Print($"{token.Name}, {token.Token}, {token.State}");
+            //}
         }
 
         private void checkboxTestimport_Click(object sender, RoutedEventArgs e)
@@ -180,32 +239,27 @@ namespace MyMp3Importer
         #endregion
 
         #region Methods
-        private bool CheckStartfolder()
+        private bool CheckStartfolder(string fullpath)
         {
             try
             {
-                DirectoryInfo di = new DirectoryInfo(textboxStartfolder.Text);
+                string path = Path.GetDirectoryName(fullpath);
+                DirectoryInfo di = new DirectoryInfo(path);
 
                 if (di.Exists)
-                {
-                    textboxStartfolder.Background = (Brush)new BrushConverter().ConvertFrom("#FFD1E6A7");   //.LightGreen;
-                    textboxStartfolder.IsEnabled = true;
                     return true;
-                }
                 else
-                {
-                    textboxStartfolder.Background = Brushes.Salmon;
-                    buttonScan.IsEnabled = false;
                     return false;
-                }
-
             }
-            catch { return false; }
+            catch
+            {
+                return false;
+            }
         }
 
-        private void CheckIfSampler(List<FileDetails> files)
+        private bool CheckIfSampler(List<FileDetails> files)
         {
-            bool sampler = false;
+            bool isSampler = false;
 
             var ar = files[0].File.ToString().Split(new string[] { " - " }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -214,10 +268,10 @@ namespace MyMp3Importer
             foreach (var file in files)
             {
                 ar = file.File.Split(new string[] { " - " }, StringSplitOptions.RemoveEmptyEntries);
-                if (ar[0] != tmp) sampler = true;
+                if (ar[0] != tmp) isSampler = true;
             }
 
-            checkboxSampler.IsChecked = sampler;
+            return isSampler;
         }
 
         private async Task FillCollectionsAsync()
@@ -266,15 +320,10 @@ namespace MyMp3Importer
             comboboxAlbum.SelectedItem = "NA";
         }
 
-        private async void Scanner()
+        private void ScannFolder(string startDirectory, string filePattern)
         {
-            string startDirectory = textboxStartfolder.Text;
-            string filePattern = textboxExtension.Text;
-
-            if (startDirectory == "") return;
-
-            labelSuccess.Content = "0";
-            labelFailed.Content = "0";
+            if (startDirectory == "")
+                return;
 
             #region processing files
 
@@ -290,164 +339,19 @@ namespace MyMp3Importer
             if (filedetails.FileSizeAll > 0)
                 buttonImport.IsEnabled = true;
 
-            CheckIfSampler(_fileDetails);
-
+            checkboxSampler.IsChecked = CheckIfSampler(_fileDetails);
             datagridFilelist.ItemsSource = _fileDetails;
 
             #endregion
 
             #region processing parser tokens
 
-            string container = Helpers.GetContainer(startDirectory);
-            var tokens = container.Split('\\').ToList();
-            tokens.RemoveAt(0);
+            List<ParserToken> tokens = new List<ParserToken>();
+            ParserTokenList parserlist = new ParserTokenList(startDirectory);
+            tokens = parserlist.Get();
 
-            ParserToken parserToken = new ParserToken();
-            Parser2 parser2 = new Parser2();
+            UpdateCombos(tokens);
 
-            // processing genre
-            parserToken = parser2.GetParserToken(_genres, "Genre", tokens[0], startDirectory);
-            comboboxGenre.SelectedItem = tokens[0];
-            labelGenre.Tag = parserToken.State;
-            // processing catalog
-            parserToken = parser2.GetParserToken(_catalogs, "Catalog", tokens[1], startDirectory);
-            comboboxCatalog.SelectedItem = tokens[1];
-            labelCatalog.Tag = parserToken.State;
-            // processing media
-            parserToken = parser2.GetParserToken(_medias, "Media", tokens[2], startDirectory);
-            comboboxMedia.SelectedItem = tokens[2];
-            labelMedia.Tag = parserToken.State;
-            // processing artist
-            _artists.Insert(1, tokens[3]);
-            comboboxArtist.SelectedItem = tokens[3];
-            labelArtist.Foreground = Brushes.Red;
-            labelArtist.Tag = false;
-            // processing album
-            _albums.Insert(1, tokens[4]);
-            comboboxAlbum.SelectedItem = tokens[4];
-            labelAlbum.Foreground = Brushes.Red;
-            labelAlbum.Tag = false;
-
-            #region old for loop
-            //for (int i = 1; i <= tokens.Count; i++)
-            //{
-            //    #region genre
-            //    //if (i == 1)     // Genre
-            //    //{
-            //    //    if (_genres.Contains(tokens[0].Token))
-            //    //    {
-            //    //        Dispatcher.Invoke(() =>
-            //    //        {
-            //    //            comboboxGenre.SelectedItem = tokens[0].Token;
-            //    //            labelGenre.Tag = true;
-            //    //        });
-            //    //    }
-            //    //    else
-            //    //    {
-            //    //        Dispatcher.Invoke(() =>
-            //    //        {
-            //    //            _genres.Add(tokens[0].Token);
-            //    //            comboboxGenre.SelectedItem = tokens[0].Token;
-            //    //            labelGenre.Foreground = Brushes.Red;
-            //    //            labelGenre.Tag = false;
-            //    //        });
-            //    //    }
-            //    //}
-            //    #endregion
-            //    #region catalog
-            //    //if (i == 2)     // Catalog
-            //    //{
-            //    //    if (_catalogs.Contains(tokens[1].Token))
-            //    //    {
-            //    //        Dispatcher.Invoke(() =>
-            //    //        {
-            //    //            comboboxCatalog.SelectedItem = tokens[1].Token;
-            //    //            labelCatalog.Tag = true;
-            //    //        });
-            //    //    }
-            //    //    else
-            //    //    {
-            //    //        Dispatcher.Invoke(() =>
-            //    //        {
-            //    //            _catalogs.Add(tokens[1].Token);
-            //    //            comboboxCatalog.SelectedItem = tokens[1].Token;
-            //    //            labelCatalog.Foreground = Brushes.Red;
-            //    //            labelCatalog.Tag = false;
-            //    //        });
-            //    //    }
-            //    //}
-            //    #endregion
-            //    #region media
-            //    //if (i == 3)     // Media
-            //    //{
-            //    //    if (_medias.Contains(tokens[2].Token))
-            //    //    {
-            //    //        Dispatcher.Invoke(() =>
-            //    //        {
-            //    //            comboboxMedia.SelectedItem = tokens[2].Token;
-            //    //            labelMedia.Tag = true;
-            //    //        });
-            //    //    }
-            //    //    else
-            //    //    {
-            //    //        Dispatcher.Invoke(() =>
-            //    //        {
-            //    //            _medias.Add(tokens[2].Token);
-            //    //            comboboxMedia.SelectedItem = tokens[2].Token;
-            //    //            labelMedia.Foreground = Brushes.Red;
-            //    //            labelMedia.Tag = false;
-            //    //        });
-            //    //    }
-            //    //}
-            //    #endregion
-            //    #region artist
-            //    //if (i == 4)     // artist
-            //    //{
-            //    //    if (_interpreters.Contains(tokens[3].Token))
-            //    //    {
-            //    //        Dispatcher.Invoke(() =>
-            //    //        {
-            //    //            comboboxInterpret.SelectedItem = tokens[3].Token;
-            //    //            labelArtist.Tag = true;
-            //    //        });
-            //    //    }
-            //    //    else
-            //    //    {
-            //    //        Dispatcher.Invoke(() =>
-            //    //        {
-            //    //            _interpreters.Insert(1, tokens[3].Token);
-            //    //            comboboxInterpret.SelectedItem = tokens[3].Token;
-            //    //            labelArtist.Foreground = Brushes.Red;
-            //    //            labelArtist.Tag = false;
-            //    //        });
-            //    //    }
-            //    //}
-            //    #endregion
-            //    #region album
-            //    //if (i == 5)     // Album
-            //    //{
-            //    //    if (_albums.Contains(tokens[4].Token))
-            //    //    {
-            //    //        Dispatcher.Invoke(() =>
-            //    //        {
-            //    //            comboboxAlbum.SelectedItem = tokens[4].Token;
-            //    //            labelAlbum.Tag = true;
-            //    //        });
-            //    //    }
-            //    //    else
-            //    //    {
-            //    //        Dispatcher.Invoke(() =>
-            //    //        {
-            //    //            _albums.Insert(1, tokens[4].Token);
-            //    //            comboboxAlbum.SelectedItem = tokens[4].Token;
-            //    //            labelAlbum.Foreground = Brushes.Red;
-            //    //            labelAlbum.Tag = false;
-            //    //        });
-            //    //    }
-            //    //}
-            //    #endregion
-            //}
-            #endregion
             #endregion
 
             #region Fill Albums condtionaly
@@ -468,13 +372,70 @@ namespace MyMp3Importer
                     else
                         _albums.Add(di.Parent.Name);
                 }
-
                 comboboxAlbum.SelectedIndex = 0;
             }
 
             #endregion
         }
 
+        private void UpdateCombos(List<ParserToken> tokens)
+        {
+            comboboxGenre.SelectedItem = tokens[0].Token;
+            labelGenre.Tag = tokens[0].State;
+
+            comboboxCatalog.SelectedItem = tokens[1].Token;
+            labelCatalog.Tag = tokens[1].State;
+
+            comboboxMedia.SelectedItem = tokens[2].Token;
+            labelMedia.Tag = tokens[2].State;
+
+            _artists.Add(tokens[3].Token);
+            comboboxArtist.SelectedItem = tokens[3].Token;
+            labelArtist.Tag = tokens[3].State;
+
+            _albums.Add(tokens[4].Token);
+            comboboxAlbum.SelectedItem = tokens[4].Token;
+            labelAlbum.Tag = tokens[4].State;
+        }
+
+        private void ScannFileList(string[] files, string path, string extension)
+        {
+            if (path == "")
+                return;
+
+            #region processing files
+            List<string> fileList = new List<string>();
+
+            foreach (string file in files)
+            {
+                fileList.Add(file);
+            }
+
+            var filedetailsList = new FileDetailsList(fileList, path, extension);
+            _fileDetails = filedetailsList.LoadFiles();
+
+            labelFolders.Content = filedetailsList.DirCount.ToString();
+            labelFiles.Content = filedetailsList.FileCount.ToString();
+
+            if (_fileDetails.Count > 0)
+                buttonImport.IsEnabled = true;
+
+            checkboxSampler.IsChecked = CheckIfSampler(_fileDetails);
+            datagridFilelist.ItemsSource = _fileDetails;
+
+            #endregion
+
+            #region processing parser tokens
+
+            List<ParserToken> tokens = new List<ParserToken>();
+            ParserTokenList parserlist = new ParserTokenList(path);
+            tokens = parserlist.Get();
+
+            UpdateCombos(tokens);
+
+            #endregion
+
+        }
 
         private void ImportStart()
         {
@@ -612,209 +573,6 @@ namespace MyMp3Importer
         }
 
         #endregion
-
-        // old stuff
-        //public void Test(string path)
-        //{
-        //    List<ParserToken> tokenList = new List<ParserToken>();
-
-        //    string container = Helpers.GetContainer(path);
-        //    var tokens = container.Split('\\').ToList();
-        //    tokens.RemoveAt(0);
-
-        //    Parser2 parser2 = new Parser2();
-        //    tokenList.Add(parser2.GetParserToken(_genres, "Genre", tokens[0], path));
-        //    tokenList.Add(parser2.GetParserToken(_catalogs, "Catalog", tokens[1], path));
-        //    tokenList.Add(parser2.GetParserToken(_medias, "Media", tokens[2], path));
-        //}
-
-
-        //private async void ScannerOld()
-        //{
-        //    string startDirectory = textboxStartfolder.Text;
-        //    string filePattern = textboxExtension.Text;
-
-        //    if (startDirectory == "") return;
-
-        //    labelSuccess.Content = "0";
-        //    labelFailed.Content = "0";
-
-        //    #region processing files
-
-        //    var filedetails = new FileDetailsList(startDirectory, filePattern);
-        //    _fileDetails = filedetails.Load();
-
-        //    labelFolders.Content = filedetails.DirCount.ToString();
-        //    labelFiles.Content = filedetails.FileCount.ToString();
-
-        //    var size = filedetails.FileSizeAll / 1024;
-        //    labelSize.Content = size.ToString("#,#") + " Kb";
-
-        //    if (filedetails.FileSizeAll > 0)
-        //        buttonImport.IsEnabled = true;
-
-        //    CheckIfSampler(_fileDetails);
-
-        //    datagridFilelist.ItemsSource = _fileDetails;
-
-        //    #endregion
-
-        //    #region processing parser tokens
-
-        //    List<ParserToken> tokens = null;
-        //    Parser parser = new Parser((bool)checkboxSampler.IsChecked);
-
-        //    tokens = await parser.ParserTokensAsync(startDirectory);
-        //    Debug.Print("");
-
-        //    await Task.Run(() =>
-        //    {
-        //        for (int i = 1; i <= tokens.Count; i++)
-        //        {
-        //            if (i == 1)     // Genre
-        //            {
-        //                if (_genres.Contains(tokens[0].Token))
-        //                {
-        //                    Dispatcher.Invoke(() =>
-        //                    {
-        //                        comboboxGenre.SelectedItem = tokens[0].Token;
-        //                        labelGenre.Tag = true;
-        //                    });
-        //                }
-        //                else
-        //                {
-        //                    Dispatcher.Invoke(() =>
-        //                    {
-        //                        _genres.Add(tokens[0].Token);
-        //                        comboboxGenre.SelectedItem = tokens[0].Token;
-        //                        labelGenre.Foreground = Brushes.Red;
-        //                        labelGenre.Tag = false;
-        //                    });
-        //                }
-        //            }
-
-        //            if (i == 2)     // Catalog
-        //            {
-        //                if (_catalogs.Contains(tokens[1].Token))
-        //                {
-        //                    Dispatcher.Invoke(() =>
-        //                    {
-        //                        comboboxCatalog.SelectedItem = tokens[1].Token;
-        //                        labelCatalog.Tag = true;
-        //                    });
-        //                }
-        //                else
-        //                {
-        //                    Dispatcher.Invoke(() =>
-        //                    {
-        //                        _catalogs.Add(tokens[1].Token);
-        //                        comboboxCatalog.SelectedItem = tokens[1].Token;
-        //                        labelCatalog.Foreground = Brushes.Red;
-        //                        labelCatalog.Tag = false;
-        //                    });
-        //                }
-        //            }
-
-        //            if (i == 3)     // Media
-        //            {
-        //                if (_medias.Contains(tokens[2].Token))
-        //                {
-        //                    Dispatcher.Invoke(() =>
-        //                    {
-        //                        comboboxMedia.SelectedItem = tokens[2].Token;
-        //                        labelMedia.Tag = true;
-        //                    });
-        //                }
-        //                else
-        //                {
-        //                    Dispatcher.Invoke(() =>
-        //                    {
-        //                        _medias.Add(tokens[2].Token);
-        //                        comboboxMedia.SelectedItem = tokens[2].Token;
-        //                        labelMedia.Foreground = Brushes.Red;
-        //                        labelMedia.Tag = false;
-        //                    });
-        //                }
-        //            }
-
-        //            if (i == 4)     // Interpret
-        //            {
-        //                if (_interpreters.Contains(tokens[3].Token))
-        //                {
-        //                    Dispatcher.Invoke(() =>
-        //                    {
-        //                        comboboxInterpret.SelectedItem = tokens[3].Token;
-        //                        labelArtist.Tag = true;
-        //                    });
-        //                }
-        //                else
-        //                {
-        //                    Dispatcher.Invoke(() =>
-        //                    {
-        //                        _interpreters.Insert(1, tokens[3].Token);
-        //                        comboboxInterpret.SelectedItem = tokens[3].Token;
-        //                        labelArtist.Foreground = Brushes.Red;
-        //                        labelArtist.Tag = false;
-        //                    });
-        //                }
-        //            }
-
-        //            if (i == 5)     // Album
-        //            {
-        //                if (_albums.Contains(tokens[4].Token))
-        //                {
-        //                    Dispatcher.Invoke(() =>
-        //                    {
-        //                        comboboxAlbum.SelectedItem = tokens[4].Token;
-        //                        labelAlbum.Tag = true;
-        //                    });
-        //                }
-        //                else
-        //                {
-        //                    Dispatcher.Invoke(() =>
-        //                    {
-        //                        _albums.Insert(1, tokens[4].Token);
-        //                        comboboxAlbum.SelectedItem = tokens[4].Token;
-        //                        labelAlbum.Foreground = Brushes.Red;
-        //                        labelAlbum.Tag = false;
-        //                    });
-        //                }
-        //            }
-        //        }
-        //    });
-
-        //    #endregion
-
-        //    #region Fill Albums condtionaly
-        //    var folders = System.Convert.ToInt32(labelFolders.Content);
-
-        //    if (comboboxInterpret.SelectedItem.ToString() != "NA" && folders > 0)
-        //    {
-        //        DirectoryInfo di = null;
-        //        List<string> allDirs = Helpers.GetDirectories(startDirectory, false);
-        //        _albums.Clear();
-
-        //        foreach (string dir in allDirs)
-        //        {
-        //            di = new DirectoryInfo(dir);
-
-        //            if (_ignores.Contains(dir.Split('\\').Last()) != true)
-        //            {
-        //                Debug.Print(dir);
-        //                Debug.Print(di.Name);
-        //                _albums.Add(di.Name);
-        //            }
-        //            else
-        //            {
-        //                _albums.Add(di.Parent.Name);
-        //            }
-        //        }
-
-        //        comboboxAlbum.SelectedIndex = 0;
-        //    }
-
-        //    #endregion
-        //}
 
     }
 }
