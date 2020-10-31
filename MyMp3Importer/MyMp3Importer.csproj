@@ -33,7 +33,7 @@
     <MapFileExtensions>true</MapFileExtensions>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>13</ApplicationRevision>
+    <ApplicationRevision>14</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -274,7 +274,9 @@
       <LastGenOutput>MyJukeboxModel.cs</LastGenOutput>
     </Content>
     <Resource Include="Old Stuff.txt" />
-    <Resource Include="Views\Icon1424.ico" />
+    <Resource Include="Views\Icon1424.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\11_Public\FunctionPool\FunctionPool.csproj">

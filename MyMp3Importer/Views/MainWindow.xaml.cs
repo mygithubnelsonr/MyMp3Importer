@@ -3,7 +3,6 @@ using MyMp3Importer.Common;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -469,11 +468,6 @@ namespace MyMp3Importer
                     return;
             }
 
-            //if (checkboxSampler.IsChecked == true)
-            //    ImportSampler();
-            //else
-            //    ImportAlbum();
-
             Import((bool)checkboxSampler.IsChecked);
 
         }
@@ -492,7 +486,6 @@ namespace MyMp3Importer
             if (checkboxTestimport.IsChecked == true)
             {
                 var result = DataGetSet.TruncateTestTables();
-                Debug.Print($"TruncateTestTables result = {result}");
                 if (result == false) return;
             }
 
@@ -509,9 +502,13 @@ namespace MyMp3Importer
 
                 // save records
                 if ((bool)checkboxTestimport.IsChecked == true)
-                    recordsAffected += DataGetSet.SaveTestRecord(mp3List);
-                else
-                    recordsAffected += DataGetSet.SaveRecord(mp3List);
+                    if (recordsAffected > 0)
+                    {
+                        recordsAffected += DataGetSet.SaveTestRecord(mp3List);
+                        checkboxTestimport.IsChecked = false;
+                    }
+                    else
+                        recordsAffected += DataGetSet.SaveRecord(mp3List);
 
             }
 
