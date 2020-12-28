@@ -117,6 +117,8 @@
                     <Separator/>
                     <StatusBarItem HorizontalAlignment="Right">
                         <StackPanel Orientation="Horizontal">
+                            <Button x:Name="buttonLog" Content="Log" Margin="4,0,20,0"
+                                    Click="buttonLog_Click"/>
                             <Button x:Name="buttonClear" Content="Clear" Margin="4,0,0,0"
                                     Click="buttonClear_Click"/>
                             <Button x:Name="buttonScan" Content="Start" Margin="4,0,0,0" 

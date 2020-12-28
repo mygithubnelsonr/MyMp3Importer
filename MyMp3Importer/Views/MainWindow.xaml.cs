@@ -1,5 +1,6 @@
 ﻿using MyMp3Importer.BLL;
 using MyMp3Importer.Common;
+using MyMp3Importer.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -32,6 +33,7 @@ namespace MyMp3Importer
         {
             InitializeComponent();
             statusVersion.Content = Properties.Settings.Default.Version;
+            this.buttonLog.Visibility = Visibility.Hidden;
             FillCombosAsync();
         }
 
@@ -115,6 +117,13 @@ namespace MyMp3Importer
 
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
+
+                _albums.Clear();
+                _albums.Add("NA");
+
+                var logs = LogList.Instance;
+                logs.Clear();
+
                 string[] filenames = (string[])e.Data.GetData(DataFormats.FileDrop, false);
                 fullpath = filenames[0];
 
@@ -168,9 +177,6 @@ namespace MyMp3Importer
             {
                 ScannFileList(files, path, extension);
             }
-
-            //textboxStartfolder.Text = path;
-            //textboxStartfolder.ToolTip = path;
         }
 
         #endregion
@@ -209,6 +215,13 @@ namespace MyMp3Importer
         private void buttonImport_Click(object sender, RoutedEventArgs e)
         {
             ImportStart();
+            this.buttonLog.Visibility = Visibility.Visible;
+        }
+
+        private void buttonLog_Click(object sender, RoutedEventArgs e)
+        {
+            Log log = new Log();
+            log.ShowDialog();
         }
 
         private void buttonCancel_Click(object sender, RoutedEventArgs e)
@@ -354,7 +367,7 @@ namespace MyMp3Importer
             #endregion
 
             #region Fill Albums condtionaly
-            var folders = System.Convert.ToInt32(labelFolders.Content);
+            var folders = Convert.ToInt32(labelFolders.Content);
 
             if (comboboxArtist.SelectedItem.ToString() != "NA" && folders > 0)
             {
@@ -502,14 +515,14 @@ namespace MyMp3Importer
 
                 // save records
                 if ((bool)checkboxTestimport.IsChecked == true)
-                    if (recordsAffected > 0)
-                    {
-                        recordsAffected += DataGetSet.SaveTestRecord(mp3List);
-                        checkboxTestimport.IsChecked = false;
-                    }
-                    else
-                        recordsAffected += DataGetSet.SaveRecord(mp3List);
-
+                {
+                    recordsAffected += DataGetSet.SaveTestRecord(mp3List);
+                    checkboxTestimport.IsChecked = false;
+                }
+                else
+                {
+                    recordsAffected += DataGetSet.SaveRecord(mp3List);
+                }
             }
 
             DateTime t2 = DateTime.Now;

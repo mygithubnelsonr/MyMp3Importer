@@ -10,6 +10,12 @@ namespace MyMp3Importer.BLL
 {
     public class DataGetSet
     {
+        private static void WriteLog(string entry)
+        {
+            var log = LogList.Instance;
+            log.Write(entry);
+        }
+
         #region FileImporter
 
         public static async Task<List<string>> GetGenresAsync()
@@ -162,6 +168,11 @@ namespace MyMp3Importer.BLL
                 recordsImporteds += SetRecord(record);
             }
 
+
+            var logs = LogList.Instance;
+            var entries = logs.Get();
+            //Debug.Print($"{entries.Count}");
+
             return recordsImporteds;
         }
 
@@ -217,6 +228,10 @@ namespace MyMp3Importer.BLL
 
             if (result != null)
             {
+
+                var md5 = (tMD5)result;
+
+                WriteLog($"title allready exist! SongID={md5.ID_Song}, MD5={md5.MD5})");
                 Debug.Print($"title allready exist! (MD5={result})");
                 return true;
             }
@@ -278,11 +293,13 @@ namespace MyMp3Importer.BLL
                 catch (Exception ex)
                 {
                     Debug.Print($"SetNewTestRecord_Error: {ex.Message}");
+
                     return 0;
                 }
             }
             else
             {
+
                 return 0;
             }
         }
