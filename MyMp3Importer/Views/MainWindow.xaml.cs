@@ -4,6 +4,7 @@ using MyMp3Importer.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,6 +27,9 @@ namespace MyMp3Importer
 
         private FileDetailsList _fileDetails = null;
         private string _ignores = "NA,_Images,Backup";
+
+        private List<SongRecord> songRecords = new List<SongRecord>();
+
         #endregion
 
         #region CTOR
@@ -65,33 +69,7 @@ namespace MyMp3Importer
 
         private void textboxStartfolder_PreviewDrop(object sender, DragEventArgs e)
         {
-            //if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            //{
-            //    datagridFilelist.ItemsSource = null;
 
-            //    string[] filenames = (string[])e.Data.GetData(DataFormats.FileDrop, false);
-
-            //    DirectoryInfo di;
-            //    di = new DirectoryInfo(filenames[0]);
-            //    string folder;
-
-            //    if ((di.Attributes & FileAttributes.Directory) > 0)
-            //        folder = di.FullName;
-            //    else
-            //        folder = di.Parent.FullName;
-
-            //    textboxStartfolder.Text = folder;
-            //    textboxStartfolder.ToolTip = folder;
-            //    labelFailed.Content = "0";
-            //    labelSuccess.Content = "0";
-
-            //    this.Activate();
-
-            //    checkboxTestimport.IsChecked = true;
-
-            //    if (CheckStartfolder() == true)
-            //        Scanner();
-            //}
         }
         #endregion
 
@@ -145,18 +123,35 @@ namespace MyMp3Importer
                 if (isFolder == true)
                 {
                     textboxStartfolder.Text = fullpath;
-                    ProcessFolder(fullpath, textboxExtension.Text);
+                    //ProcessFolder(fullpath, textboxExtension.Text);
+                    ScannFolder2(fullpath, textboxExtension.Text);
                 }
                 else
                 {
                     textboxStartfolder.Text = Path.GetDirectoryName(fullpath);
-                    ProcessFileList(filenames, textboxStartfolder.Text, textboxExtension.Text);
+                    //ProcessFileList(filenames, textboxStartfolder.Text, textboxExtension.Text);
+                    ScannFileList2(filenames, textboxExtension.Text);
                 }
 
                 labelFailed.Content = "0";
                 labelSuccess.Content = "0";
 
                 this.Activate();
+            }
+        }
+
+        private void datagridFilelist_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (datagridFilelist.Items.Count > 0)
+            {
+                int index = datagridFilelist.SelectedIndex;
+
+                comboboxGenre.Text = DataGetSet.GetGenre(songRecords[index].Genre);
+                comboboxCatalog.Text = DataGetSet.GetCatalog(songRecords[index].Catalog);
+                comboboxMedia.Text = DataGetSet.GetMedia(songRecords[index].Media);
+
+                comboboxAlbum.Text = songRecords[index].Album;
+                comboboxArtist.Text = songRecords[index].Artist;
             }
         }
 
@@ -179,8 +174,12 @@ namespace MyMp3Importer
             }
         }
 
-        #endregion
+        //private void ProcessFileList2(string[] files, string extension)
+        //{
+        //    ScannFileList2(files, extension);
+        //}
 
+        #endregion
         private void buttonMinimize_Click(object sender, RoutedEventArgs e)
         {
             this.WindowState = WindowState.Minimized;
@@ -193,18 +192,7 @@ namespace MyMp3Importer
 
         private void buttonScan_Click(object sender, RoutedEventArgs e)
         {
-            //datagridFilelist.ItemsSource = null;
-            //datagridFilelist.Items.Clear();
-
-            //_artists.Clear();
-            //_artists.Add("NA");
-            //_albums.Clear();
-            //_albums.Add("NA");
-
-            //comboboxArtist.SelectedItem = "NA";
-            //comboboxAlbum.SelectedItem = "NA";
-
-            //ScannFolder(textboxStartfolder.Text, textboxExtension.Text);
+            //ScannFolder2(textboxStartfolder.Text, textboxExtension.Text);
         }
 
         private void buttonClear_Click(object sender, RoutedEventArgs e)
@@ -214,7 +202,7 @@ namespace MyMp3Importer
 
         private void buttonImport_Click(object sender, RoutedEventArgs e)
         {
-            ImportStart();
+            ImportStart2();
             this.buttonLog.Visibility = Visibility.Visible;
         }
 
@@ -231,15 +219,112 @@ namespace MyMp3Importer
 
         private void buttonTest_Click(object sender, RoutedEventArgs e)
         {
-            //List<ParserToken> tokens = new List<ParserToken>();
-            //ParserTokenList parserlist = new ParserTokenList(@"\\win2k16dc01\FS012\Andere\Berni\M3\Norah Jones");
-            //tokens = parserlist.Get();
-            //Debug.Print($"{tokens.Count}");
 
-            //foreach (var token in tokens)
-            //{
-            //    Debug.Print($"{token.Name}, {token.Token}, {token.State}");
-            //}
+        }
+
+        private void GetTokens(string fullName, string extension)
+        {
+            string genre = "", catalog = "", media = "", artist, album = "", title, file, path, t1;
+            int l;
+
+            try
+            {
+
+                #region Path
+                l = fullName.LastIndexOf("\\");
+                path = fullName.Substring(0, l);
+                #endregion
+
+                #region File
+                string container = Helpers.GetContainer(fullName);
+                string[] ar = container.Split('\\');
+                file = ar[ar.Length - 1];
+                #endregion
+
+                #region Album
+                if (ar[4] == "_Various Artists")
+                    album = ar[5];
+                else
+                    album = ar[5];
+                #endregion
+
+                #region Artist
+                t1 = $" - ";
+                l = l = file.IndexOf(t1);
+                artist = file.Substring(0, l);
+                #endregion
+
+                #region Title
+                t1 = $" - ";
+                l = l = file.IndexOf(t1);
+                title = file.Substring(l + t1.Length).Replace(extension, "");
+                #endregion
+
+                #region Genre
+                var genreList = GenreList.Instance;
+                var genres = genreList.Get();
+
+                foreach (var g in genres)
+                {
+                    if (fullName.IndexOf(g) > -1)
+                    {
+                        genre = g;
+                        break;
+                    }
+                }
+                #endregion
+
+                #region Catalog
+                var catalogList = CatalogList.Instance;
+                var catalogs = catalogList.Get();
+
+                foreach (var c in catalogs)
+                {
+                    if (fullName.IndexOf(c) > -1)
+                    {
+                        catalog = c;
+                        break;
+                    }
+                }
+                #endregion
+
+                #region Media
+                var mediaList = MediaList.Instance;
+                var medias = mediaList.Get();
+
+                foreach (var m in medias)
+                {
+                    if (fullName.IndexOf($"\\{m}\\") > -1)
+                    {
+                        media = m;
+                        break;
+                    }
+                }
+                #endregion
+
+                FileInfo fi = new FileInfo(fullName);
+
+                SongRecord songRecord = new SongRecord()
+                {
+                    Album = album,
+                    Artist = artist,
+                    Catalog = DataGetSet.GetCatalogId(catalog),
+                    FileName = file,
+                    Genre = DataGetSet.GetGenreId(genre),
+                    Media = DataGetSet.GetMediaId(media),
+                    Path = path,
+                    Titel = title,
+                    MD5 = Helpers.MD5($"{path}\\{file}"),
+                    FileDate = File.GetLastWriteTime(fullName),
+                    FileSize = Convert.ToInt32(fi.Length),
+                };
+                songRecords.Add(songRecord);
+            }
+            catch (Exception ex)
+            {
+                Debug.Print(ex.Message);
+                Debug.Print($"{fullName}");
+            }
         }
 
         private void checkboxTestimport_Click(object sender, RoutedEventArgs e)
@@ -281,6 +366,22 @@ namespace MyMp3Importer
             {
                 ar = file.File.Split(new string[] { " - " }, StringSplitOptions.RemoveEmptyEntries);
                 if (ar[0] != tmp) isSampler = true;
+            }
+
+            return isSampler;
+        }
+
+        private bool CheckIfSampler2(List<SongRecord> files)
+        {
+            bool isSampler = false;
+            string artist = "";
+
+            foreach (var file in files)
+            {
+                if (artist == "")
+                    artist = file.Artist;
+                else if (file.Artist != artist)
+                    isSampler = true;
             }
 
             return isSampler;
@@ -390,24 +491,31 @@ namespace MyMp3Importer
             #endregion
         }
 
-        private void UpdateCombos(List<ParserToken> tokens)
+        private void ScannFolder2(string fullPath, object extension)
         {
-            comboboxGenre.SelectedItem = tokens[0].Token;
-            labelGenre.Tag = tokens[0].State;
+            songRecords.Clear();
 
-            comboboxCatalog.SelectedItem = tokens[1].Token;
-            labelCatalog.Tag = tokens[1].State;
+            datagridFilelist.ItemsSource = null;
+            datagridFilelist.Items.Clear();
 
-            comboboxMedia.SelectedItem = tokens[2].Token;
-            labelMedia.Tag = tokens[2].State;
+            List<string> listFiles = new List<string>();
+            FileInfo[] fileInfos = GetAllFileInfos(fullPath, ".mp3");
 
-            _artists.Add(tokens[3].Token);
-            comboboxArtist.SelectedItem = tokens[3].Token;
-            labelArtist.Tag = tokens[3].State;
+            foreach (var fileinfo in fileInfos)
+            {
+                listFiles.Add(fileinfo.FullName);
+                GetTokens(fileinfo.FullName, textboxExtension.Text);
+            };
 
-            _albums.Add(tokens[4].Token);
-            comboboxAlbum.SelectedItem = tokens[4].Token;
-            labelAlbum.Tag = tokens[4].State;
+            if (fileInfos.Length > 0)
+                buttonImport.IsEnabled = true;
+
+            checkboxSampler.IsChecked = CheckIfSampler2(songRecords);
+
+            datagridFilelist.ItemsSource = songRecords;
+            datagridFilelist.SelectedIndex = 0;
+            datagridFilelist.SelectedItem = 0;
+            labelFiles.Content = songRecords.Count;
         }
 
         private void ScannFileList(string[] files, string path, string extension)
@@ -449,6 +557,61 @@ namespace MyMp3Importer
 
         }
 
+        private void ScannFileList2(string[] files, string extension)
+        {
+            songRecords.Clear();
+
+            datagridFilelist.ItemsSource = null;
+            datagridFilelist.Items.Clear();
+
+            #region processing files
+            List<string> listFiles = new List<string>();
+            FileInfo[] fileInfos = new FileInfo[files.Length];
+
+            for (int n = 0; n < files.Length; n++)
+            {
+                FileInfo fileInfo = new FileInfo(files[n]);
+                fileInfos[n] = fileInfo;
+            }
+
+            foreach (var fileinfo in fileInfos)
+            {
+                listFiles.Add(fileinfo.FullName);
+                GetTokens(fileinfo.FullName, textboxExtension.Text);
+            }
+
+            if (fileInfos.Length > 0)
+                buttonImport.IsEnabled = true;
+
+            checkboxSampler.IsChecked = CheckIfSampler2(songRecords);
+
+            datagridFilelist.ItemsSource = songRecords;
+            datagridFilelist.SelectedIndex = 0;
+            datagridFilelist.SelectedItem = 0;
+            labelFiles.Content = songRecords.Count;
+            #endregion
+        }
+
+        private void UpdateCombos(List<ParserToken> tokens)
+        {
+            comboboxGenre.SelectedItem = tokens[0].Token;
+            labelGenre.Tag = tokens[0].State;
+
+            comboboxCatalog.SelectedItem = tokens[1].Token;
+            labelCatalog.Tag = tokens[1].State;
+
+            comboboxMedia.SelectedItem = tokens[2].Token;
+            labelMedia.Tag = tokens[2].State;
+
+            _artists.Add(tokens[3].Token);
+            comboboxArtist.SelectedItem = tokens[3].Token;
+            labelArtist.Tag = tokens[3].State;
+
+            _albums.Add(tokens[4].Token);
+            comboboxAlbum.SelectedItem = tokens[4].Token;
+            labelAlbum.Tag = tokens[4].State;
+        }
+
         private void ImportStart()
         {
             int catalogID = -1;
@@ -485,6 +648,16 @@ namespace MyMp3Importer
 
         }
 
+        private void ImportStart2()
+        {
+            labelSuccess.Content = "0";
+            labelFailed.Content = "0";
+
+            if (datagridFilelist.Items.Count == 0) return;
+
+            Import2((bool)checkboxSampler.IsChecked);
+        }
+
         private void Import(bool isSampler)
         {
             int recordsAffected = 0;
@@ -517,7 +690,6 @@ namespace MyMp3Importer
                 if ((bool)checkboxTestimport.IsChecked == true)
                 {
                     recordsAffected += DataGetSet.SaveTestRecord(mp3List);
-                    checkboxTestimport.IsChecked = false;
                 }
                 else
                 {
@@ -532,6 +704,70 @@ namespace MyMp3Importer
             labelSuccess.Content = $"{recordsAffected}";
             labelFailed.Content = $"{_fileDetails.Count - recordsAffected}";
 
+            checkboxTestimport.IsChecked = false;
+            buttonImport.IsEnabled = true;
+        }
+
+        private void Import2(bool isSampler)
+        {
+            int recordsAffected = 0;
+
+            buttonImport.IsEnabled = false;
+
+            DateTime t1 = DateTime.Now;
+            statusbarStart.Content = t1.ToString("HH:mm:ss");
+            statusbarDauer.Content = "";
+            statusbarProgress.Visibility = Visibility.Visible;
+
+            if (checkboxTestimport.IsChecked == true)
+            {
+                var result = DataGetSet.TruncateTestTables();
+                if (result == false)
+                {
+                    // Todo write log
+                    return;
+                }
+            }
+
+            List<MP3Record> mp3List;
+
+            foreach (var song in songRecords)
+            {
+                mp3List = new List<MP3Record>();
+                mp3List.Add(new MP3Record() {
+                    Album = song.Album,
+                    Artist = song.Artist,
+                    Catalog = song.Catalog,
+                    FileName = song.FileName,
+                    Genre = song.Genre,
+                    Media = song.Media,
+                    MD5 = song.MD5,
+                    Path = song.Path,
+                    Titel = song.Titel,
+                    FileDate = song.FileDate,
+                    FileSize = song.FileSize,
+                    IsSample = (bool)checkboxSampler.IsChecked}
+                );
+
+                // save records
+                if ((bool)checkboxTestimport.IsChecked == true)
+                {
+                    recordsAffected += DataGetSet.SaveTestRecord(mp3List);
+                }
+                else
+                {
+                    recordsAffected += DataGetSet.SaveRecord(mp3List);
+                }
+            }
+
+            DateTime t2 = DateTime.Now;
+            statusbarProgress.Visibility = Visibility.Hidden;
+            statusbarDauer.Content = (t2 - t1).Milliseconds.ToString() + " ms";
+
+            labelSuccess.Content = $"{recordsAffected}";
+            labelFailed.Content = $"{songRecords.Count - recordsAffected}";
+
+            checkboxTestimport.IsChecked = false;
             buttonImport.IsEnabled = true;
         }
 
@@ -580,6 +816,21 @@ namespace MyMp3Importer
             }
 
             return mp3List;
+        }
+
+        #endregion
+
+        #region Test
+        private FileInfo[] GetAllFileInfos(string startDirectory, string filePattern)
+        {
+            if (startDirectory == "")
+                return null;
+
+            DirectoryInfo di = new DirectoryInfo(startDirectory);
+
+            FileInfo[] fileInfos = di.GetFiles($"*{filePattern}", SearchOption.AllDirectories);
+
+            return fileInfos;
         }
 
         #endregion

@@ -2,7 +2,7 @@
 
 namespace MyMp3Importer.Common
 {
-    public class MpeRecordList : List<MP3Record>
+    public class Mp3RecordList : List<MP3Record>
     {
 
     }

@@ -33,7 +33,7 @@
     <MapFileExtensions>true</MapFileExtensions>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>16</ApplicationRevision>
+    <ApplicationRevision>17</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -127,9 +127,10 @@
     <Compile Include="Common\Mp3Record.cs" />
     <Compile Include="Common\FileDetails.cs" />
     <Compile Include="Common\Helpers.cs" />
-    <Compile Include="Common\MpeRecordList.cs" />
+    <Compile Include="Common\Mp3RecordList.cs" />
     <Compile Include="Common\Parser.cs" />
     <Compile Include="Common\ParserTokenList.cs" />
+    <Compile Include="Common\SongRecord.cs" />
     <Compile Include="DAL\MyJukeboxModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

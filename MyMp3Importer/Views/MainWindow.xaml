@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyMp3Importer"
         mc:Ignorable="d"
-        Title="MainWindow" Height="585" Width="585" WindowStartupLocation="CenterScreen" SizeToContent="Height" Background="#FF0991C3"
+        Title="MainWindow" Height="585" Width="585" SizeToContent="Height" WindowStartupLocation="CenterScreen" Background="#FF0991C3"
               WindowStyle="None" Icon="/Images/Importer.ico" ResizeMode="NoResize" MouseLeftButtonDown="Move_Window">
     <DockPanel>
         <StatusBar DockPanel.Dock="Bottom" Background="Transparent" Foreground="WhiteSmoke" BorderThickness="2">
@@ -100,10 +100,29 @@
                 </StackPanel>
                 <DataGrid x:Name="datagridFilelist" Grid.Row="2" Grid.ColumnSpan="3" Margin="10,0,10,10" Background="LightGray"
                         CanUserSortColumns="True" AlternationCount="1" AlternatingRowBackground="#FFB9DFF7" AllowDrop="True"
-                        RowBackground="#FFD2EAF7" IsReadOnly="True" ColumnHeaderStyle="{StaticResource datagridHeaderStyle}"
+                        RowBackground="#FFD2EAF7" IsReadOnly="False" CanUserAddRows="False" ColumnHeaderStyle="{StaticResource datagridHeaderStyle}"
                         PreviewDragEnter="datagridFilelist_PreviewDragEnter"
                         PreviewDragOver="datagridFilelist_PreviewDragOver"
-                        PreviewDrop="datagridFilelist_PreviewDrop"/>
+                        PreviewDrop="datagridFilelist_PreviewDrop"
+                        SelectionChanged="datagridFilelist_SelectionChanged">
+                    <DataGrid.Resources>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="#FF0078D7"/>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="WhiteSmoke"/>
+                    </DataGrid.Resources>
+                    <DataGrid.RowStyle>
+                        <Style TargetType="DataGridRow">
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="FontWeight" Value="Bold"/>
+                                    <Setter Property="Foreground" Value="DarkBlue"/>
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="FontWeight" Value="Bold"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.RowStyle>
+                </DataGrid>
                 <StatusBar Grid.Row="3" Grid.ColumnSpan="3" Background="#FF0991C3" Foreground="White">
                     <Separator/>
                     <StatusBarItem Content="Subfolders:" FontWeight="Bold"/>

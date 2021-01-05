@@ -28,7 +28,7 @@ namespace MyMp3Importer.BLL
 
         private static void Fill()
         {
-            medias = DataGetSet.GetCatalogs();
+            medias = DataGetSet.GetMedias();
         }
 
         public List<string> Get()
